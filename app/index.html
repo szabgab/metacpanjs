@@ -5,12 +5,12 @@
   <script src="/handlebars-v3.0.0.js"></script>
   <script src="/metacpan.js"></script>
 
-<script id="entry-template" type="text/x-handlebars-template">
+<script id="release-template" type="text/x-handlebars-template">
   <div class="entry">
-    <h1>{{tite}}</h1>
-    <div class="body">
-      {{body}}
-    </div>
+    <h2>{{author}} {{name}} {{date}}</h2>
+  </div>
+  <div class="repository">
+    <a href="{{resources.repository.web}}">{{resources.repository.type}}</a>
   </div>
 </script>
 
@@ -19,7 +19,7 @@
 <body>
 
 <p>Find a solution in Perl</p>
-<p><input type="text" id="query"></p>
+<p><input type="text" id="query"><button id="search">Search</button></p>
 <hr>
 
 <div id="result">
@@ -29,15 +29,21 @@
 </html>
 
 <script>
-function search() {
-	console.log(document.getElementById('query').value);
 
-    var source   = document.getElementById('#entry-template').html();
+function display_result(query, result) {
+    var source   = document.getElementById('release-template').innerHTML;
     var template = Handlebars.compile(source);
-    var context = {title: "My New Post", body: "This is my first post!"};
-    var html    = template(context);
+    //var context = {name: result["name"]};
+    //var html    = template(context);
+    var html    = template(result);
     document.getElementById('result').innerHTML = html;
 }
 
-document.getElementById('query').addEventListener('keyup', search);
+function search() {
+	var query = document.getElementById('query').value;
+	metacpan.search(query, display_result);
+}
+
+//document.getElementById('query').addEventListener('keyup', search);
+document.getElementById('search').addEventListener('click', search);
 </script>
