@@ -22,3 +22,44 @@ metacpan.get = function(url, query, callback) {
     xmlhttp.send();
 };
 
+
+function search() {
+	var query = document.getElementById('query').value;
+	metacpan.release(query, display_result);
+}
+
+
+function display_result(query, result) {
+	display(query, result, 'release-template');
+};
+
+function display(query, result, template) {
+    var source   = document.getElementById(template).innerHTML;
+    var template = Handlebars.compile(source);
+    //var context = {name: result["name"]};
+    //var html    = template(context);
+    var html    = template(result);
+    document.getElementById('result').innerHTML = html;
+
+	var as = document.getElementsByClassName('release');
+    for (i=0; i<as.length; i++) {
+		as[i].addEventListener('click', function() {
+			//var query = this.innerHTML;
+			var query = this.getAttribute('data-distribution');
+			//console.log(query);
+			metacpan.release(query, display_result);
+		});
+	}
+}
+
+function display_recent(count, result) {
+	display(count, result, 'recent-template');
+}
+
+//document.getElementById('query').addEventListener('keyup', search);
+document.getElementById('search').addEventListener('click', search);
+
+document.getElementById('recent').addEventListener('click', function() {
+	metacpan.recent(20, display_recent);
+});
+
