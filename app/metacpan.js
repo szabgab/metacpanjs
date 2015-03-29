@@ -6,6 +6,10 @@ metacpan.recent = function(count, callback) {
 metacpan.release = function(query, callback) {
 	metacpan.get("http://api.metacpan.org/v0/release/" + query, query, callback);
 };
+metacpan.author = function(query, callback) {
+	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback);
+};
+
 
 metacpan.get = function(url, query, callback) {
     xmlhttp = new XMLHttpRequest();
@@ -29,10 +33,6 @@ function search() {
 }
 
 
-function display_result(query, result) {
-	display(query, result, 'release-template');
-};
-
 function display(query, result, template) {
     var source   = document.getElementById(template).innerHTML;
     var template = Handlebars.compile(source);
@@ -50,7 +50,32 @@ function display(query, result, template) {
 			metacpan.release(query, display_result);
 		});
 	}
+
+	var authors = document.getElementsByClassName('author');
+    for (i = 0; i < authors.length; i++) {
+		authors[i].addEventListener('click', function() {
+			var query = this.getAttribute('data-author');
+			metacpan.author(query, display_author);
+		});
+	}
+
 }
+
+function display_author(query, result) {
+    if (result["profile"]) {
+        for (i=0; i<result["profile"].length; i++) {
+            if (result["profile"][i]["name"] == 'github') {
+	    		result["profile"][i]["url"] = 'https://github.com/' + result["profile"][i]["id"];
+	    	}
+	    }
+    }
+
+	display(query, result, 'author-template');
+};
+
+function display_result(query, result) {
+	display(query, result, 'release-template');
+};
 
 function display_recent(count, result) {
 	display(count, result, 'recent-template');

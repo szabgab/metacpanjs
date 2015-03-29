@@ -6,7 +6,7 @@
 
 <script id="release-template" type="text/x-handlebars-template">
   <div class="entry">
-    <h2>{{author}} {{name}} {{date}}</h2>
+    <h2><a href="#" class="author" data-author="{{author}}">{{author}}</a> {{name}} {{date}}</h2>
   </div>
   <div class="repository">
     <a href="{{resources.repository.web}}">{{resources.repository.type}}</a>
@@ -21,6 +21,21 @@
   </ul>
 </script>
 
+<script id="author-template" type="text/x-handlebars-template">
+<h2>{{name}} ({{pauseid}})</h2>
+<img src="{{gravatar_url}}" alt="{{name}}" /> <a href="{{website}}">{{website}}</a>
+
+{{#if profile}}
+  <h3>Profiles</h3>
+  {{#each profile}}
+     {{#if url}}
+        <a href="{{url}}">{{name}}</a><br>
+     {{else}}
+        {{name}} {{id}}<br>
+     {{/if}}
+  {{/each}}
+{{/if}}
+</script>
 
 </head>
 <body>
