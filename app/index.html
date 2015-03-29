@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>METACPAN.js</title>
+  <script src="/handlebars-v3.0.0.js"></script>
+  <script src="/metacpan.js"></script>
+
+<script id="entry-template" type="text/x-handlebars-template">
+  <div class="entry">
+    <h1>{{tite}}</h1>
+    <div class="body">
+      {{body}}
+    </div>
+  </div>
+</script>
+
+
+</head>
+<body>
+
+<p>Find a solution in Perl</p>
+<p><input type="text" id="query"></p>
+<hr>
+
+<div id="result">
+</div>
+
+</body>
+</html>
+
+<script>
+function search() {
+	console.log(document.getElementById('query').value);
+
+    var source   = document.getElementById('#entry-template').html();
+    var template = Handlebars.compile(source);
+    var context = {title: "My New Post", body: "This is my first post!"};
+    var html    = template(context);
+    document.getElementById('result').innerHTML = html;
+}
+
+document.getElementById('query').addEventListener('keyup', search);
+</script>
