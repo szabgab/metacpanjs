@@ -11,7 +11,19 @@
   <div class="repository">
     <a href="{{resources.repository.web}}">{{resources.repository.type}}</a>
   </div>
+
+  <h2>Provides</h2>
+  {{#each provides}}
+      <a href="#" class="module">{{lookup ../provides @index}}</a><br>
+  {{/each}}
+
 </script>
+
+<script id="home-template" type="text/x-handlebars-template">
+<h2>Welcome to MetaCPAN</h2>
+</script>
+
+
 
 <script id="recent-template" type="text/x-handlebars-template">
   <ul>
@@ -19,7 +31,9 @@
       <li><a href="#" class="release" data-distribution="{{fields.distribution}}">{{fields.name}}</a><br>{{fields.abstract}}<br>{{fields.date}}</li>
     {{/each}}
   </ul>
+
 </script>
+
 
 <script id="author-template" type="text/x-handlebars-template">
 <h2>{{name}} ({{pauseid}})</h2>
@@ -37,10 +51,11 @@
 {{/if}}
 </script>
 
+
 </head>
 <body>
 
-<a href="#" id="recent">recent</a>
+<a href="#" id="home">home</a> | <a href="#" id="recent">recent</a>
 
 <p>Find a solution in Perl</p>
 <p><input type="text" id="query"><button id="search">Search</button></p>
