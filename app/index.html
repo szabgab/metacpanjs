@@ -28,7 +28,12 @@
 <script id="recent-template" type="text/x-handlebars-template">
   <ul>
     {{#each hits.hits}}
-      <li><a href="#" class="release" data-distribution="{{fields.distribution}}">{{fields.name}}</a><br>{{fields.abstract}}<br>{{fields.date}}</li>
+      <li>
+        <a href="#" class="release" data-distribution="{{fields.distribution}}">{{fields.name}}</a><br>
+        {{fields.abstract}}<br>
+        {{fields.date}}<br>
+        {{#iff fields.status '!=' 'latest'}}<b>{{fields.status}}</b>{{/iff}}<br>
+      </li>
     {{/each}}
   </ul>
 
