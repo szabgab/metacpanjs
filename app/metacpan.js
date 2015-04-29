@@ -74,8 +74,8 @@ function click() {
 	console.log('click');
 	var id = this.getAttribute('id');
 	var class_name = this.getAttribute('class');
-	console.log(id);
-	console.log(class_name);
+	console.log('id: ' + id);
+	console.log('class: ' + class_name);
 	switch(id) {
 		case('search'):
 			search(); 
@@ -87,7 +87,7 @@ function click() {
 			metacpan.recent(20, display_recent, show_error);
 			return;
 		default:
-			console.log('id: ' + id);
+			console.log('unhandled id: ' + id);
 	}
 
 	switch(class_name) {
@@ -130,7 +130,25 @@ function display_author(query, result) {
 		for (i=0; i<result["profile"].length; i++) {
 			if (result["profile"][i]["name"] == 'github') {
 				result["profile"][i]["url"] = 'https://github.com/' + result["profile"][i]["id"];
+				continue;
 			}
+			if (result["profile"][i]["name"] == 'twitter') {
+				result["profile"][i]["url"] = 'https://twitter.com/' + result["profile"][i]["id"];
+				continue;
+			}
+			if (result["profile"][i]["name"] == 'coderwall') {
+				result["profile"][i]["url"] = 'http://www.coderwall.com/' + result["profile"][i]["id"];
+				continue;
+			}
+			if (result["profile"][i]["name"] == 'delicious') {
+				result["profile"][i]["url"] = 'http://www.delicious.com/' + result["profile"][i]["id"];
+				continue;
+			}
+			if (result["profile"][i]["name"] == 'facebook') {
+				result["profile"][i]["url"] = 'http://www.facebook.com/' + result["profile"][i]["id"];
+				continue;
+			}
+
 		}
 	}
 
@@ -149,5 +167,6 @@ function display_home() {
 }
 
 //document.getElementById('query').addEventListener('keyup', search);
+document.getElementById('search').addEventListener('click', search);
 
 display_home();

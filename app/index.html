@@ -3,9 +3,10 @@
 <head>
   <title>METACPAN.js</title>
   <script src="/handlebars-v3.0.0.js"></script>
+  <link rel="stylesheet" href="style.css">
 
 <script id="error-template" type="text/x-handlebars-template">
-Error. {{code}}
+  Error. {{code}}
 </script>
 
 <script id="release-template" type="text/x-handlebars-template">
@@ -16,6 +17,14 @@ Error. {{code}}
     <a target="_blank" href="{{resources.repository.web}}">{{resources.repository.type}}</a>
   </div>
 
+  {{#unless authorized}}
+    <div class="warn">Unauthorized release</div>
+  {{/unless}}
+
+  <div class="license">
+     License: {{license}}
+  </div>
+
   <h2>Provides</h2>
   {{#each provides}}
       <a href="#" class="module">{{lookup ../provides @index}}</a><br>
@@ -24,7 +33,7 @@ Error. {{code}}
 </script>
 
 <script id="home-template" type="text/x-handlebars-template">
-<h2>Welcome to MetaCPAN</h2>
+  <h2>Welcome to MetaCPAN</h2>
 </script>
 
 
@@ -45,19 +54,22 @@ Error. {{code}}
 
 
 <script id="author-template" type="text/x-handlebars-template">
-<h2>{{name}} ({{pauseid}})</h2>
-<img src="{{gravatar_url}}" alt="{{name}}" /> <a href="{{website}}">{{website}}</a>
-
-{{#if profile}}
-  <h3>Profiles</h3>
-  {{#each profile}}
-     {{#if url}}
-        <a href="{{url}}">{{name}}</a><br>
-     {{else}}
-        {{name}} {{id}}<br>
-     {{/if}}
+  <h2>{{name}} ({{pauseid}})</h2>
+  <img src="{{gravatar_url}}" alt="{{name}}" /><br>
+  {{#each website}}
+    <a target="_blanket" href="{{this}}">{{this}}</a><br>
   {{/each}}
-{{/if}}
+  
+  {{#if profile}}
+    <h3>Profiles</h3>
+    {{#each profile}}
+       {{#if url}}
+          <a target="_blank" href="{{url}}">{{name}}</a><br>
+       {{else}}
+          {{name}} {{id}}<br>
+       {{/if}}
+    {{/each}}
+  {{/if}}
 </script>
 
 
