@@ -23,7 +23,7 @@ metacpan.get = function(url, query, callback, error) {
 					break;
 				case 404:
 					console.log('Status: ' + xmlhttp.status);
-					error(query, data);
+					error(query, {code : 404});
 					break;
 				default:
 					console.log('Status: ' + xmlhttp.status);
