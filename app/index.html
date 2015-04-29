@@ -70,6 +70,13 @@
        {{/if}}
     {{/each}}
   {{/if}}
+
+  {{#if blog}}
+    <h3>Blog</h3>
+    {{#each blog}}
+       <a target="_blank" href="{{url}}">{{url}}</a> <a target="_blank" href="{{feed}}">feed</a><br>
+    {{/each}}
+  {{/if}}
 </script>
 
 

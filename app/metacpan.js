@@ -126,15 +126,26 @@ function display(query, result, template) {
 }
 
 function display_author(query, result) {
-	if (result["profile"]) {
 	var data = {
-		'github'    : 'https://github.com/',
-		'twitter'   : 'https://twitter.com/',
-		'coderwall' : 'http://www.coderwall.com/',
-		'delicious' : 'http://www.delicious.com/',
-		'facebook'  : 'http://www.facebook.com/'
+		'github'            : 'https://github.com/',
+		'twitter'           : 'https://twitter.com/',
+		'coderwall'         : 'http://www.coderwall.com/',
+		'delicious'         : 'http://www.delicious.com/',
+		'facebook'          : 'http://www.facebook.com/',
+		'github-meets-cpan' : 'http://gh.metacpan.org/user/',
+		'gittip'            : 'https://gratipay.com/',
+		'googleplus'        : 'https://plus.google.com/',
+		'hackernews'        : 'https://news.ycombinator.com/user?id=',
+		'linkedin'          : 'https://www.linkedin.com/in/',
+		//'irc'               : '',
+		'perlmonks'         : 'http://www.perlmonks.org/?node=',
+		'stackoverflow'     : 'http://stackoverflow.com/users/',
+		'vimeo'             : 'https://vimeo.com/',
+		'xing'              : 'https://www.xing.com/profile/',
+		'youtube'           : 'https://www.youtube.com/user/'
 	};
 
+	if (result["profile"]) {
 		for (i=0; i<result["profile"].length; i++) {
 			if (data[ result["profile"][i]["name"] ]) {
 				result["profile"][i]["url"] =  data[ result["profile"][i]["name"] ] + result["profile"][i]["id"];
