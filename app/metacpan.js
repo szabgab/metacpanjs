@@ -70,6 +70,41 @@ function search() {
 	metacpan.release(query, display_result, show_error);
 }
 
+function click() {
+	console.log('click');
+	var id = this.getAttribute('id');
+	var class_name = this.getAttribute('class');
+	console.log(id);
+	console.log(class_name);
+	switch(id) {
+		case('search'):
+			search(); 
+			return;
+		case('home'):
+			display_home(); 
+			return;
+		case('recent'):
+			metacpan.recent(20, display_recent, show_error);
+			return;
+		default:
+			console.log('id: ' + id);
+	}
+
+	switch(class_name) {
+		case('release'):
+			var query = this.getAttribute('data-distribution');
+			//console.log(query);
+			metacpan.release(query, display_result, show_error);
+			break;
+		case('author'):
+			var query = this.getAttribute('data-author');
+			metacpan.author(query, display_author, show_error);
+			break;
+		default:
+			console.log('Unhandled class: ' + class_name);
+	}
+}
+
 function show_error(query, result) {
 	display(query, result, 'error-template');
 }
@@ -83,23 +118,11 @@ function display(query, result, template) {
 	var html    = template(result);
 	document.getElementById('result').innerHTML = html;
 
-	var as = document.getElementsByClassName('release');
+	var as = document.getElementsByTagName('a');
 	for (i=0; i<as.length; i++) {
-		as[i].addEventListener('click', function() {
-			//var query = this.innerHTML;
-			var query = this.getAttribute('data-distribution');
-			//console.log(query);
-			metacpan.release(query, display_result, show_error);
-		});
+		as[i].addEventListener('click', click);
 	}
-
-	var authors = document.getElementsByClassName('author');
-	for (i = 0; i < authors.length; i++) {
-		authors[i].addEventListener('click', function() {
-			var query = this.getAttribute('data-author');
-			metacpan.author(query, display_author, show_error);
-		});
-	}
+	
 }
 
 function display_author(query, result) {
@@ -126,15 +149,5 @@ function display_home() {
 }
 
 //document.getElementById('query').addEventListener('keyup', search);
-document.getElementById('search').addEventListener('click', search);
-
-document.getElementById('recent').addEventListener('click', function() {
-	metacpan.recent(20, display_recent, show_error);
-	return false;
-});
-
-document.getElementById('home').addEventListener('click', function() {
-	display_home(); 
-});
 
 display_home();
