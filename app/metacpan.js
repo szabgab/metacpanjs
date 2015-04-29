@@ -127,28 +127,18 @@ function display(query, result, template) {
 
 function display_author(query, result) {
 	if (result["profile"]) {
-		for (i=0; i<result["profile"].length; i++) {
-			if (result["profile"][i]["name"] == 'github') {
-				result["profile"][i]["url"] = 'https://github.com/' + result["profile"][i]["id"];
-				continue;
-			}
-			if (result["profile"][i]["name"] == 'twitter') {
-				result["profile"][i]["url"] = 'https://twitter.com/' + result["profile"][i]["id"];
-				continue;
-			}
-			if (result["profile"][i]["name"] == 'coderwall') {
-				result["profile"][i]["url"] = 'http://www.coderwall.com/' + result["profile"][i]["id"];
-				continue;
-			}
-			if (result["profile"][i]["name"] == 'delicious') {
-				result["profile"][i]["url"] = 'http://www.delicious.com/' + result["profile"][i]["id"];
-				continue;
-			}
-			if (result["profile"][i]["name"] == 'facebook') {
-				result["profile"][i]["url"] = 'http://www.facebook.com/' + result["profile"][i]["id"];
-				continue;
-			}
+	var data = {
+		'github'    : 'https://github.com/',
+		'twitter'   : 'https://twitter.com/',
+		'coderwall' : 'http://www.coderwall.com/',
+		'delicious' : 'http://www.delicious.com/',
+		'facebook'  : 'http://www.facebook.com/'
+	};
 
+		for (i=0; i<result["profile"].length; i++) {
+			if (data[ result["profile"][i]["name"] ]) {
+				result["profile"][i]["url"] =  data[ result["profile"][i]["name"] ] + result["profile"][i]["id"];
+			}
 		}
 	}
 
