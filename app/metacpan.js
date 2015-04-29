@@ -1,23 +1,35 @@
 var metacpan = {}
-metacpan.recent = function(count, callback) {
-	metacpan.get('http://api.metacpan.org/v0/release/_search?q=status:latest&fields=distribution,name,status,date,abstract&sort=date:desc&size=' + count, count, callback);
+metacpan.recent = function(count, callback, error) {
+	metacpan.get('http://api.metacpan.org/v0/release/_search?q=status:latest&fields=distribution,name,status,date,abstract&sort=date:desc&size=' + count, count, callback, error);
 };
 
-metacpan.release = function(query, callback) {
-	metacpan.get("http://api.metacpan.org/v0/release/" + query, query, callback);
+metacpan.release = function(query, callback, error) {
+	metacpan.get("http://api.metacpan.org/v0/release/" + query, query, callback, error);
 };
-metacpan.author = function(query, callback) {
-	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback);
+metacpan.author = function(query, callback, error) {
+	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback, error);
 };
 
 
-metacpan.get = function(url, query, callback) {
+metacpan.get = function(url, query, callback, error) {
 	xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			console.log('responseText:' + xmlhttp.responseText);
-			var data = JSON.parse(xmlhttp.responseText);
-			callback(query, data);
+		if (xmlhttp.readyState == 4) {
+			switch (xmlhttp.status) {
+				case 200:
+					console.log('responseText:' + xmlhttp.responseText);
+					var data = JSON.parse(xmlhttp.responseText);
+					callback(query, data);
+					break;
+				case 404:
+					console.log('Status: ' + xmlhttp.status);
+					error(query, data);
+					break;
+				default:
+					console.log('Status: ' + xmlhttp.status);
+					error(query, data);
+					break;
+			}
 		}
 	}
 
@@ -55,7 +67,11 @@ Handlebars.registerHelper('iff', function(a, operator, b, opts) {
 
 function search() {
 	var query = document.getElementById('query').value;
-	metacpan.release(query, display_result);
+	metacpan.release(query, display_result, show_error);
+}
+
+function show_error(query, result) {
+	display(query, result, 'error-template');
 }
 
 
@@ -73,7 +89,7 @@ function display(query, result, template) {
 			//var query = this.innerHTML;
 			var query = this.getAttribute('data-distribution');
 			//console.log(query);
-			metacpan.release(query, display_result);
+			metacpan.release(query, display_result, show_error);
 		});
 	}
 
@@ -81,10 +97,9 @@ function display(query, result, template) {
 	for (i = 0; i < authors.length; i++) {
 		authors[i].addEventListener('click', function() {
 			var query = this.getAttribute('data-author');
-			metacpan.author(query, display_author);
+			metacpan.author(query, display_author, show_error);
 		});
 	}
-
 }
 
 function display_author(query, result) {
@@ -114,7 +129,7 @@ function display_home() {
 document.getElementById('search').addEventListener('click', search);
 
 document.getElementById('recent').addEventListener('click', function() {
-	metacpan.recent(20, display_recent);
+	metacpan.recent(20, display_recent, show_error);
 	return false;
 });
 
