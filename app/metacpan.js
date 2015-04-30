@@ -26,7 +26,7 @@ metacpan.leaderboard = function(callback, error) {
    }, callback, error)
 };
 metacpan.profile = function(name, callback, error) {
-	metacpan.get("http://api.metacpan.org/v0/author/_search?fields=name,pauseid,profile&size=100&q=author.profile.name:" + name, name, callback, error);
+	metacpan.get("http://api.metacpan.org/v0/author/_search?fields=name,pauseid,profile&size=10&q=author.profile.name:" + name, name, callback, error);
 };
 
 metacpan.profiles = {
@@ -191,6 +191,18 @@ function display(query, result, template) {
 }
 
 function display_profile(name, result) {
+	for (var i=0; i < result["hits"]["hits"].length; i++) {
+		var profile = result["hits"]["hits"][i]["fields"]["profile"];
+		var url = "";
+		for (var j=0; j < profile.length; j++) {
+			if (profile[j]["name"] == name) {
+				url = metacpan.profiles[name] + profile[j]["id"];
+				break;
+			}
+		}
+		result["hits"]["hits"][i]["url"] = url;
+	}
+
 	display(name, result, 'profile-template');
 }
 

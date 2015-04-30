@@ -103,7 +103,7 @@
    <h2>Users with {{query}} in their profile</h2>
    <ul>
      {{#each result.hits.hits}}
-       <li><a href="#" class="author" data-author="{{this.fields.pauseid}}">{{this.fields.name}} ({{this.fields.pauseid}})</a></li>
+       <li><a href="#" class="author" data-author="{{this.fields.pauseid}}">{{this.fields.name}} ({{this.fields.pauseid}})</a> <a href="{{this.url}}" target="_blank">{{../query}}</a></li>
      {{/each}}
    </ul>
 
