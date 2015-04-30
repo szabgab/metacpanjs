@@ -35,17 +35,18 @@ metacpan.leaderboard = function(query, callback, error) {
 		"size": 0
 	}, '', callback, error)
 };
-metacpan.profile = function(name, callback, error) {
+metacpan.profile = function(query, callback, error) {
+	metacpan.history.push({ 'req' : metacpan.profile, 'query' : query, 'callback' : callback, 'error' : error });
 	metacpan.post("http://api.metacpan.org/v0/author/_search", {
 		"query": {
 			"match_all": {}
 		},
 		"filter" : {
-			"term": { "author.profile.name" : name }
+			"term": { "author.profile.name" : query }
 		},
 		"fields" : ["name", "pauseid", "profile"],
 		"size" : metacpan.size()
-	}, name, callback, error);
+	}, query, callback, error);
 };
 
 metacpan.profiles = {
