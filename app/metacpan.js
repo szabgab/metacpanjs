@@ -11,19 +11,19 @@ metacpan.author = function(query, callback, error) {
 };
 metacpan.leaderboard = function(query, callback, error) {
 	metacpan.post("http://api.metacpan.org/v0/release/_search", {
-    "query": {
-        "match_all": {}
-    },
-    "facets": {
-        "author": {
-            "terms": {
-                "field": "author",
-                "size": 100
-            }
-        }
-    },
-    "size": 0
-   }, '', callback, error)
+		"query": {
+			"match_all": {}
+		},
+		"facets": {
+			"author": {
+				"terms": {
+					"field": "author",
+					"size": 100
+				}
+			}
+		},
+		"size": 0
+	}, '', callback, error)
 };
 metacpan.profile = function(name, callback, error) {
 	metacpan.post("http://api.metacpan.org/v0/author/_search", {
@@ -103,29 +103,29 @@ metacpan.prepare = function(query, callback, error) {
 };
 
 Handlebars.registerHelper('iff', function(a, operator, b, opts) {
-    var bool = false;
-    switch(operator) {
-       case '==':
-           bool = a == b;
-           break;
-       case '!=':
-           bool = a != b;
-           break;
-       case '>':
-           bool = a > b;
-           break;
-       case '<':
-           bool = a < b;
-           break;
-       default:
-           throw "Unknown operator " + operator;
-    }
+	var bool = false;
+	switch(operator) {
+		case '==':
+			bool = a == b;
+			break;
+		case '!=':
+			bool = a != b;
+			break;
+		case '>':
+			bool = a > b;
+			break;
+		case '<':
+			bool = a < b;
+			break;
+		default:
+			throw "Unknown operator " + operator;
+	}
 
-    if (bool) {
-        return opts.fn(this);
-    } else {
-        return opts.inverse(this);
-    }
+	if (bool) {
+		return opts.fn(this);
+	} else {
+		return opts.inverse(this);
+	}
 });
 
 
