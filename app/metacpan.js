@@ -25,6 +25,28 @@ metacpan.leaderboard = function(callback, error) {
     "size": 0
    }, callback, error)
 };
+metacpan.profiles = {
+		'github'            : 'https://github.com/',
+		'twitter'           : 'https://twitter.com/',
+		'coderwall'         : 'http://www.coderwall.com/',
+		'delicious'         : 'http://www.delicious.com/',
+		'facebook'          : 'http://www.facebook.com/',
+		'github-meets-cpan' : 'http://gh.metacpan.org/user/',
+		'gittip'            : 'https://gratipay.com/',
+		'googleplus'        : 'https://plus.google.com/',
+		'hackernews'        : 'https://news.ycombinator.com/user?id=',
+		'linkedin'          : 'https://www.linkedin.com/in/',
+		//'irc'               : '',
+		'perlmonks'         : 'http://www.perlmonks.org/?node=',
+		'stackoverflow'     : 'http://stackoverflow.com/users/',
+		'vimeo'             : 'https://vimeo.com/',
+		'xing'              : 'https://www.xing.com/profile/',
+		'youtube'           : 'https://www.youtube.com/user/',
+		'gitorious'         : 'https://gitorious.org/~',
+		'ohloh'             : 'https://www.openhub.net/accounts/',
+		'openhub'           : 'https://www.openhub.net/accounts/'
+};
+
 
 metacpan.post = function(url, data, callback, error) {
 	xmlhttp = metacpan.prepare('', callback, error);
@@ -118,6 +140,8 @@ function click() {
 		case('leaderboard'):
 			metacpan.leaderboard(display_leaderboard, show_error);
 			return;
+		case('profiles'):
+			return;
 		default:
 			console.log('unhandled id: ' + id);
 	}
@@ -158,32 +182,11 @@ function display(query, result, template) {
 }
 
 function display_author(query, result) {
-	var data = {
-		'github'            : 'https://github.com/',
-		'twitter'           : 'https://twitter.com/',
-		'coderwall'         : 'http://www.coderwall.com/',
-		'delicious'         : 'http://www.delicious.com/',
-		'facebook'          : 'http://www.facebook.com/',
-		'github-meets-cpan' : 'http://gh.metacpan.org/user/',
-		'gittip'            : 'https://gratipay.com/',
-		'googleplus'        : 'https://plus.google.com/',
-		'hackernews'        : 'https://news.ycombinator.com/user?id=',
-		'linkedin'          : 'https://www.linkedin.com/in/',
-		//'irc'               : '',
-		'perlmonks'         : 'http://www.perlmonks.org/?node=',
-		'stackoverflow'     : 'http://stackoverflow.com/users/',
-		'vimeo'             : 'https://vimeo.com/',
-		'xing'              : 'https://www.xing.com/profile/',
-		'youtube'           : 'https://www.youtube.com/user/',
-		'gitorious'         : 'https://gitorious.org/~',
-		'ohloh'             : 'https://www.openhub.net/accounts/',
-		'openhub'           : 'https://www.openhub.net/accounts/'
-	};
 
 	if (result["profile"]) {
 		for (i=0; i<result["profile"].length; i++) {
-			if (data[ result["profile"][i]["name"] ]) {
-				result["profile"][i]["url"] =  data[ result["profile"][i]["name"] ] + result["profile"][i]["id"];
+			if (metacpan.profiles[ result["profile"][i]["name"] ]) {
+				result["profile"][i]["url"] =  metacpan.profiles[ result["profile"][i]["name"] ] + result["profile"][i]["id"];
 			}
 		}
 	}
