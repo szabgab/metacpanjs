@@ -174,7 +174,10 @@ function display_author(query, result) {
 		'stackoverflow'     : 'http://stackoverflow.com/users/',
 		'vimeo'             : 'https://vimeo.com/',
 		'xing'              : 'https://www.xing.com/profile/',
-		'youtube'           : 'https://www.youtube.com/user/'
+		'youtube'           : 'https://www.youtube.com/user/',
+		'gitorious'         : 'https://gitorious.org/~',
+		'ohloh'             : 'https://www.openhub.net/accounts/',
+		'openhub'           : 'https://www.openhub.net/accounts/'
 	};
 
 	if (result["profile"]) {
