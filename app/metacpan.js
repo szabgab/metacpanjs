@@ -9,7 +9,7 @@ metacpan.release = function(query, callback, error) {
 metacpan.author = function(query, callback, error) {
 	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback, error);
 };
-metacpan.leaderboard = function(callback, error) {
+metacpan.leaderboard = function(query, callback, error) {
 	metacpan.post("http://api.metacpan.org/v0/release/_search", {
     "query": {
         "match_all": {}
@@ -26,7 +26,6 @@ metacpan.leaderboard = function(callback, error) {
    }, '', callback, error)
 };
 metacpan.profile = function(name, callback, error) {
-	//metacpan.get("http://api.metacpan.org/v0/author/_search?fields=name,pauseid,profile&size=10&q=author.profile.name:" + name, name, callback, error);
 	metacpan.post("http://api.metacpan.org/v0/author/_search", {
 		"query": {
 			"match_all": {}
@@ -152,7 +151,7 @@ function click() {
 			metacpan.recent(20, display_recent, show_error);
 			return;
 		case('leaderboard'):
-			metacpan.leaderboard(display_leaderboard, show_error);
+			metacpan.leaderboard('', display_leaderboard, show_error);
 			return;
 		case('profiles'):
 			display(0, {'profiles' : metacpan.profiles }, 'profiles-template');
