@@ -180,7 +180,7 @@ function display(query, result, template) {
 	var template = Handlebars.compile(source);
 	//var context = {name: result["name"]};
 	//var html    = template(context);
-	var html    = template(result);
+	var html    = template({'query' : query, 'result' : result});
 	document.getElementById('result').innerHTML = html;
 
 	var as = document.getElementsByTagName('a');

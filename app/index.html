@@ -13,23 +13,23 @@
 
 <script id="release-template" type="text/x-handlebars-template">
   <div class="entry">
-    <h2><a href="#" class="author" data-author="{{author}}">{{author}}</a> {{name}} {{date}}</h2>
+    <h2><a href="#" class="author" data-author="{{result.author}}">{{result.author}}</a> {{result.name}} {{result.date}}</h2>
   </div>
   <div class="repository">
-    <a target="_blank" href="{{resources.repository.web}}">{{resources.repository.type}}</a>
+    <a target="_blank" href="{{result.resources.repository.web}}">{{result.resources.repository.type}}</a>
   </div>
 
-  {{#unless authorized}}
+  {{#unless result.authorized}}
     <div class="warn">Unauthorized release</div>
   {{/unless}}
 
   <div class="license">
-     License: {{license}}
+     License: {{result.license}}
   </div>
 
   <h2>Provides</h2>
-  {{#each provides}}
-      <a href="#" class="module">{{lookup ../provides @index}}</a><br>
+  {{#each result.provides}}
+      <a href="#" class="module">{{this}}</a><br>
   {{/each}}
 
 </script>
@@ -42,7 +42,7 @@
 
 <script id="recent-template" type="text/x-handlebars-template">
   <ul>
-    {{#each hits.hits}}
+    {{#each result.hits.hits}}
       <li>
         <a href="#" class="release" data-distribution="{{fields.distribution}}">{{fields.name}}</a><br>
         {{fields.abstract}}<br>
@@ -56,15 +56,15 @@
 
 
 <script id="author-template" type="text/x-handlebars-template">
-  <h2>{{name}} ({{pauseid}})</h2>
-  <img src="{{gravatar_url}}" alt="{{name}}" /><br>
-  {{#each website}}
+  <h2>{{result.name}} ({{result.pauseid}})</h2>
+  <img src="{{result.gravatar_url}}" alt="{{result.name}}" /><br>
+  {{#each result.website}}
     <a target="_blanket" href="{{this}}">{{this}}</a><br>
   {{/each}}
   
-  {{#if profile}}
+  {{#if result.profile}}
     <h3>Profiles</h3>
-    {{#each profile}}
+    {{#each result.profile}}
        {{#if url}}
           <a target="_blank" href="{{url}}">{{name}}</a><br>
        {{else}}
@@ -73,9 +73,9 @@
     {{/each}}
   {{/if}}
 
-  {{#if blog}}
+  {{#if result.blog}}
     <h3>Blog</h3>
-    {{#each blog}}
+    {{#each result.blog}}
        <a target="_blank" href="{{url}}">{{url}}</a> <a target="_blank" href="{{feed}}">feed</a><br>
     {{/each}}
   {{/if}}
@@ -84,7 +84,7 @@
 <script id="leaderboard-template" type="text/x-handlebars-template">
   <h2>Leaderboard - Authors with Most Uploads</h2>
   <ul>
-  {{#each facets.author.terms }}
+  {{#each result.facets.author.terms }}
     <li><a href="#" class="author" data-author="{{term}}" >{{term}}</a> {{count}}</li>
   {{/each}}
   </ul>
@@ -93,16 +93,16 @@
 <script id="profiles-template" type="text/x-handlebars-template">
    <h2>Profile fields</h2>
    <ul>
-   {{#each profiles}}
+   {{#each result.profiles}}
      <li><a href="#" class="profile" data-profile="{{@key}}">{{@key}}</a></li>
    {{/each}}
    </ul>
 </script>
 
 <script id="profile-template" type="text/x-handlebars-template">
-   <h2>Users with .. in their profile</h2>
+   <h2>Users with {{query}} in their profile</h2>
    <ul>
-     {{#each hits.hits}}
+     {{#each result.hits.hits}}
        <li><a href="#" class="author" data-author="{{this.fields.pauseid}}">{{this.fields.name}} ({{this.fields.pauseid}})</a></li>
      {{/each}}
    </ul>
