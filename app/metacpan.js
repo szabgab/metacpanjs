@@ -25,6 +25,10 @@ metacpan.leaderboard = function(callback, error) {
     "size": 0
    }, callback, error)
 };
+metacpan.profile = function(name, callback, error) {
+	metacpan.get("http://api.metacpan.org/v0/author/_search?fields=name,pauseid,profile&size=100&q=author.profile.name:" + name, name, callback, error);
+};
+
 metacpan.profiles = {
 		'github'            : 'https://github.com/',
 		'twitter'           : 'https://twitter.com/',
@@ -141,6 +145,7 @@ function click() {
 			metacpan.leaderboard(display_leaderboard, show_error);
 			return;
 		case('profiles'):
+			display(0, {'profiles' : metacpan.profiles }, 'profiles-template');
 			return;
 		default:
 			console.log('unhandled id: ' + id);
@@ -155,6 +160,10 @@ function click() {
 		case('author'):
 			var query = this.getAttribute('data-author');
 			metacpan.author(query, display_author, show_error);
+			break;
+		case('profile'):
+			var profile = this.getAttribute('data-profile'); 
+			metacpan.profile(profile, display_profile, show_error);
 			break;
 		default:
 			console.log('Unhandled class: ' + class_name);
@@ -179,6 +188,10 @@ function display(query, result, template) {
 		as[i].addEventListener('click', click);
 	}
 	
+}
+
+function display_profile(name, result) {
+	display(name, result, 'profile-template');
 }
 
 function display_author(query, result) {
