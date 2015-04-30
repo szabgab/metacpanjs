@@ -1,10 +1,9 @@
 
 
 - Make the Back and Forward buttons work properly.
-- Change the URLs without reloading page
+- Change the URLs without reloading page (maybe only the part after # ?)
 - Allow the backend to serve the site from deep URLs as well.
 - Paging (e.g. for the leaderboard page)
-- List all the keys of all the profiles and then for each key, list all the people who have that key.
 
 
 //window.onbeforeunload = function () {

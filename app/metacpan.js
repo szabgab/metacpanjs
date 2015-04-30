@@ -23,10 +23,20 @@ metacpan.leaderboard = function(callback, error) {
         }
     },
     "size": 0
-   }, callback, error)
+   }, '', callback, error)
 };
 metacpan.profile = function(name, callback, error) {
-	metacpan.get("http://api.metacpan.org/v0/author/_search?fields=name,pauseid,profile&size=10&q=author.profile.name:" + name, name, callback, error);
+	//metacpan.get("http://api.metacpan.org/v0/author/_search?fields=name,pauseid,profile&size=10&q=author.profile.name:" + name, name, callback, error);
+	metacpan.post("http://api.metacpan.org/v0/author/_search", {
+		"query": {
+			"match_all": {}
+		},
+		"filter" : {
+			"term": { "author.profile.name" : name }
+		},
+		"fields" : ["name", "pauseid", "profile"],
+		"size" : 10
+	}, name, callback, error);
 };
 
 metacpan.profiles = {
@@ -52,8 +62,8 @@ metacpan.profiles = {
 };
 
 
-metacpan.post = function(url, data, callback, error) {
-	xmlhttp = metacpan.prepare('', callback, error);
+metacpan.post = function(url, data, query, callback, error) {
+	xmlhttp = metacpan.prepare(query, callback, error);
 	xmlhttp.open("POST", url, true);
 	//setTimeout(function() {  xmlhttp.abort()  },40000);
 	//xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -111,7 +121,7 @@ Handlebars.registerHelper('iff', function(a, operator, b, opts) {
        default:
            throw "Unknown operator " + operator;
     }
- 
+
     if (bool) {
         return opts.fn(this);
     } else {
@@ -133,10 +143,10 @@ function click() {
 	console.log('class: ' + class_name);
 	switch(id) {
 		case('search'):
-			search(); 
+			search();
 			return;
 		case('home'):
-			display_home(); 
+			display_home();
 			return;
 		case('recent'):
 			metacpan.recent(20, display_recent, show_error);
@@ -162,7 +172,7 @@ function click() {
 			metacpan.author(query, display_author, show_error);
 			break;
 		case('profile'):
-			var profile = this.getAttribute('data-profile'); 
+			var profile = this.getAttribute('data-profile');
 			metacpan.profile(profile, display_profile, show_error);
 			break;
 		default:
