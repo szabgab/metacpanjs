@@ -83,10 +83,17 @@
 
 <script id="leaderboard-template" type="text/x-handlebars-template">
   <h2>Leaderboard - Authors with Most Uploads</h2>
+  Total: {{result.facets.author.total}}
   <ul>
   {{#each result.facets.author.terms }}
     <li><a href="#" class="author" data-author="{{term}}" >{{term}}</a> {{count}}</li>
   {{/each}}
+  </ul>
+
+  <ul>
+   <li><a href="#" class="size" data-size="10">10</a></li>
+   <li><a href="#" class="size" data-size="50">50</a></li>
+   <li><a href="#" class="size" data-size="100">100</a></li>
   </ul>
 </script>
 

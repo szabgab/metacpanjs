@@ -1,4 +1,13 @@
 var metacpan = {}
+metacpan.size = function() {
+	var page_size = localStorage.getItem('page_size');
+	console.log(page_size);
+	if (page_size == null) {
+		page_size = 10;
+	}
+	return page_size;
+};
+
 metacpan.recent = function(count, callback, error) {
 	metacpan.get('http://api.metacpan.org/v0/release/_search?q=status:latest&fields=distribution,name,status,date,abstract&sort=date:desc&size=' + count, count, callback, error);
 };
@@ -18,7 +27,7 @@ metacpan.leaderboard = function(query, callback, error) {
 			"author": {
 				"terms": {
 					"field": "author",
-					"size": 100
+					"size": metacpan.size()
 				}
 			}
 		},
@@ -174,6 +183,11 @@ function click() {
 			var profile = this.getAttribute('data-profile');
 			metacpan.profile(profile, display_profile, show_error);
 			break;
+		case('size'):
+			var size = this.getAttribute('data-size');
+			console.log('set ' + size);
+			localStorage.setItem('page_size', size);
+			return;
 		default:
 			console.log('Unhandled class: ' + class_name);
 	}
