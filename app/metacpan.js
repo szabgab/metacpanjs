@@ -9,9 +9,41 @@ metacpan.release = function(query, callback, error) {
 metacpan.author = function(query, callback, error) {
 	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback, error);
 };
+metacpan.leaderboard = function(callback, error) {
+	metacpan.post("http://api.metacpan.org/v0/release/_search", {
+    "query": {
+        "match_all": {}
+    },
+    "facets": {
+        "author": {
+            "terms": {
+                "field": "author",
+                "size": 100
+            }
+        }
+    },
+    "size": 0
+   }, callback, error)
+};
+
+metacpan.post = function(url, data, callback, error) {
+	xmlhttp = metacpan.prepare('', callback, error);
+	xmlhttp.open("POST", url, true);
+	//setTimeout(function() {  xmlhttp.abort()  },40000);
+	//xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	xmlhttp.send(JSON.stringify(data));
+};
 
 
 metacpan.get = function(url, query, callback, error) {
+	xmlhttp = metacpan.prepare(query, callback, error);
+
+	xmlhttp.open("GET", url, true);
+	//setTimeout(function() {  xmlhttp.abort()  },40000);
+	xmlhttp.send();
+};
+
+metacpan.prepare = function(query, callback, error) {
 	xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4) {
@@ -32,10 +64,7 @@ metacpan.get = function(url, query, callback, error) {
 			}
 		}
 	}
-
-	xmlhttp.open("GET", url, true);
-	//setTimeout(function() {  xmlhttp.abort()  },40000);
-	xmlhttp.send();
+	return xmlhttp;
 };
 
 Handlebars.registerHelper('iff', function(a, operator, b, opts) {
@@ -85,6 +114,9 @@ function click() {
 			return;
 		case('recent'):
 			metacpan.recent(20, display_recent, show_error);
+			return;
+		case('leaderboard'):
+			metacpan.leaderboard(display_leaderboard, show_error);
 			return;
 		default:
 			console.log('unhandled id: ' + id);
@@ -163,6 +195,10 @@ function display_result(query, result) {
 function display_recent(count, result) {
 	display(count, result, 'recent-template');
 }
+function display_leaderboard(count, result) {
+	display(count, result, 'leaderboard-template');
+}
+
 function display_home() {
 	display('', '', 'home-template');
 }

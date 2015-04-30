@@ -79,11 +79,19 @@
   {{/if}}
 </script>
 
+<script id="leaderboard-template" type="text/x-handlebars-template">
+  <h2>Leaderboard - Authors with Most Uploads</h2>
+  <ul>
+  {{#each facets.author.terms }}
+    <li><a href="#" class="author" data-author="{{term}}" >{{term}}</a> {{count}}</li>
+  {{/each}}
+  </ul>
+</script>
 
 </head>
 <body>
 
-<a href="#" id="home">home</a> | <a href="#" id="recent">recent</a>
+<a href="#" id="home">home</a> | <a href="#" id="recent">recent</a> | <a href="#" id="leaderboard">leaderboard</a>
 
 <p>Find a solution in Perl</p>
 <p><input type="text" id="query"><button id="search">Search</button></p>
