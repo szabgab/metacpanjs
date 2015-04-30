@@ -1,4 +1,5 @@
 var metacpan = {}
+metacpan.history = [];
 metacpan.size = function() {
 	var page_size = localStorage.getItem('page_size');
 	if (page_size == null) {
@@ -18,6 +19,7 @@ metacpan.author = function(query, callback, error) {
 	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback, error);
 };
 metacpan.leaderboard = function(query, callback, error) {
+	metacpan.history.push({ 'req' : metacpan.leaderboard, 'query' : query, 'callback' : callback, 'error' : error });
 	metacpan.post("http://api.metacpan.org/v0/release/_search", {
 		"query": {
 			"match_all": {}
@@ -203,6 +205,11 @@ function click() {
 		case('size'):
 			var size = this.getAttribute('data-size');
 			localStorage.setItem('page_size', size);
+			if (metacpan.history.length > 0) {
+				var last = metacpan.history.length - 1;
+				metacpan.history[last]["req"]( metacpan.history[last]["query"], metacpan.history[last]["callback"], metacpan.history[last]["error"])
+			}
+
 			return;
 		default:
 			console.log('Unhandled class: ' + class_name);
