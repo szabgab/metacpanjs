@@ -206,7 +206,9 @@ function display_home() {
 	display('', '', 'home-template');
 }
 
-//document.getElementById('query').addEventListener('keyup', search);
-document.getElementById('search').addEventListener('click', search);
+$(document).ready(function() {
+	//document.getElementById('query').addEventListener('keyup', search);
+	document.getElementById('search').addEventListener('click', search);
+	display_home();
+});
 
-display_home();
