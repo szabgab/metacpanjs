@@ -1,7 +1,6 @@
 var metacpan = {}
 metacpan.size = function() {
 	var page_size = localStorage.getItem('page_size');
-	console.log(page_size);
 	if (page_size == null) {
 		page_size = 10;
 	}
@@ -43,7 +42,7 @@ metacpan.profile = function(name, callback, error) {
 			"term": { "author.profile.name" : name }
 		},
 		"fields" : ["name", "pauseid", "profile"],
-		"size" : 10
+		"size" : metacpan.size()
 	}, name, callback, error);
 };
 
@@ -111,6 +110,24 @@ metacpan.prepare = function(query, callback, error) {
 	return xmlhttp;
 };
 
+Handlebars.registerHelper('sizer', function(size) {
+	var html = '<ul>';
+	[10, 50, 100, 500].forEach(function(n) {
+		html += '<li>';
+		if (metacpan.size() == n) {
+			html += '<b>';
+		}
+		html += '<a href="#" class="size" data-size="' + n + '">' + n + '</a>';
+		if (metacpan.size() == n) {
+			html += '</b>';
+		}
+		html += '</li>';
+	});
+	html += '</ul>';
+	return new Handlebars.SafeString(html);
+})
+
+
 Handlebars.registerHelper('iff', function(a, operator, b, opts) {
 	var bool = false;
 	switch(operator) {
@@ -144,11 +161,11 @@ function search() {
 }
 
 function click() {
-	console.log('click');
+	//console.log('click');
 	var id = this.getAttribute('id');
 	var class_name = this.getAttribute('class');
-	console.log('id: ' + id);
-	console.log('class: ' + class_name);
+	//console.log('id: ' + id);
+	//console.log('class: ' + class_name);
 	switch(id) {
 		case('search'):
 			search();
@@ -185,7 +202,6 @@ function click() {
 			break;
 		case('size'):
 			var size = this.getAttribute('data-size');
-			console.log('set ' + size);
 			localStorage.setItem('page_size', size);
 			return;
 		default:
