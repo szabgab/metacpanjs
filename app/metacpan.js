@@ -1,12 +1,14 @@
 var metacpan = {}
 metacpan.history = [];
 metacpan.size = function() {
-	var page_size = localStorage.getItem('page_size');
-	if (page_size == null) {
+	var page_size = parseInt(localStorage.getItem('page_size'));
+	if (page_size == null || page_size == 'null') {
 		page_size = 10;
 	}
 	return page_size;
 };
+metacpan.page = 1;
+metacpan.total = 0;
 
 metacpan.recent = function(count, callback, error) {
 	metacpan.get('http://api.metacpan.org/v0/release/_search?q=status:latest&fields=distribution,name,status,date,abstract&sort=date:desc&size=' + count, count, callback, error);
@@ -20,6 +22,9 @@ metacpan.author = function(query, callback, error) {
 };
 metacpan.leaderboard = function(query, callback, error) {
 	metacpan.history.push({ 'req' : metacpan.leaderboard, 'query' : query, 'callback' : callback, 'error' : error });
+	var page_size = metacpan.size();
+	var page = metacpan.page;
+	var from = ( page - 1 ) * page_size;
 	metacpan.post("http://api.metacpan.org/v0/release/_search", {
 		"query": {
 			"match_all": {}
@@ -28,15 +33,20 @@ metacpan.leaderboard = function(query, callback, error) {
 			"author": {
 				"terms": {
 					"field": "author",
-					"size": metacpan.size()
+					"from" : from,
+					"size": page_size
 				}
 			}
 		},
 		"size": 0
 	}, '', callback, error)
 };
+
 metacpan.profile = function(query, callback, error) {
 	metacpan.history.push({ 'req' : metacpan.profile, 'query' : query, 'callback' : callback, 'error' : error });
+	var page_size = metacpan.size();
+	var page = metacpan.page;
+	var from = ( page - 1 ) * page_size;
 	metacpan.post("http://api.metacpan.org/v0/author/_search", {
 		"query": {
 			"match_all": {}
@@ -45,7 +55,8 @@ metacpan.profile = function(query, callback, error) {
 			"term": { "author.profile.name" : query }
 		},
 		"fields" : ["name", "pauseid", "profile"],
-		"size" : metacpan.size()
+		"size" : metacpan.size(),
+		"from" : from
 	}, query, callback, error);
 };
 
@@ -113,22 +124,45 @@ metacpan.prepare = function(query, callback, error) {
 	return xmlhttp;
 };
 
-Handlebars.registerHelper('sizer', function(size) {
-	var html = '<ul>';
-	[10, 50, 100, 500].forEach(function(n) {
+Handlebars.registerHelper('pager', function() {
+	var html = 'Page:';
+	var page_count = Math.ceil(metacpan.total / metacpan.size());
+	var page = metacpan.page;
+	html += '<ul>';
+	for (var n = Math.max(1, page - 2) ; n <= Math.min(page + 2, page_count); n++) {
 		html += '<li>';
-		if (metacpan.size() == n) {
+		if (page == n) {
+			html += '<b>';
+		}
+		html += '<a href="#" class="page" data-page="' + n + '">' + n + '</a>';
+		if (page == n) {
+			html += '</b>';
+		}
+		html += '</li>';
+	}
+
+	html += '</ul>';
+	return new Handlebars.SafeString(html);
+});
+
+Handlebars.registerHelper('sizer', function() {
+	var html = 'Size:';
+	html += '<ul>';
+	var page_size = metacpan.size();
+	[1, 10, 50, 100, 500].forEach(function(n) {
+		html += '<li>';
+		if (page_size == n) {
 			html += '<b>';
 		}
 		html += '<a href="#" class="size" data-size="' + n + '">' + n + '</a>';
-		if (metacpan.size() == n) {
+		if (page_size == n) {
 			html += '</b>';
 		}
 		html += '</li>';
 	});
 	html += '</ul>';
 	return new Handlebars.SafeString(html);
-})
+});
 
 
 Handlebars.registerHelper('iff', function(a, operator, b, opts) {
@@ -164,11 +198,8 @@ function search() {
 }
 
 function click() {
-	//console.log('click');
 	var id = this.getAttribute('id');
 	var class_name = this.getAttribute('class');
-	//console.log('id: ' + id);
-	//console.log('class: ' + class_name);
 	switch(id) {
 		case('search'):
 			search();
@@ -192,7 +223,6 @@ function click() {
 	switch(class_name) {
 		case('release'):
 			var query = this.getAttribute('data-distribution');
-			//console.log(query);
 			metacpan.release(query, display_result, show_error);
 			break;
 		case('author'):
@@ -204,16 +234,22 @@ function click() {
 			metacpan.profile(profile, display_profile, show_error);
 			break;
 		case('size'):
-			var size = this.getAttribute('data-size');
-			localStorage.setItem('page_size', size);
-			if (metacpan.history.length > 0) {
-				var last = metacpan.history.length - 1;
-				metacpan.history[last]["req"]( metacpan.history[last]["query"], metacpan.history[last]["callback"], metacpan.history[last]["error"])
-			}
-
+			localStorage.setItem('page_size', this.getAttribute('data-size'));
+			reload();
+			return;
+		case('page'):
+			metacpan.page = parseInt(this.getAttribute('data-page'));
+			reload();
 			return;
 		default:
 			console.log('Unhandled class: ' + class_name);
+	}
+}
+
+function reload() {
+	if (metacpan.history.length > 0) {
+		var last = metacpan.history.length - 1;
+		metacpan.history[last]["req"]( metacpan.history[last]["query"], metacpan.history[last]["callback"], metacpan.history[last]["error"])
 	}
 }
 
@@ -223,6 +259,10 @@ function show_error(query, result) {
 
 
 function display(query, result, template) {
+	if (result["hits"]) {
+		metacpan.total = result["hits"]["total"];
+	}
+
 	var source   = document.getElementById(template).innerHTML;
 	var template = Handlebars.compile(source);
 	//var context = {name: result["name"]};
