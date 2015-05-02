@@ -80,7 +80,7 @@ metacpan.profiles = {
 		'ohloh'             : 'https://www.openhub.net/accounts/',
 		'openhub'           : 'https://www.openhub.net/accounts/',
 		'perlmonks'         : 'http://www.perlmonks.org/?node=',
-		'perlresume'        : 'http://perlresume.org/',
+		//'perlresume'        : 'http://perlresume.org/',
 		'reddit'            : 'http://www.reddit.com/user/',
 		'stackoverflow'     : 'http://stackoverflow.com/users/',
 		'twitter'           : 'https://twitter.com/',
@@ -302,13 +302,16 @@ function display_profile(name, result) {
 
 function display_author(query, result) {
 
+	var good_profiles = new Array;
 	if (result["profile"]) {
 		for (i=0; i<result["profile"].length; i++) {
 			if (metacpan.profiles[ result["profile"][i]["name"] ]) {
 				result["profile"][i]["url"] =  metacpan.profiles[ result["profile"][i]["name"] ] + result["profile"][i]["id"];
+				good_profiles.push(result["profile"][i]);
 			}
 		}
 	}
+	result["profile"] = good_profiles;
 
 	display(query, result, 'author-template');
 };
