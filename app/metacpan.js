@@ -200,7 +200,7 @@ Handlebars.registerHelper('iff', function(a, operator, b, opts) {
 
 
 function search() {
-	var query = document.getElementById('query').value;
+	var query = $('#query').val();
 	metacpan.release(query, display_result, show_error);
 }
 
@@ -270,18 +270,14 @@ function display(query, result, template) {
 		metacpan.total = result["hits"]["total"];
 	}
 
-	var source   = document.getElementById(template).innerHTML;
+	var source   = $('#' + template).html();
 	var template = Handlebars.compile(source);
 	//var context = {name: result["name"]};
 	//var html    = template(context);
 	var html    = template({'query' : query, 'result' : result});
-	document.getElementById('result').innerHTML = html;
+	$('#result').html(html);
 
-	var as = document.getElementsByTagName('a');
-	for (i=0; i<as.length; i++) {
-		as[i].addEventListener('click', click);
-	}
-	
+	$('a').click(click);
 }
 
 function display_profile(name, result) {
@@ -332,8 +328,7 @@ function display_home() {
 }
 
 $(document).ready(function() {
-	//document.getElementById('query').addEventListener('keyup', search);
-	document.getElementById('search').addEventListener('click', search);
+	$('#search').click(search);
 	display_home();
 });
 
