@@ -61,25 +61,32 @@ metacpan.profile = function(query, callback, error) {
 };
 
 metacpan.profiles = {
-		'github'            : 'https://github.com/',
-		'twitter'           : 'https://twitter.com/',
 		'coderwall'         : 'http://www.coderwall.com/',
 		'delicious'         : 'http://www.delicious.com/',
 		'facebook'          : 'http://www.facebook.com/',
+		'flickr'            : 'http://www.flickr.com/people/',
+		'geeklist'          : 'http://geekli.st/',
+		'github'            : 'https://github.com/',
 		'github-meets-cpan' : 'http://gh.metacpan.org/user/',
+		'gitorious'         : 'https://gitorious.org/~',
 		'gittip'            : 'https://gratipay.com/',
 		'googleplus'        : 'https://plus.google.com/',
 		'hackernews'        : 'https://news.ycombinator.com/user?id=',
-		'linkedin'          : 'https://www.linkedin.com/in/',
+		'identica'          : 'http://identi.ca/',
 		//'irc'               : '',
+		'lastfm'            : 'http://www.last.fm/user/',
+		'linkedin'          : 'https://www.linkedin.com/in/',
+		'klout'             : 'http://klout.com/#/',
+		'ohloh'             : 'https://www.openhub.net/accounts/',
+		'openhub'           : 'https://www.openhub.net/accounts/',
 		'perlmonks'         : 'http://www.perlmonks.org/?node=',
+		'perlresume'        : 'http://perlresume.org/',
+		'reddit'            : 'http://www.reddit.com/user/',
 		'stackoverflow'     : 'http://stackoverflow.com/users/',
+		'twitter'           : 'https://twitter.com/',
 		'vimeo'             : 'https://vimeo.com/',
 		'xing'              : 'https://www.xing.com/profile/',
-		'youtube'           : 'https://www.youtube.com/user/',
-		'gitorious'         : 'https://gitorious.org/~',
-		'ohloh'             : 'https://www.openhub.net/accounts/',
-		'openhub'           : 'https://www.openhub.net/accounts/'
+		'youtube'           : 'https://www.youtube.com/user/'
 };
 
 
