@@ -89,11 +89,6 @@ metacpan.profiles = {
 		'youtube'           : 'https://www.youtube.com/user/'
 };
 
-metacpan.recommended = {
-   'database' : [ 'DBI', 'DBD::mysql', 'MongoDB' ],
-   'json'     : [ 'JSON::MaybeXS', 'Mojo::JSON' ]
-};
-
 
 metacpan.post = function(url, data, query, callback, error) {
 	xmlhttp = metacpan.prepare(query, callback, error);
