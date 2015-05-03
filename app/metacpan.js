@@ -250,7 +250,7 @@ function click() {
 			return;
 		case('recommended'):
 			var name = this.getAttribute('data-recommended');
-			display(name, metacpan.recommended[name], 'recommended-template');
+			display(name, { 'recommended' : metacpan.recommended[name] }, 'recommended-template');
 			return;
 		default:
 			console.log('Unhandled class: ' + class_name);
@@ -319,7 +319,7 @@ function display_leaderboard(count, result) {
 }
 
 function display_home() {
-	display('', metacpan.recommended, 'home-template');
+	display('', { 'recommended' : metacpan.recommended }, 'home-template');
 }
 
 $(document).ready(function() {

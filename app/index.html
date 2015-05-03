@@ -38,16 +38,17 @@
 <script id="home-template" type="text/x-handlebars-template">
   <h2>Perl Maven's view of CPAN</h2>
   <ul>
-  {{#each result}}
+  {{#each result.recommended}}
      <li><a href="#" class="recommended" data-recommended="{{@key}}">{{@key}}</a></li>
   {{/each}}
   </ul>
+  If you would like to suggest other categories, you can do that via <a target="_blank" href="https://github.com/szabgab/metacpanjs">GitHub</a>
 </script>
 
 <script id="recommended-template" type="text/x-handlebars-template">
   <h2>Perl Maven's recommended CPAN modules for {{query}}</h2>
   <ul>
-  {{#each result}}
+  {{#each result.recommended}}
      <li><a href="#" class="module" data-module="{{this}}">{{this}}</a></li>
   {{/each}}
   </ul>
