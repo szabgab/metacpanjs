@@ -297,17 +297,8 @@ function display_profile(name, result) {
 }
 
 function display_author(query, result) {
-
-	var good_profiles = new Array;
-	if (result["profile"]) {
-		for (i=0; i<result["profile"].length; i++) {
-			if (metacpan.profiles[ result["profile"][i]["name"] ]) {
-				result["profile"][i]["url"] =  metacpan.profiles[ result["profile"][i]["name"] ] + result["profile"][i]["id"];
-				good_profiles.push(result["profile"][i]);
-			}
-		}
-	}
-	result["profile"] = good_profiles;
+	result["profile"] = result["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
+	result["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
 
 	display(query, result, 'author-template');
 };
