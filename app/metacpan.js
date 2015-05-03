@@ -11,7 +11,19 @@ metacpan.page = 1;
 metacpan.total = 0;
 
 metacpan.recent = function(count, callback, error) {
-	metacpan.get('http://api.metacpan.org/v0/release/_search?q=status:latest&fields=distribution,name,status,date,abstract&sort=date:desc&size=' + count, count, callback, error);
+	metacpan.post('http://api.metacpan.org/v0/release/_search', {
+		"query": {
+			"match_all": {}
+		},
+		//"filter" : {
+		//	"term": { "status" : "latest" }
+		//},
+		"fields" : [ "distribution", "name", "status", "date", "abstract" ],
+		"sort" : [
+			{ "date": {"order" : "desc"} }
+		],
+		"size" :  count
+	}, count, callback, error);
 };
 
 metacpan.release = function(query, callback, error) {
