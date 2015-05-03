@@ -89,6 +89,11 @@ metacpan.profiles = {
 		'youtube'           : 'https://www.youtube.com/user/'
 };
 
+metacpan.recommended = {
+   'database' : [ 'DBI', 'DBD::mysql', 'MongoDB' ],
+   'json'     : [ 'JSON::MaybeXS', 'Mojo::JSON' ]
+};
+
 
 metacpan.post = function(url, data, query, callback, error) {
 	xmlhttp = metacpan.prepare(query, callback, error);
@@ -248,6 +253,10 @@ function click() {
 			metacpan.page = parseInt(this.getAttribute('data-page'));
 			reload();
 			return;
+		case('recommended'):
+			var name = this.getAttribute('data-recommended');
+			display(name, metacpan.recommended[name], 'recommended-template');
+			return;
 		default:
 			console.log('Unhandled class: ' + class_name);
 	}
@@ -315,7 +324,7 @@ function display_leaderboard(count, result) {
 }
 
 function display_home() {
-	display('', '', 'home-template');
+	display('', metacpan.recommended, 'home-template');
 }
 
 $(document).ready(function() {

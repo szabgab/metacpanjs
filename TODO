@@ -3,7 +3,6 @@
 - Make the Back and Forward buttons work properly.
 - Change the URLs without reloading page (maybe only the part after # ?)
 - Allow the backend to serve the site from deep URLs as well.
-- Paging (e.g. for the leaderboard page)
 
 
 //window.onbeforeunload = function () {

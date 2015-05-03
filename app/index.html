@@ -29,13 +29,27 @@
 
   <h2>Provides</h2>
   {{#each result.provides}}
-      <a href="#" class="module">{{this}}</a><br>
+      <a href="#" class="module" data-module="{{this}}">{{this}}</a><br>
   {{/each}}
 
 </script>
 
 <script id="home-template" type="text/x-handlebars-template">
   <h2>Perl Maven's view of CPAN</h2>
+  <ul>
+  {{#each result}}
+     <li><a href="#" class="recommended" data-recommended="{{@key}}">{{@key}}</a></li>
+  {{/each}}
+  </ul>
+</script>
+
+<script id="recommended-template" type="text/x-handlebars-template">
+  <h2>Perl Maven's recommended CPAN modules for {{query}}</h2>
+  <ul>
+  {{#each result}}
+     <li><a href="#" class="module" data-module="{{this}}">{{this}}</a></li>
+  {{/each}}
+  </ul>
 </script>
 
 
