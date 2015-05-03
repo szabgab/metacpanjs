@@ -20,6 +20,24 @@ metacpan.release = function(query, callback, error) {
 metacpan.author = function(query, callback, error) {
 	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback, error);
 };
+
+metacpan.no_license = function(query, callback, error) {
+	metacpan.history.push({ 'req' : metacpan.no_license, 'query' : query, 'callback' : callback, 'error' : error });
+	//var page_size = metacpan.size();
+	//var page = metacpan.page;
+	//var from = ( page - 1 ) * page_size;
+	metacpan.post("http://api.metacpan.org/v0/release/_search", {
+		"query": {
+			"match_all": {}
+		},
+		"fields" : [ "metadata.license", "metadata.distribution", "date", "author", "license", "distribution", "name", "metadata.name" ],
+		"size" : 1000,
+		//"size" : metacpan.size(),
+		//"from" : from
+	}, query, callback, error)
+
+}
+
 metacpan.leaderboard = function(query, callback, error) {
 	metacpan.history.push({ 'req' : metacpan.leaderboard, 'query' : query, 'callback' : callback, 'error' : error });
 	var page_size = metacpan.size();
@@ -39,7 +57,7 @@ metacpan.leaderboard = function(query, callback, error) {
 			}
 		},
 		"size": 0
-	}, '', callback, error)
+	}, query, callback, error)
 };
 
 metacpan.profile = function(query, callback, error) {
@@ -223,6 +241,12 @@ function click() {
 		case('profiles'):
 			display(0, {'profiles' : metacpan.profiles }, 'profiles-template');
 			return;
+		case('other'):
+			display(0, {}, 'other-template');
+			return;
+		case('no-license'):
+			metacpan.no_license('', display_no_license, show_error);
+			return;
 		default:
 			console.log('unhandled id: ' + id);
 	}
@@ -317,6 +341,12 @@ function display_recent(count, result) {
 function display_leaderboard(count, result) {
 	display(count, result, 'leaderboard-template');
 }
+
+function display_no_license(count, result) {
+	var distros = result["hits"]["hits"].filter(function(h) { return h["fields"]["license"] == "unknown" } );
+	display(count, distros, 'releases-template');
+}
+
 
 function display_home() {
 	display('', { 'recommended' : metacpan.recommended }, 'home-template');

@@ -99,6 +99,22 @@
   {{/if}}
 </script>
 
+<script id="releases-template" type="text/x-handlebars-template">
+   <h2>Recent releases without a license</h2>
+   <ul>
+   {{#each result}}
+     <li><a href="#" class="release" data-distribution="{{fields.distribution}}">{{fields.distribution}}</a></li>
+   {{/each}}
+   </ul>
+</script>
+
+<script id="other-template" type="text/x-handlebars-template">
+  <h2>Various other pages</h2>
+  <ul>
+    <li><a href="#" id="no-license">no license</a></li>
+  </ul>
+</script>
+
 <script id="leaderboard-template" type="text/x-handlebars-template">
   <h2>Leaderboard - Authors with Most Uploads</h2>
   Total: {{result.facets.author.total}}
@@ -137,7 +153,7 @@
 </head>
 <body>
 
-<a href="#" id="home">home</a> | <a href="#" id="recent">recent</a> | <a href="#" id="leaderboard">leaderboard</a> | <a href="#" id="profiles">profiles</a> |  <a target="_blank" href="https://github.com/szabgab/metacpanjs">fork me</a>
+<a href="#" id="home">home</a> | <a href="#" id="recent">recent</a> | <a href="#" id="leaderboard">leaderboard</a> | <a href="#" id="profiles">profiles</a> |  <a href="#" id="other">other</a> |  <a target="_blank" href="https://github.com/szabgab/metacpanjs">fork me</a>
 
 <p>Find a solution in Perl (For now, search only works if you type the exact name of a distribution. For example Test-Simple. Use the other navigaion options)</p>
 <p><input type="text" id="query"><button id="search">Search</button></p>
