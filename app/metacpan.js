@@ -249,10 +249,6 @@ function search() {
 }
 
 function click(route) {
-	$(".active").removeClass('active');
-	var locator = route ? "a[href=" + route +"]" : 'a[href=#]';
-	$(locator).parent('li').addClass('active');
-
 	var params = new Object;
 	if (route) {
 		route = route.replace(/^#/, '');
@@ -266,6 +262,10 @@ function click(route) {
 		route = 'home';
 	}
 	route = route.split("/");
+
+	$(".active").removeClass('active');
+	var locator = route[0] == 'home' ? 'a[href=#]' : "a[href=#" + route[0] +"]" ;
+	$(locator).parent('li').addClass('active');
 
 	if (params["size"]) {
 		localStorage.setItem('page_size', params["size"]);
