@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="/style.css">
 
 <script id="error-template" type="text/x-handlebars-template">
-  Error. {{code}}
+  <div class="error">Error. {{result.code}}</div>
 </script>
 
 <script id="release-template" type="text/x-handlebars-template">
@@ -194,10 +194,12 @@
 <p>Find a solution in Perl (For now, search only works if you type the exact name of a distribution. For example Test-Simple. Use the other navigaion options)</p>
 <p><input type="text" id="query"><button id="search">Search</button></p>
 <hr>
-
-<div id="result">
+<div class="units-row">
+    <div class="unit-10"></div>
+    <div class="unit-90">
+        <div id="result"></div>
+    </div>
 </div>
-
 
 </body>
 </html>

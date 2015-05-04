@@ -1,3 +1,7 @@
+.error {
+   color: red;
+}
+
 .warn {
    color: red;
 }
@@ -15,3 +19,15 @@
 .navbar ul li.active {
     background: #DDD;
 }
+
+.units-row {
+	width: 100%;
+}
+
+.unit-10 {
+	width: 10%;
+}
+.unit-90 {
+	width: 90%;
+}
+
