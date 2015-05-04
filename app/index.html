@@ -33,7 +33,24 @@
   {{#each result.provides}}
       <a href="#" class="module" data-module="{{this}}">{{this}}</a><br>
   {{/each}}
+</script>
 
+<script id="module-template" type="text/x-handlebars-template">
+    <h2>{{result.module.name}} {{result.version}} by {{result.author}}</h2>
+    {{result.abstract}}
+    <hr>
+    {{#unless result.authorized}}
+     <div class="warn">Unauthorized release</div>
+    {{/unless}}
+    {{result.release}}<br>
+    {{result.path}}<br>
+    <div>
+     {{result.description}}
+    </div>
+    <hr>
+    <div>
+     {{result.pod}}
+    </div>
 </script>
 
 <script id="home-template" type="text/x-handlebars-template">

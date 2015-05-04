@@ -29,6 +29,13 @@ metacpan.recent = function(count, callback, error) {
 metacpan.release = function(query, callback, error) {
 	metacpan.get("http://api.metacpan.org/v0/release/" + query, query, callback, error);
 };
+
+metacpan.module = function(query, callback, error) {
+	metacpan.get("http://api.metacpan.org/v0/module/" + query, query, callback, error);
+};
+
+
+
 metacpan.author = function(query, callback, error) {
 	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback, error);
 };
@@ -288,6 +295,10 @@ function click() {
 			var name = this.getAttribute('data-recommended');
 			display(name, { 'recommended' : metacpan.recommended[name] }, 'recommended-template');
 			return;
+		case('module'):
+			var query = this.getAttribute('data-module');
+			metacpan.module(query, display_module, show_error);
+			return;
 		default:
 			console.log('Unhandled class: ' + class_name);
 	}
@@ -341,6 +352,10 @@ function display_author(query, result) {
 	result["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
 
 	display(query, result, 'author-template');
+};
+
+function display_module(query, result) {
+	display(query, result, 'module-template');
 };
 
 function display_result(query, result) {
