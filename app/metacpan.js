@@ -248,6 +248,10 @@ function search() {
 }
 
 function click(route) {
+	$(".active").removeClass('active');
+	var locator = "a[href=" + route +"]";
+	$(locator).parent('li').addClass('active');
+
 	var params = new Object;
 	if (route) {
 		route = route.replace(/^#/, '');

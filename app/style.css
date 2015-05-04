@@ -1,3 +1,17 @@
 .warn {
    color: red;
 }
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar ul li {
+    display: inline;
+}
+
+.navbar ul li.active {
+    background: #DDD;
+}
