@@ -348,8 +348,10 @@ function display_profile(name, result) {
 }
 
 function display_author(query, result) {
-	result["profile"] = result["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
-	result["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
+	if (result["profile"]) {
+		result["profile"] = result["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
+		result["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
+	}
 
 	display(query, result, 'author-template');
 };
