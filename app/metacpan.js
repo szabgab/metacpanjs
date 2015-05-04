@@ -244,6 +244,7 @@ Handlebars.registerHelper('iff', function(a, operator, b, opts) {
 
 function search() {
 	var query = $('#query').val();
+	window.location.hash = '#';
 	metacpan.release(query, display_result, show_error);
 }
 
