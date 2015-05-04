@@ -36,8 +36,14 @@
 </script>
 
 <script id="module-template" type="text/x-handlebars-template">
-    <h2>{{result.module.name}} {{result.version}} by <a href="#" class="author" data-author="{{result.author}}">{{result.author}}</a></h2>
+    <h2><a href="#" class="release" data-distribution="{{result.distribution}}">{{result.distribution}}</a> {{query}} {{result.version}} by <a href="#" class="author" data-author="{{result.author}}">{{result.author}}</a></h2>
     {{result.abstract}}
+    <hr>
+    <ul>
+    {{#each result.module}}
+       <li>{{name}} {{#if version}}{{version}}{{/if}} {{#if associated_pod}}{{associated_pod}}{{/if}}</li>
+    {{/each}}
+    </ul>
     <hr>
     {{#unless result.authorized}}
      <div class="warn">Unauthorized release</div>
