@@ -14,7 +14,7 @@
 
 <script id="release-template" type="text/x-handlebars-template">
   <div class="entry">
-    <h2><a href="#" class="author" data-author="{{result.author}}">{{result.author}}</a> {{result.name}} {{result.date}}</h2>
+    <h2><a href="#/author/{{result.author}}">{{result.author}}</a> {{result.name}} {{result.date}}</h2>
     <a href="https://metacpan.org/release/{{result.distribution}}" target="_blank">MetaCPAN</a>
   </div>
   <div class="repository">
@@ -31,12 +31,12 @@
 
   <h2>Provides</h2>
   {{#each result.provides}}
-      <a href="#" class="module" data-module="{{this}}">{{this}}</a><br>
+      <a href="#module/{{this}}">{{this}}</a><br>
   {{/each}}
 </script>
 
 <script id="module-template" type="text/x-handlebars-template">
-    <h2><a href="#" class="release" data-distribution="{{result.distribution}}">{{result.distribution}}</a> {{query}} {{result.version}} by <a href="#" class="author" data-author="{{result.author}}">{{result.author}}</a></h2>
+    <h2><a href="#release/{{result.distribution}}">{{result.distribution}}</a> {{query}} {{result.version}} by <a href="#author/{{result.author}}">{{result.author}}</a></h2>
     {{result.abstract}}
     <hr>
     <ul>
@@ -63,7 +63,7 @@
   <h2>Perl Maven's view of CPAN</h2>
   <ul>
   {{#each result.recommended}}
-     <li><a href="#" class="recommended" data-recommended="{{@key}}">{{@key}}</a></li>
+     <li><a href="#recommended/{{@key}}">{{@key}}</a></li>
   {{/each}}
   </ul>
   If you would like to suggest other categories, you can do that via <a target="_blank" href="https://github.com/szabgab/metacpanjs">GitHub</a>
@@ -73,7 +73,7 @@
   <h2>Perl Maven's recommended CPAN modules for {{query}}</h2>
   <ul>
   {{#each result.recommended}}
-     <li><a href="#" class="module" data-module="{{this}}">{{this}}</a></li>
+     <li><a href="#module/{{this}}">{{this}}</a></li>
   {{/each}}
   </ul>
 </script>
@@ -84,7 +84,7 @@
   <ul>
     {{#each result.hits.hits}}
       <li>
-        <a href="#" class="release" data-distribution="{{fields.distribution}}">{{fields.name}}</a><br>
+        <a href="#release/{{fields.distribution}}">{{fields.name}}</a><br>
         {{fields.abstract}}<br>
         {{fields.date}}<br>
         {{#iff fields.status '!=' 'latest'}}<b>{{fields.status}}</b>{{/iff}}<br>
@@ -99,7 +99,7 @@
   <h2>{{result.name}} ({{result.pauseid}})</h2>
   <img src="{{result.gravatar_url}}" alt="{{result.name}}" /><br>
   {{#each result.website}}
-    <a target="_blanket" href="{{this}}">{{this}}</a><br>
+    <a target="_blank" href="{{this}}">{{this}}</a><br>
   {{/each}}
   <a href="https://metacpan.org/author/{{result.pauseid}}" target="_blank">MetaCPAN</a>
   
@@ -126,7 +126,7 @@
    <h2>Recent releases without a license</h2>
    <ul>
    {{#each result}}
-     <li><a href="#" class="release" data-distribution="{{fields.distribution}}">{{fields.distribution}}</a></li>
+     <li><a href="#release/{{fields.distribution}}">{{fields.distribution}}</a></li>
    {{/each}}
    </ul>
 </script>
@@ -134,7 +134,7 @@
 <script id="other-template" type="text/x-handlebars-template">
   <h2>Various other pages</h2>
   <ul>
-    <li><a href="#" id="no-license">no license</a></li>
+    <li><a href="#no-license">no license</a></li>
   </ul>
 </script>
 
@@ -143,7 +143,7 @@
   Total: {{result.facets.author.total}}
   <ul>
   {{#each result.facets.author.terms }}
-    <li><a href="#" class="author" data-author="{{term}}" >{{term}}</a> {{count}}</li>
+    <li><a href="#author/{{term}}" >{{term}}</a> {{count}}</li>
   {{/each}}
   </ul>
 
@@ -155,7 +155,7 @@
    <h2>Profile fields</h2>
    <ul>
    {{#each result.profiles}}
-     <li><a href="#" class="profile" data-profile="{{@key}}">{{@key}}</a></li>
+     <li><a href="#profile/{{@key}}">{{@key}}</a></li>
    {{/each}}
    </ul>
 </script>
@@ -164,7 +164,7 @@
    <h2>Users with {{query}} in their profile</h2>
    <ul>
      {{#each result.hits.hits}}
-       <li><a href="#" class="author" data-author="{{this.fields.pauseid}}">{{this.fields.name}} ({{this.fields.pauseid}})</a> <a href="{{this.url}}" target="_blank">{{../query}}</a></li>
+       <li><a href="#author/{{this.fields.pauseid}}">{{this.fields.name}} ({{this.fields.pauseid}})</a> <a href="{{this.url}}" target="_blank">{{../query}}</a></li>
      {{/each}}
    </ul>
 
@@ -176,7 +176,7 @@
 </head>
 <body>
 
-<a href="#" id="home">home</a> | <a href="#" id="recent">recent</a> | <a href="#" id="leaderboard">leaderboard</a> | <a href="#" id="profiles">profiles</a> |  <a href="#" id="other">other</a> |  <a target="_blank" href="https://github.com/szabgab/metacpanjs">fork me</a>
+<a href="#">home</a> | <a href="#recent">recent</a> | <a href="#leaderboard">leaderboard</a> | <a href="#profiles">profiles</a> |  <a href="#other">other</a> |  <a target="_blank" href="https://github.com/szabgab/metacpanjs">fork me</a>
 
 <p>Find a solution in Perl (For now, search only works if you type the exact name of a distribution. For example Test-Simple. Use the other navigaion options)</p>
 <p><input type="text" id="query"><button id="search">Search</button></p>

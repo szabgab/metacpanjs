@@ -241,10 +241,19 @@ function search() {
 	metacpan.release(query, display_result, show_error);
 }
 
-function click() {
-	var id = this.getAttribute('id');
-	var class_name = this.getAttribute('class');
-	switch(id) {
+function click(route) {
+	if (route) {
+		route = route.replace(/^#/, '');
+	} else {
+		route = 'home';
+	}
+	route = route.split("/");
+
+	//var id = this.getAttribute('id');
+	//var class_name = this.getAttribute('class');
+	console.log("route: '" + route + "'");
+	//var class_name = '';
+	switch(route[0]) {
 		case('search'):
 			search();
 			return;
@@ -266,42 +275,33 @@ function click() {
 		case('no-license'):
 			metacpan.no_license('', display_no_license, show_error);
 			return;
-		default:
-			console.log('unhandled id: ' + id);
-	}
-
-	switch(class_name) {
 		case('release'):
-			var query = this.getAttribute('data-distribution');
-			metacpan.release(query, display_result, show_error);
-			break;
-		case('author'):
-			var query = this.getAttribute('data-author');
-			metacpan.author(query, display_author, show_error);
-			break;
-		case('profile'):
-			var profile = this.getAttribute('data-profile');
-			metacpan.profile(profile, display_profile, show_error);
-			break;
-		case('size'):
-			localStorage.setItem('page_size', this.getAttribute('data-size'));
-			reload();
+			metacpan.release(route[1], display_result, show_error);
 			return;
-		case('page'):
-			metacpan.page = parseInt(this.getAttribute('data-page'));
-			reload();
+		case('author'):
+			metacpan.author(route[1], display_author, show_error);
+			return;
+		case('profile'):
+			metacpan.profile(route[1], display_profile, show_error);
 			return;
 		case('recommended'):
-			var name = this.getAttribute('data-recommended');
+			var name = route[1];
 			display(name, { 'recommended' : metacpan.recommended[name] }, 'recommended-template');
 			return;
 		case('module'):
-			var query = this.getAttribute('data-module');
-			metacpan.module(query, display_module, show_error);
+			metacpan.module(route[1], display_module, show_error);
 			return;
 		default:
-			console.log('Unhandled class: ' + class_name);
+			console.log('unhandled route: ' + route);
 	}
+		//case('size'):
+		//	localStorage.setItem('page_size', this.getAttribute('data-size'));
+		//	reload();
+		//	return;
+		//case('page'):
+		//	metacpan.page = parseInt(this.getAttribute('data-page'));
+		//	reload();
+		//	return;
 }
 
 function reload() {
@@ -328,7 +328,7 @@ function display(query, result, template) {
 	var html    = template({'query' : query, 'result' : result});
 	$('#result').html(html);
 
-	$('a').click(click);
+	//$('a').click(click);
 }
 
 function display_profile(name, result) {
@@ -383,6 +383,10 @@ function display_home() {
 
 $(document).ready(function() {
 	$('#search').click(search);
-	display_home();
+	$(window).bind('hashchange', function() {
+		console.log( "'" + location.hash + "'" );
+		click(location.hash)
+	})
+	click(location.hash);
 });
 
