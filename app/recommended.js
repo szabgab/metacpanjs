@@ -2,7 +2,7 @@ metacpan.recommended = {
 	'async'           : [ 'POE', 'AnyEvent', 'IO::Async' ],
 	'csv'             : [ 'Text::CSV', 'Spreadsheet::Read' ],
 	'config'          : [ 'Config::Tiny', 'Config::General', 'Config::Any' ],
-	'Dancer'          : [ 'Dancer', 'Dancer::Plugin::DBIC', 'Dancer::Plugin::Auth::Extensible', 'Dancer::Plugin::Passphrase', 'Dancer::Plugin::Email', 'Dancer::Plugin::Lexicon', 'Dancer::Plugin::Auth::Extensible::Provider::Usergroup' ],
+	'Dancer'          : [ 'Dancer', 'Dancer::Plugin::DBIC', 'Dancer::Plugin::Auth::Extensible', 'Dancer::Plugin::Passphrase', 'Dancer::Plugin::Email', 'Dancer::Plugin::Lexicon', 'Dancer::Plugin::Auth::Extensible::Provider::Usergroup', 'Dancer::Plugin::Ajax', 'Dancer::Plugin::Database' ],
 	'Dancer2'         : [ 'Dancer2::Plugin::Path::Class', 'Dancer2::Plugin::DBIC', 'Dancer2::Plugin::Ajax', 'Dancer2::Plugin::Passphrase', 'Dancer2::Plugin::Auth::Extensible'],
 	'database'        : [ 'DBI', 'DBIx::Class', 'DBD::mysql', 'DBD::SQLite', 'MongoDB' ],
 	'date-time'       : [ 'DateTime', 'DateTime::Tiny' ],
