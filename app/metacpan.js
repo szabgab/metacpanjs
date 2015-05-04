@@ -249,7 +249,7 @@ function search() {
 
 function click(route) {
 	$(".active").removeClass('active');
-	var locator = "a[href=" + route +"]";
+	var locator = route ? "a[href=" + route +"]" : 'a[href=#]';
 	$(locator).parent('li').addClass('active');
 
 	var params = new Object;
