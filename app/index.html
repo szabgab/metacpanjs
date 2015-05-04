@@ -36,7 +36,7 @@
 </script>
 
 <script id="module-template" type="text/x-handlebars-template">
-    <h2>{{result.module.name}} {{result.version}} by {{result.author}}</h2>
+    <h2>{{result.module.name}} {{result.version}} by <a href="#" class="author" data-author="{{result.author}}">{{result.author}}</a></h2>
     {{result.abstract}}
     <hr>
     {{#unless result.authorized}}
