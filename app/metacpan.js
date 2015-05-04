@@ -1,5 +1,4 @@
 var metacpan = {}
-metacpan.history = [];
 metacpan.size = function() {
 	var page_size = parseInt(localStorage.getItem('page_size'));
 	if (page_size == null || page_size == 'null') {
@@ -41,7 +40,6 @@ metacpan.author = function(query, callback, error) {
 };
 
 metacpan.no_license = function(query, callback, error) {
-	metacpan.history.push({ 'req' : metacpan.no_license, 'query' : query, 'callback' : callback, 'error' : error });
 	//var page_size = metacpan.size();
 	//var page = metacpan.page;
 	//var from = ( page - 1 ) * page_size;
@@ -58,7 +56,6 @@ metacpan.no_license = function(query, callback, error) {
 }
 
 metacpan.leaderboard = function(query, callback, error) {
-	metacpan.history.push({ 'req' : metacpan.leaderboard, 'query' : query, 'callback' : callback, 'error' : error });
 	var page_size = metacpan.size();
 	var page = metacpan.page;
 	var from = ( page - 1 ) * page_size;
@@ -80,7 +77,6 @@ metacpan.leaderboard = function(query, callback, error) {
 };
 
 metacpan.profile = function(query, callback, error) {
-	metacpan.history.push({ 'req' : metacpan.profile, 'query' : query, 'callback' : callback, 'error' : error });
 	var page_size = metacpan.size();
 	var page = metacpan.page;
 	var from = ( page - 1 ) * page_size;
@@ -169,16 +165,21 @@ metacpan.prepare = function(query, callback, error) {
 };
 
 Handlebars.registerHelper('pager', function() {
-	var html = 'Page:';
 	var page_count = Math.ceil(metacpan.total / metacpan.size());
 	var page = metacpan.page;
+	var path = location.hash;
+	if (path) {
+		path = path.replace(/\?.*/, '');
+	}
+
+	var html = 'Page:';
 	html += '<ul>';
 	for (var n = Math.max(1, page - 2) ; n <= Math.min(page + 2, page_count); n++) {
 		html += '<li>';
 		if (page == n) {
 			html += '<b>';
 		}
-		html += '<a href="#" class="page" data-page="' + n + '">' + n + '</a>';
+		html += '<a href="' + path + '?page=' + n + '">' + n + '</a>';
 		if (page == n) {
 			html += '</b>';
 		}
@@ -190,15 +191,20 @@ Handlebars.registerHelper('pager', function() {
 });
 
 Handlebars.registerHelper('sizer', function() {
+	var page_size = metacpan.size();
+	var path = location.hash;
+	if (path) {
+		path = path.replace(/\?.*/, '');
+	}
+
 	var html = 'Size:';
 	html += '<ul>';
-	var page_size = metacpan.size();
 	[1, 10, 50, 100, 500].forEach(function(n) {
 		html += '<li>';
 		if (page_size == n) {
 			html += '<b>';
 		}
-		html += '<a href="#" class="size" data-size="' + n + '">' + n + '</a>';
+		html += '<a href="' + path + '?size=' + n + '">' + n + '</a>';
 		if (page_size == n) {
 			html += '</b>';
 		}
@@ -242,17 +248,27 @@ function search() {
 }
 
 function click(route) {
+	var params = new Object;
 	if (route) {
 		route = route.replace(/^#/, '');
+		var query_string = route.replace(/^[^?]*\?/, '');
+		query_string.split(/\&/).forEach(function(pair) {
+			var kv = pair.split(/=/);
+			params[ kv[0] ] = kv[1];
+		});
+		route = route.replace(/\?.*/, '');
 	} else {
 		route = 'home';
 	}
 	route = route.split("/");
 
-	//var id = this.getAttribute('id');
-	//var class_name = this.getAttribute('class');
-	console.log("route: '" + route + "'");
-	//var class_name = '';
+	if (params["size"]) {
+		localStorage.setItem('page_size', params["size"]);
+	}
+	if (params["page"]) {
+		metacpan.page = parseInt(params["page"]);
+	}
+
 	switch(route[0]) {
 		case('search'):
 			search();
@@ -293,21 +309,6 @@ function click(route) {
 			return;
 		default:
 			console.log('unhandled route: ' + route);
-	}
-		//case('size'):
-		//	localStorage.setItem('page_size', this.getAttribute('data-size'));
-		//	reload();
-		//	return;
-		//case('page'):
-		//	metacpan.page = parseInt(this.getAttribute('data-page'));
-		//	reload();
-		//	return;
-}
-
-function reload() {
-	if (metacpan.history.length > 0) {
-		var last = metacpan.history.length - 1;
-		metacpan.history[last]["req"]( metacpan.history[last]["query"], metacpan.history[last]["callback"], metacpan.history[last]["error"])
 	}
 }
 
