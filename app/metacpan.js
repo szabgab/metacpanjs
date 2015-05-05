@@ -72,6 +72,9 @@ var metacpan = {
 				"match_all": {}
 			},
 			"fields" : [ "metadata.license", "metadata.distribution", "date", "author", "license", "distribution", "name", "metadata.name" ],
+			"sort" : [
+				{ "date": {"order" : "desc"} }
+			],
 			"size" : 1000,
 			//"size" : metacpan.size(),
 			//"from" : from
