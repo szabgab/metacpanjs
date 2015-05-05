@@ -158,6 +158,13 @@ metacpan.prepare = function(query, callback, error) {
 	return xmlhttp;
 };
 
+metacpan.search = function() {
+	var query = $('#query').val();
+	window.location.hash = '#search/' + query;
+	click(location.hash)
+}
+
+
 Handlebars.registerHelper('pager', function() {
 	var page_count = Math.ceil(metacpan.total / metacpan.size());
 	var page = metacpan.page;
@@ -235,12 +242,6 @@ Handlebars.registerHelper('iff', function(a, operator, b, opts) {
 	}
 });
 
-
-function search() {
-	var query = $('#query').val();
-	window.location.hash = '#search/' + query;
-	click(location.hash)
-}
 
 function click(route) {
 	var params = new Object;
@@ -389,11 +390,11 @@ function display_no_license(count, result) {
 
 
 $(document).ready(function() {
-	$('#search').click(search);
+	$('#search').click(metacpan.search);
 	$('#query').bind('keypress', function(e) {
 		var code = e.keyCode || e.which;
 		if (code == 13) {
-			search();
+			metacpan.search();
 		}
 	});
 	$(window).bind('hashchange', function() {
