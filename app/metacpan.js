@@ -196,22 +196,22 @@ var metacpan = {
 
 	'click' : function(route) {
 		var params = new Object;
-		if (route) {
-			route = route.replace(/^#/, '');
-			var query_string = route.replace(/^[^?]*\?/, '');
-			query_string.split(/\&/).forEach(function(pair) {
-				var kv = pair.split(/=/);
-				params[ kv[0] ] = kv[1];
-			});
-			route = route.replace(/\?.*/, '');
-		} else {
-			route = 'home';
+		if (! route) {
+			route = '';
 		}
+		route = route.replace(/^#/, '');
 		jQuery.get('/log/' + route);
+		var query_string = route.replace(/^[^?]*\?/, '');
+		query_string.split(/\&/).forEach(function(pair) {
+			var kv = pair.split(/=/);
+			params[ kv[0] ] = kv[1];
+		});
+		route = route.replace(/\?.*/, '');
+
 		route = route.split("/");
 	
 		$(".active").removeClass('active');
-		var locator = route[0] == 'home' ? 'a[href=#]' : "a[href=#" + route[0] +"]" ;
+		var locator = route[0] == '' ? 'a[href=#]' : "a[href=#" + route[0] +"]" ;
 		$(locator).parent('li').addClass('active');
 	
 		if (params["size"]) {
@@ -240,7 +240,7 @@ var metacpan = {
 					});
 				}
 				return;
-			case('home'):
+			case(''):
 				metacpan.display('', { 'recommended' : metacpan.recommended }, 'home-template');
 				return;
 			case('recent'):
