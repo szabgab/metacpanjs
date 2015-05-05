@@ -159,7 +159,7 @@ metacpan.prepare = function(query, callback, error) {
 metacpan.search = function() {
 	var query = $('#query').val();
 	window.location.hash = '#search/' + query;
-	click(location.hash)
+	metacpan.click(location.hash)
 }
 
 metacpan.show_error = function(query, result) {
@@ -198,86 +198,7 @@ metacpan.display_profile = function(name, result) {
 };
 
 
-
-Handlebars.registerHelper('pager', function() {
-	var page_count = Math.ceil(metacpan.total / metacpan.size());
-	var page = metacpan.page;
-	var path = location.hash;
-	if (path) {
-		path = path.replace(/\?.*/, '');
-	}
-
-	var html = 'Page:';
-	html += '<ul>';
-	for (var n = Math.max(1, page - 2) ; n <= Math.min(page + 2, page_count); n++) {
-		html += '<li>';
-		if (page == n) {
-			html += '<b>';
-		}
-		html += '<a href="' + path + '?page=' + n + '">' + n + '</a>';
-		if (page == n) {
-			html += '</b>';
-		}
-		html += '</li>';
-	}
-
-	html += '</ul>';
-	return new Handlebars.SafeString(html);
-});
-
-Handlebars.registerHelper('sizer', function() {
-	var page_size = metacpan.size();
-	var path = location.hash;
-	if (path) {
-		path = path.replace(/\?.*/, '');
-	}
-
-	var html = 'Size:';
-	html += '<ul>';
-	[1, 10, 50, 100, 500].forEach(function(n) {
-		html += '<li>';
-		if (page_size == n) {
-			html += '<b>';
-		}
-		html += '<a href="' + path + '?size=' + n + '">' + n + '</a>';
-		if (page_size == n) {
-			html += '</b>';
-		}
-		html += '</li>';
-	});
-	html += '</ul>';
-	return new Handlebars.SafeString(html);
-});
-
-
-Handlebars.registerHelper('iff', function(a, operator, b, opts) {
-	var bool = false;
-	switch(operator) {
-		case '==':
-			bool = a == b;
-			break;
-		case '!=':
-			bool = a != b;
-			break;
-		case '>':
-			bool = a > b;
-			break;
-		case '<':
-			bool = a < b;
-			break;
-		default:
-			throw "Unknown operator " + operator;
-	}
-
-	if (bool) {
-		return opts.fn(this);
-	} else {
-		return opts.inverse(this);
-	}
-});
-
-
-function click(route) {
+metacpan.click = function(route) {
 	var params = new Object;
 	if (route) {
 		route = route.replace(/^#/, '');
@@ -379,6 +300,85 @@ function click(route) {
 	}
 }
 
+
+
+Handlebars.registerHelper('pager', function() {
+	var page_count = Math.ceil(metacpan.total / metacpan.size());
+	var page = metacpan.page;
+	var path = location.hash;
+	if (path) {
+		path = path.replace(/\?.*/, '');
+	}
+
+	var html = 'Page:';
+	html += '<ul>';
+	for (var n = Math.max(1, page - 2) ; n <= Math.min(page + 2, page_count); n++) {
+		html += '<li>';
+		if (page == n) {
+			html += '<b>';
+		}
+		html += '<a href="' + path + '?page=' + n + '">' + n + '</a>';
+		if (page == n) {
+			html += '</b>';
+		}
+		html += '</li>';
+	}
+
+	html += '</ul>';
+	return new Handlebars.SafeString(html);
+});
+
+Handlebars.registerHelper('sizer', function() {
+	var page_size = metacpan.size();
+	var path = location.hash;
+	if (path) {
+		path = path.replace(/\?.*/, '');
+	}
+
+	var html = 'Size:';
+	html += '<ul>';
+	[1, 10, 50, 100, 500].forEach(function(n) {
+		html += '<li>';
+		if (page_size == n) {
+			html += '<b>';
+		}
+		html += '<a href="' + path + '?size=' + n + '">' + n + '</a>';
+		if (page_size == n) {
+			html += '</b>';
+		}
+		html += '</li>';
+	});
+	html += '</ul>';
+	return new Handlebars.SafeString(html);
+});
+
+
+Handlebars.registerHelper('iff', function(a, operator, b, opts) {
+	var bool = false;
+	switch(operator) {
+		case '==':
+			bool = a == b;
+			break;
+		case '!=':
+			bool = a != b;
+			break;
+		case '>':
+			bool = a > b;
+			break;
+		case '<':
+			bool = a < b;
+			break;
+		default:
+			throw "Unknown operator " + operator;
+	}
+
+	if (bool) {
+		return opts.fn(this);
+	} else {
+		return opts.inverse(this);
+	}
+});
+
 $(document).ready(function() {
 	$('#search').click(metacpan.search);
 	$('#query').bind('keypress', function(e) {
@@ -388,8 +388,8 @@ $(document).ready(function() {
 		}
 	});
 	$(window).bind('hashchange', function() {
-		click(location.hash)
+		metacpan.click(location.hash)
 	})
-	click(location.hash);
+	metacpan.click(location.hash);
 });
 
