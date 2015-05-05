@@ -278,42 +278,42 @@ function click(route) {
 			// if user search for Module::Name we try to load that exact module (we should search among the module names)
 			if (/::/.exec(route[1])) {
 				metacpan.module(route[1], function(query, result) {
-					display(query, result, 'module-template');
+					metacpan.display(query, result, 'module-template');
 				});
 			} else {
 				metacpan.release(route[1], function(query, result) {
-					display(query, result, 'release-template');
+					metacpan.display(query, result, 'release-template');
 				});
 			}
 			return;
 		case('home'):
-			display('', { 'recommended' : metacpan.recommended }, 'home-template');
+			metacpan.display('', { 'recommended' : metacpan.recommended }, 'home-template');
 			return;
 		case('recent'):
 			metacpan.recent(20, function(count, result) {
-				display(count, result, 'recent-template');
+				metacpan.display(count, result, 'recent-template');
 			});
 			return;
 		case('leaderboard'):
 			metacpan.leaderboard('', function (count, result) {
-				display(count, result, 'leaderboard-template');
+				metacpan.display(count, result, 'leaderboard-template');
 			})
 			return;
 		case('profiles'):
-			display(0, {'profiles' : metacpan.profiles }, 'profiles-template');
+			metacpan.display(0, {'profiles' : metacpan.profiles }, 'profiles-template');
 			return;
 		case('other'):
-			display(0, {}, 'other-template');
+			metacpan.display(0, {}, 'other-template');
 			return;
 		case('no-license'):
 			metacpan.no_license('', function(count, result) {
 				var distros = result["hits"]["hits"].filter(function(h) { return h["fields"]["license"] == "unknown" } );
-				display(count, distros, 'releases-template');
+				metacpan.display(count, distros, 'releases-template');
 			});
 			return;
 		case('release'):
 			metacpan.release(route[1], function(query, result) {
-				display(query, result, 'release-template');
+				metacpan.display(query, result, 'release-template');
 			});
 			return;
 		case('author'):
@@ -323,19 +323,19 @@ function click(route) {
 					result["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
 				}
 
-				display(query, result, 'author-template');
+				metacpan.display(query, result, 'author-template');
 			});
 			return;
 		case('profile'):
-			metacpan.profile(route[1], display_profile);
+			metacpan.profile(route[1], metacpan.display_profile);
 			return;
 		case('recommended'):
 			var name = route[1];
-			display(name, { 'recommended' : metacpan.recommended[name] }, 'recommended-template');
+			metacpan.display(name, { 'recommended' : metacpan.recommended[name] }, 'recommended-template');
 			return;
 		case('module'):
 			metacpan.module(route[1], function(query, result) {
-				display(query, result, 'module-template');
+				metacpan.display(query, result, 'module-template');
 			});
 			return;
 		default:
@@ -344,11 +344,11 @@ function click(route) {
 }
 
 function show_error(query, result) {
-	display(query, result, 'error-template');
+	metacpan.display(query, result, 'error-template');
 }
 
 
-function display(query, result, template) {
+metacpan.display = function(query, result, template) {
 	if (result["hits"]) {
 		metacpan.total = result["hits"]["total"];
 	}
@@ -357,9 +357,9 @@ function display(query, result, template) {
 	var template = Handlebars.compile(source);
 	var html    = template({'query' : query, 'result' : result});
 	$('#result').html(html);
-}
+};
 
-function display_profile(name, result) {
+metacpan.display_profile = function(name, result) {
 	for (var i=0; i < result["hits"]["hits"].length; i++) {
 		var profile = result["hits"]["hits"][i]["fields"]["profile"];
 		var url = "";
@@ -375,8 +375,8 @@ function display_profile(name, result) {
 		result["hits"]["hits"][i]["id"] = id;
 	}
 
-	display(name, result, 'profile-template');
-}
+	metacpan.display(name, result, 'profile-template');
+};
 
 
 
