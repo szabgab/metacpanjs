@@ -113,16 +113,16 @@
 
 
 <script id="author-template" type="text/x-handlebars-template">
-  <h2>{{result.name}} ({{result.pauseid}})</h2>
-  <img src="{{result.gravatar_url}}" alt="{{result.name}}" /><br>
-  {{#each result.website}}
+  <h2>{{result.author.name}} ({{result.author.pauseid}})</h2>
+  <img src="{{result.author.gravatar_url}}" alt="{{result.author.name}}" /><br>
+  {{#each result.author.website}}
     <a target="_blank" href="{{this}}">{{this}}</a><br>
   {{/each}}
-  <a href="https://metacpan.org/author/{{result.pauseid}}" target="_blank">MetaCPAN</a>
+  <a href="https://metacpan.org/author/{{result.author.pauseid}}" target="_blank">MetaCPAN</a>
   
-  {{#if result.profile}}
+  {{#if result.author.profile}}
     <h3>Profiles</h3>
-    {{#each result.profile}}
+    {{#each result.author.profile}}
        {{#if url}}
           <a target="_blank" href="{{url}}" title="{{name}}"><img src="https://metacpan.org/static/images/profile/{{name}}.png" /></a>
        {{else}}
@@ -131,9 +131,9 @@
     {{/each}}
   {{/if}}
 
-  {{#if result.blog}}
+  {{#if result.author.blog}}
     <h3>Blog</h3>
-    {{#each result.blog}}
+    {{#each result.author.blog}}
        <a target="_blank" href="{{url}}">{{url}}</a> <a target="_blank" href="{{feed}}">feed</a><br>
     {{/each}}
   {{/if}}
