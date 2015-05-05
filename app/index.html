@@ -77,7 +77,7 @@
 </script>
 
 <script id="home-template" type="text/x-handlebars-template">
-  <h2>Perl Maven's view of CPAN</h2>
+  <h2>Perl Maven's view of CPAN - categories</h2>
   <table class="table-stripped">
   {{#each result.recommended}}
      <tr><td><a href="#recommended/{{@key}}">{{@key}}</a></td></tr>
@@ -217,8 +217,7 @@
 <div class="units-row">
     <div class="unit-10"></div>
     <div class="unit-90">
-<p>Find a solution in Perl (For now, search only works if you type the exact name of a distribution. For example Test-Simple. Use the other navigaion options)</p>
-<p><input type="text" id="query" class="input-big width-50"> <button class="btn" id="search">Search</button></p>
+    <input type="text" id="query" class="input-big width-50"> <button class="btn" id="search">Search</button>
     </div>
 </div>
 
