@@ -288,10 +288,14 @@ function click(route) {
 			display('', { 'recommended' : metacpan.recommended }, 'home-template');
 			return;
 		case('recent'):
-			metacpan.recent(20, display_recent);
+			metacpan.recent(20, function(count, result) {
+				display(count, result, 'recent-template');
+			});
 			return;
 		case('leaderboard'):
-			metacpan.leaderboard('', display_leaderboard);
+			metacpan.leaderboard('', function (count, result) {
+				display(count, result, 'leaderboard-template');
+			})
 			return;
 		case('profiles'):
 			display(0, {'profiles' : metacpan.profiles }, 'profiles-template');
@@ -374,13 +378,6 @@ function display_module(query, result) {
 function display_result(query, result) {
 	display(query, result, 'release-template');
 };
-
-function display_recent(count, result) {
-	display(count, result, 'recent-template');
-}
-function display_leaderboard(count, result) {
-	display(count, result, 'leaderboard-template');
-}
 
 function display_no_license(count, result) {
 	var distros = result["hits"]["hits"].filter(function(h) { return h["fields"]["license"] == "unknown" } );
