@@ -276,6 +276,10 @@ function click(route) {
 
 	switch(route[0]) {
 		case('search'):
+			if (route[1] == '') {
+				window.location.hash = '#';
+				return;
+			}
 			if (/::/.exec(route[1])) {
 				metacpan.module(route[1], display_module, show_error);
 			} else {
