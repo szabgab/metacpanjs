@@ -341,13 +341,16 @@ function display_profile(name, result) {
 	for (var i=0; i < result["hits"]["hits"].length; i++) {
 		var profile = result["hits"]["hits"][i]["fields"]["profile"];
 		var url = "";
+		var id = "";
 		for (var j=0; j < profile.length; j++) {
 			if (profile[j]["name"] == name) {
+				id  = profile[j]["id"];
 				url = metacpan.profiles[name] + profile[j]["id"];
 				break;
 			}
 		}
 		result["hits"]["hits"][i]["url"] = url;
+		result["hits"]["hits"][i]["id"] = id;
 	}
 
 	display(name, result, 'profile-template');

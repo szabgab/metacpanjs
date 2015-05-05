@@ -12,6 +12,7 @@
   <script src="/recommended.js"></script>
 
   <link rel="stylesheet" href="/kube.min.css" />
+  <link rel="stylesheet" href="/with_kube.css" />
 
 <script id="error-template" type="text/x-handlebars-template">
   <div class="error">Error. {{result.code}}</div>
@@ -35,20 +36,31 @@
   </div>
 
   <h2>Provides</h2>
+  <table class="table-stripped">
   {{#each result.provides}}
-      <a href="#module/{{this}}">{{this}}</a><br>
+      <tr><td><a href="#module/{{this}}">{{this}}</a></td></tr>
   {{/each}}
+  </table>
 </script>
 
 <script id="module-template" type="text/x-handlebars-template">
     <h2><a href="#release/{{result.distribution}}">{{result.distribution}}</a> {{query}} {{result.version}} by <a href="#author/{{result.author}}">{{result.author}}</a></h2>
     {{result.abstract}}
     <hr>
-    <ul>
+    <table class="table-stripped">
+      <tr>
+        <th>Module name</th>
+        <th>version</th>
+        <th>pod</th>
+      </tr>
     {{#each result.module}}
-       <li>{{name}} {{#if version}}{{version}}{{/if}} {{#if associated_pod}}{{associated_pod}}{{/if}}</li>
+       <tr>
+         <td>{{name}}</td>
+         <td>{{#if version}}{{version}}{{/if}}</td>
+         <td>{{#if associated_pod}}{{associated_pod}}{{/if}}</td>
+       </tr>
     {{/each}}
-    </ul>
+    </table>
     <hr>
     {{#unless result.authorized}}
      <div class="warn">Unauthorized release</div>
@@ -86,16 +98,16 @@
 
 
 <script id="recent-template" type="text/x-handlebars-template">
-  <ul>
+  <table class="table-stripped">
     {{#each result.hits.hits}}
-      <li>
-        <a href="#release/{{fields.distribution}}">{{fields.name}}</a><br>
-        {{fields.abstract}}<br>
-        {{fields.date}}<br>
-        {{#iff fields.status '!=' 'latest'}}<b>{{fields.status}}</b>{{/iff}}<br>
-      </li>
+      <tr>
+        <td><a href="#release/{{fields.distribution}}">{{fields.name}}</a></td>
+        <td>{{fields.abstract}}</td>
+        <td>{{fields.date}}</td>
+        <!-- <td>{{#iff fields.status '!=' 'latest'}}<b>{{fields.status}}</b>{{/iff}}</td> -->
+      </tr>
     {{/each}}
-  </ul>
+  </table>
 
 </script>
 
@@ -129,11 +141,11 @@
 
 <script id="releases-template" type="text/x-handlebars-template">
    <h2>Recent releases without a license</h2>
-   <ul>
+   <table class="table-stripped">
    {{#each result}}
-     <li><a href="#release/{{fields.distribution}}">{{fields.distribution}}</a></li>
+     <tr><td><a href="#release/{{fields.distribution}}">{{fields.distribution}}</a></td></tr>
    {{/each}}
-   </ul>
+   </table>
 </script>
 
 <script id="other-template" type="text/x-handlebars-template">
@@ -146,11 +158,14 @@
 <script id="leaderboard-template" type="text/x-handlebars-template">
   <h2>Leaderboard - Authors with Most Uploads</h2>
   Total: {{result.facets.author.total}}
-  <ul>
+  <table class="table-stripped">
   {{#each result.facets.author.terms }}
-    <li><a href="#author/{{term}}" >{{term}}</a> {{count}}</li>
+    <tr>
+      <td><a href="#author/{{term}}" >{{term}}</a></td>
+      <td> {{count}}</td>
+    </tr>
   {{/each}}
-  </ul>
+  </table>
 
   {{sizer}}
   {{pager}}
@@ -158,20 +173,27 @@
 
 <script id="profiles-template" type="text/x-handlebars-template">
    <h2>Profile fields</h2>
-   <ul>
+   <table class="table-stripped">
    {{#each result.profiles}}
-     <li><a href="#profile/{{@key}}">{{@key}}</a></li>
+     <tr><td><a href="#profile/{{@key}}">{{@key}}</a></td></tr>
    {{/each}}
-   </ul>
+   </table>
 </script>
 
 <script id="profile-template" type="text/x-handlebars-template">
-   <h2>Users with {{query}} in their profile</h2>
-   <ul>
+   <h2>Authors with {{query}} in their profile</h2>
+   <table class="table-stripped">
+     <tr>
+       <th>Author</th>
+       <th>{{query}}</th>
+     </tr>
      {{#each result.hits.hits}}
-       <li><a href="#author/{{this.fields.pauseid}}">{{this.fields.name}} ({{this.fields.pauseid}})</a> <a href="{{this.url}}" target="_blank">{{../query}}</a></li>
+       <tr>
+         <td><a href="#author/{{this.fields.pauseid}}">{{this.fields.name}} ({{this.fields.pauseid}})</a></td>
+         <td><a href="{{this.url}}" target="_blank">{{this.id}}</a></td>
+       </tr>
      {{/each}}
-   </ul>
+   </table>
 
   {{sizer}}
   {{pager}}
