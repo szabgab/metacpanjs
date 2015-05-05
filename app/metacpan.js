@@ -116,19 +116,19 @@ var metacpan = {
 	},
 
 	'post' : function(url, data, query, callback, error) {
-		xmlhttp = metacpan.prepare(query, callback, error);
+		var xmlhttp = metacpan.prepare(query, callback, error);
 		xmlhttp.open("POST", url, true);
 		xmlhttp.send(JSON.stringify(data));
 	},
 
 	'get' : function(url, query, callback, error) {
-		xmlhttp = metacpan.prepare(query, callback, error);
+		var xmlhttp = metacpan.prepare(query, callback, error);
 		xmlhttp.open("GET", url, true);
 		xmlhttp.send();
 	},
 
 	'prepare' : function(query, callback, error) {
-		xmlhttp = new XMLHttpRequest();
+		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
 			if (xmlhttp.readyState == 4) {
 				switch (xmlhttp.status) {
@@ -270,11 +270,30 @@ var metacpan = {
 				var query = route[1];
 				metacpan.results = {};
 				metacpan.query = query;
+				var count = 200;
 
 				metacpan.get("http://api.metacpan.org/v0/author/" + query, query, function(query, result) {
 					metacpan.results.author = result;
 					metacpan.display_author();
 				}, metacpan.show_error);
+
+				metacpan.post('http://api.metacpan.org/v0/release/_search', {
+					"query": {
+						"match_all": {}
+					},
+					"fields" : [ "distribution", "name", "status", "date", "abstract" ],
+					"filter" : {
+						"term": { "author" : query }
+					},
+					"sort" : [
+						{ "date": {"order" : "desc"} }
+					],
+					"size" :  count
+				}, count, function(query, result) {
+					metacpan.results.releases = result;
+					metacpan.display_author();
+				}, metacpan.show_error);
+
 				return;
 			case('profile'):
 				metacpan.profile(route[1], metacpan.display_profile);
@@ -294,12 +313,15 @@ var metacpan = {
 	},
 
 	'display_author' : function() {
-		//if (metacpan.result.
-		if (metacpan.results.author["profile"]) {
-			metacpan.results.author["profile"] = metacpan.results.author["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
-			metacpan.results.author["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
+		console.log('display_author', metacpan.results);
+		if (metacpan.results.author && metacpan.results.releases) {
+			if (metacpan.results.author["profile"]) {
+				metacpan.results.author["profile"] = metacpan.results.author["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
+				metacpan.results.author["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
+			}
+			metacpan.display(metacpan.query, metacpan.results, 'author-template');
 		}
-		metacpan.display(metacpan.query, metacpan.results, 'author-template');
+		return;
 	},
 
 };
