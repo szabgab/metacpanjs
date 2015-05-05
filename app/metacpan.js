@@ -207,6 +207,7 @@ var metacpan = {
 		} else {
 			route = 'home';
 		}
+		jQuery.get('/log/' + route);
 		route = route.split("/");
 	
 		$(".active").removeClass('active');
