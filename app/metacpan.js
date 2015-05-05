@@ -276,7 +276,11 @@ function click(route) {
 
 	switch(route[0]) {
 		case('search'):
-			metacpan.release(route[1], display_result, show_error);
+			if (/::/.exec(route[1])) {
+				metacpan.module(route[1], display_module, show_error);
+			} else {
+				metacpan.release(route[1], display_result, show_error);
+			}
 			return;
 		case('home'):
 			display_home();
