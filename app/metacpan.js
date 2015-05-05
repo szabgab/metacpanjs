@@ -14,9 +14,6 @@ metacpan.recent = function(count, callback, error) {
 		"query": {
 			"match_all": {}
 		},
-		//"filter" : {
-		//	"term": { "status" : "latest" }
-		//},
 		"fields" : [ "distribution", "name", "status", "date", "abstract" ],
 		"sort" : [
 			{ "date": {"order" : "desc"} }
@@ -126,8 +123,6 @@ metacpan.profiles = {
 metacpan.post = function(url, data, query, callback, error) {
 	xmlhttp = metacpan.prepare(query, callback, error);
 	xmlhttp.open("POST", url, true);
-	//setTimeout(function() {  xmlhttp.abort()  },40000);
-	//xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 	xmlhttp.send(JSON.stringify(data));
 };
 
@@ -136,7 +131,6 @@ metacpan.get = function(url, query, callback, error) {
 	xmlhttp = metacpan.prepare(query, callback, error);
 
 	xmlhttp.open("GET", url, true);
-	//setTimeout(function() {  xmlhttp.abort()  },40000);
 	xmlhttp.send();
 };
 
@@ -276,10 +270,13 @@ function click(route) {
 
 	switch(route[0]) {
 		case('search'):
+			// empty search redirct to home page
 			if (route[1] == '') {
 				window.location.hash = '#';
 				return;
 			}
+			// if users searches for Module/Name.pm   we should load it directly
+			// if user search for Module::Name we try to load that exact module (we should search among the module names)
 			if (/::/.exec(route[1])) {
 				metacpan.module(route[1], display_module, show_error);
 			} else {
@@ -337,12 +334,8 @@ function display(query, result, template) {
 
 	var source   = $('#' + template).html();
 	var template = Handlebars.compile(source);
-	//var context = {name: result["name"]};
-	//var html    = template(context);
 	var html    = template({'query' : query, 'result' : result});
 	$('#result').html(html);
-
-	//$('a').click(click);
 }
 
 function display_profile(name, result) {
@@ -407,7 +400,6 @@ $(document).ready(function() {
 		}
 	});
 	$(window).bind('hashchange', function() {
-		console.log( "'" + location.hash + "'" );
 		click(location.hash)
 	})
 	click(location.hash);
