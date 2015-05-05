@@ -19,19 +19,19 @@ metacpan.recent = function(count, callback) {
 			{ "date": {"order" : "desc"} }
 		],
 		"size" :  count
-	}, count, callback, show_error);
+	}, count, callback, metacpan.show_error);
 };
 
 metacpan.release = function(query, callback) {
-	metacpan.get("http://api.metacpan.org/v0/release/" + query, query, callback, show_error);
+	metacpan.get("http://api.metacpan.org/v0/release/" + query, query, callback, metacpan.show_error);
 };
 
 metacpan.module = function(query, callback) {
-	metacpan.get("http://api.metacpan.org/v0/module/" + query, query, callback, show_error);
+	metacpan.get("http://api.metacpan.org/v0/module/" + query, query, callback, metacpan.show_error);
 };
 
 metacpan.author = function(query, callback) {
-	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback, show_error);
+	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback, metacpan.show_error);
 };
 
 metacpan.no_license = function(query, callback) {
@@ -46,7 +46,7 @@ metacpan.no_license = function(query, callback) {
 		"size" : 1000,
 		//"size" : metacpan.size(),
 		//"from" : from
-	}, query, callback, show_error)
+	}, query, callback, metacpan.show_error)
 
 }
 
@@ -68,7 +68,7 @@ metacpan.leaderboard = function(query, callback) {
 			}
 		},
 		"size": 0
-	}, query, callback, show_error)
+	}, query, callback, metacpan.show_error)
 };
 
 metacpan.profile = function(query, callback) {
@@ -85,7 +85,7 @@ metacpan.profile = function(query, callback) {
 		"fields" : ["name", "pauseid", "profile"],
 		"size" : metacpan.size(),
 		"from" : from
-	}, query, callback, show_error);
+	}, query, callback, metacpan.show_error);
 };
 
 metacpan.profiles = {
@@ -161,6 +161,42 @@ metacpan.search = function() {
 	window.location.hash = '#search/' + query;
 	click(location.hash)
 }
+
+metacpan.show_error = function(query, result) {
+	metacpan.display(query, result, 'error-template');
+}
+
+
+metacpan.display = function(query, result, template) {
+	if (result["hits"]) {
+		metacpan.total = result["hits"]["total"];
+	}
+
+	var source   = $('#' + template).html();
+	var template = Handlebars.compile(source);
+	var html    = template({'query' : query, 'result' : result});
+	$('#result').html(html);
+};
+
+metacpan.display_profile = function(name, result) {
+	for (var i=0; i < result["hits"]["hits"].length; i++) {
+		var profile = result["hits"]["hits"][i]["fields"]["profile"];
+		var url = "";
+		var id = "";
+		for (var j=0; j < profile.length; j++) {
+			if (profile[j]["name"] == name) {
+				id  = profile[j]["id"];
+				url = metacpan.profiles[name] + profile[j]["id"];
+				break;
+			}
+		}
+		result["hits"]["hits"][i]["url"] = url;
+		result["hits"]["hits"][i]["id"] = id;
+	}
+
+	metacpan.display(name, result, 'profile-template');
+};
+
 
 
 Handlebars.registerHelper('pager', function() {
@@ -342,43 +378,6 @@ function click(route) {
 			console.log('unhandled route: ' + route);
 	}
 }
-
-function show_error(query, result) {
-	metacpan.display(query, result, 'error-template');
-}
-
-
-metacpan.display = function(query, result, template) {
-	if (result["hits"]) {
-		metacpan.total = result["hits"]["total"];
-	}
-
-	var source   = $('#' + template).html();
-	var template = Handlebars.compile(source);
-	var html    = template({'query' : query, 'result' : result});
-	$('#result').html(html);
-};
-
-metacpan.display_profile = function(name, result) {
-	for (var i=0; i < result["hits"]["hits"].length; i++) {
-		var profile = result["hits"]["hits"][i]["fields"]["profile"];
-		var url = "";
-		var id = "";
-		for (var j=0; j < profile.length; j++) {
-			if (profile[j]["name"] == name) {
-				id  = profile[j]["id"];
-				url = metacpan.profiles[name] + profile[j]["id"];
-				break;
-			}
-		}
-		result["hits"]["hits"][i]["url"] = url;
-		result["hits"]["hits"][i]["id"] = id;
-	}
-
-	metacpan.display(name, result, 'profile-template');
-};
-
-
 
 $(document).ready(function() {
 	$('#search').click(metacpan.search);
