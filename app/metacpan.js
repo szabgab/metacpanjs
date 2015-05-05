@@ -9,7 +9,7 @@ metacpan.size = function() {
 metacpan.page = 1;
 metacpan.total = 0;
 
-metacpan.recent = function(count, callback, error) {
+metacpan.recent = function(count, callback) {
 	metacpan.post('http://api.metacpan.org/v0/release/_search', {
 		"query": {
 			"match_all": {}
@@ -19,24 +19,24 @@ metacpan.recent = function(count, callback, error) {
 			{ "date": {"order" : "desc"} }
 		],
 		"size" :  count
-	}, count, callback, error);
+	}, count, callback, show_error);
 };
 
-metacpan.release = function(query, callback, error) {
-	metacpan.get("http://api.metacpan.org/v0/release/" + query, query, callback, error);
+metacpan.release = function(query, callback) {
+	metacpan.get("http://api.metacpan.org/v0/release/" + query, query, callback, show_error);
 };
 
-metacpan.module = function(query, callback, error) {
-	metacpan.get("http://api.metacpan.org/v0/module/" + query, query, callback, error);
+metacpan.module = function(query, callback) {
+	metacpan.get("http://api.metacpan.org/v0/module/" + query, query, callback, show_error);
 };
 
 
 
-metacpan.author = function(query, callback, error) {
-	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback, error);
+metacpan.author = function(query, callback) {
+	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback, show_error);
 };
 
-metacpan.no_license = function(query, callback, error) {
+metacpan.no_license = function(query, callback) {
 	//var page_size = metacpan.size();
 	//var page = metacpan.page;
 	//var from = ( page - 1 ) * page_size;
@@ -48,11 +48,11 @@ metacpan.no_license = function(query, callback, error) {
 		"size" : 1000,
 		//"size" : metacpan.size(),
 		//"from" : from
-	}, query, callback, error)
+	}, query, callback, show_error)
 
 }
 
-metacpan.leaderboard = function(query, callback, error) {
+metacpan.leaderboard = function(query, callback) {
 	var page_size = metacpan.size();
 	var page = metacpan.page;
 	var from = ( page - 1 ) * page_size;
@@ -70,10 +70,10 @@ metacpan.leaderboard = function(query, callback, error) {
 			}
 		},
 		"size": 0
-	}, query, callback, error)
+	}, query, callback, show_error)
 };
 
-metacpan.profile = function(query, callback, error) {
+metacpan.profile = function(query, callback) {
 	var page_size = metacpan.size();
 	var page = metacpan.page;
 	var from = ( page - 1 ) * page_size;
@@ -87,7 +87,7 @@ metacpan.profile = function(query, callback, error) {
 		"fields" : ["name", "pauseid", "profile"],
 		"size" : metacpan.size(),
 		"from" : from
-	}, query, callback, error);
+	}, query, callback, show_error);
 };
 
 metacpan.profiles = {
@@ -278,19 +278,19 @@ function click(route) {
 			// if users searches for Module/Name.pm   we should load it directly
 			// if user search for Module::Name we try to load that exact module (we should search among the module names)
 			if (/::/.exec(route[1])) {
-				metacpan.module(route[1], display_module, show_error);
+				metacpan.module(route[1], display_module);
 			} else {
-				metacpan.release(route[1], display_result, show_error);
+				metacpan.release(route[1], display_result);
 			}
 			return;
 		case('home'):
 			display('', { 'recommended' : metacpan.recommended }, 'home-template');
 			return;
 		case('recent'):
-			metacpan.recent(20, display_recent, show_error);
+			metacpan.recent(20, display_recent);
 			return;
 		case('leaderboard'):
-			metacpan.leaderboard('', display_leaderboard, show_error);
+			metacpan.leaderboard('', display_leaderboard);
 			return;
 		case('profiles'):
 			display(0, {'profiles' : metacpan.profiles }, 'profiles-template');
@@ -299,23 +299,23 @@ function click(route) {
 			display(0, {}, 'other-template');
 			return;
 		case('no-license'):
-			metacpan.no_license('', display_no_license, show_error);
+			metacpan.no_license('', display_no_license);
 			return;
 		case('release'):
-			metacpan.release(route[1], display_result, show_error);
+			metacpan.release(route[1], display_result);
 			return;
 		case('author'):
-			metacpan.author(route[1], display_author, show_error);
+			metacpan.author(route[1], display_author);
 			return;
 		case('profile'):
-			metacpan.profile(route[1], display_profile, show_error);
+			metacpan.profile(route[1], display_profile);
 			return;
 		case('recommended'):
 			var name = route[1];
 			display(name, { 'recommended' : metacpan.recommended[name] }, 'recommended-template');
 			return;
 		case('module'):
-			metacpan.module(route[1], display_module, show_error);
+			metacpan.module(route[1], display_module);
 			return;
 		default:
 			console.log('unhandled route: ' + route);
