@@ -279,9 +279,13 @@ function click(route) {
 			// if users searches for Module/Name.pm   we should load it directly
 			// if user search for Module::Name we try to load that exact module (we should search among the module names)
 			if (/::/.exec(route[1])) {
-				metacpan.module(route[1], display_module);
+				metacpan.module(route[1], function(query, result) {
+					display(query, result, 'module-template');
+				});
 			} else {
-				metacpan.release(route[1], display_result);
+				metacpan.release(route[1], function(query, result) {
+					display(query, result, 'release-template');
+				});
 			}
 			return;
 		case('home'):
@@ -307,7 +311,9 @@ function click(route) {
 			metacpan.no_license('', display_no_license);
 			return;
 		case('release'):
-			metacpan.release(route[1], display_result);
+			metacpan.release(route[1], function(query, result) {
+				display(query, result, 'release-template');
+			});
 			return;
 		case('author'):
 			metacpan.author(route[1], display_author);
@@ -320,7 +326,9 @@ function click(route) {
 			display(name, { 'recommended' : metacpan.recommended[name] }, 'recommended-template');
 			return;
 		case('module'):
-			metacpan.module(route[1], display_module);
+			metacpan.module(route[1], function(query, result) {
+				display(query, result, 'module-template');
+			});
 			return;
 		default:
 			console.log('unhandled route: ' + route);
@@ -371,20 +379,11 @@ function display_author(query, result) {
 	display(query, result, 'author-template');
 };
 
-function display_module(query, result) {
-	display(query, result, 'module-template');
-};
-
-function display_result(query, result) {
-	display(query, result, 'release-template');
-};
 
 function display_no_license(count, result) {
 	var distros = result["hits"]["hits"].filter(function(h) { return h["fields"]["license"] == "unknown" } );
 	display(count, distros, 'releases-template');
 }
-
-
 
 $(document).ready(function() {
 	$('#search').click(metacpan.search);
