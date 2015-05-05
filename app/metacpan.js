@@ -30,8 +30,6 @@ metacpan.module = function(query, callback) {
 	metacpan.get("http://api.metacpan.org/v0/module/" + query, query, callback, show_error);
 };
 
-
-
 metacpan.author = function(query, callback) {
 	metacpan.get("http://api.metacpan.org/v0/author/" + query, query, callback, show_error);
 };
@@ -308,7 +306,10 @@ function click(route) {
 			display(0, {}, 'other-template');
 			return;
 		case('no-license'):
-			metacpan.no_license('', display_no_license);
+			metacpan.no_license('', function(count, result) {
+				var distros = result["hits"]["hits"].filter(function(h) { return h["fields"]["license"] == "unknown" } );
+				display(count, distros, 'releases-template');
+			});
 			return;
 		case('release'):
 			metacpan.release(route[1], function(query, result) {
@@ -316,7 +317,14 @@ function click(route) {
 			});
 			return;
 		case('author'):
-			metacpan.author(route[1], display_author);
+			metacpan.author(route[1], function(query, result) {
+				if (result["profile"]) {
+					result["profile"] = result["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
+					result["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
+				}
+
+				display(query, result, 'author-template');
+			});
 			return;
 		case('profile'):
 			metacpan.profile(route[1], display_profile);
@@ -370,20 +378,7 @@ function display_profile(name, result) {
 	display(name, result, 'profile-template');
 }
 
-function display_author(query, result) {
-	if (result["profile"]) {
-		result["profile"] = result["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
-		result["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
-	}
 
-	display(query, result, 'author-template');
-};
-
-
-function display_no_license(count, result) {
-	var distros = result["hits"]["hits"].filter(function(h) { return h["fields"]["license"] == "unknown" } );
-	display(count, distros, 'releases-template');
-}
 
 $(document).ready(function() {
 	$('#search').click(metacpan.search);
