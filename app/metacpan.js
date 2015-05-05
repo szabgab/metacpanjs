@@ -284,7 +284,7 @@ function click(route) {
 			}
 			return;
 		case('home'):
-			display_home();
+			display('', { 'recommended' : metacpan.recommended }, 'home-template');
 			return;
 		case('recent'):
 			metacpan.recent(20, display_recent, show_error);
@@ -387,9 +387,6 @@ function display_no_license(count, result) {
 }
 
 
-function display_home() {
-	display('', { 'recommended' : metacpan.recommended }, 'home-template');
-}
 
 $(document).ready(function() {
 	$('#search').click(search);
