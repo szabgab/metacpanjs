@@ -244,8 +244,8 @@ Handlebars.registerHelper('iff', function(a, operator, b, opts) {
 
 function search() {
 	var query = $('#query').val();
-	window.location.hash = '#';
-	metacpan.release(query, display_result, show_error);
+	window.location.hash = '#search/' + query;
+	click(location.hash)
 }
 
 function click(route) {
@@ -276,7 +276,7 @@ function click(route) {
 
 	switch(route[0]) {
 		case('search'):
-			search();
+			metacpan.release(route[1], display_result, show_error);
 			return;
 		case('home'):
 			display_home();
