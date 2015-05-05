@@ -392,6 +392,12 @@ function display_home() {
 
 $(document).ready(function() {
 	$('#search').click(search);
+	$('#query').bind('keypress', function(e) {
+		var code = e.keyCode || e.which;
+		if (code == 13) {
+			search();
+		}
+	});
 	$(window).bind('hashchange', function() {
 		console.log( "'" + location.hash + "'" );
 		click(location.hash)
