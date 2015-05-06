@@ -275,7 +275,11 @@ var metacpan = {
 				$.when(a1, a2).done(function(r1, r2) {
 					metacpan.results.author = r1[0];
 					metacpan.results.releases = r2[0];
-					metacpan.display_author();
+					if (metacpan.results.author["profile"]) {
+						metacpan.results.author["profile"] = metacpan.results.author["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
+						metacpan.results.author["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
+					}
+					metacpan.display(metacpan.query, metacpan.results, 'author-template');
 				}).fail(metacpan.show_error);
 
 				return;
@@ -295,18 +299,6 @@ var metacpan = {
 				console.log('unhandled route: ' + route);
 		}
 	},
-
-	'display_author' : function() {
-		if (metacpan.results.author && metacpan.results.releases) {
-			if (metacpan.results.author["profile"]) {
-				metacpan.results.author["profile"] = metacpan.results.author["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
-				metacpan.results.author["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
-			}
-			metacpan.display(metacpan.query, metacpan.results, 'author-template');
-		}
-		return;
-	},
-
 };
 
 
