@@ -119,7 +119,7 @@ var metacpan = {
 	},
 
 	'post' : function(url, data, query, callback, error) {
-		jQuery.post(url, JSON.stringify(data), function(result) {
+		return jQuery.post(url, JSON.stringify(data), function(result) {
 				callback(query, result);
 			})
 			.fail(function(result) {
@@ -128,7 +128,7 @@ var metacpan = {
 	},
 
 	'get' : function(url, query, callback, error) {
-		jQuery.get(url, function(result) {
+		return jQuery.get(url, function(result) {
 				callback(query, result);
 			})
 			.fail(function(result) {
@@ -258,12 +258,8 @@ var metacpan = {
 				metacpan.query = query;
 				var count = 200;
 
-				metacpan.get("http://api.metacpan.org/v0/author/" + query, query, function(query, result) {
-					metacpan.results.author = result;
-					metacpan.display_author();
-				}, metacpan.show_error);
-
-				metacpan.post('http://api.metacpan.org/v0/release/_search', {
+				var a1 = jQuery.get("http://api.metacpan.org/v0/author/" + query);
+				var a2 = jQuery.post('http://api.metacpan.org/v0/release/_search', JSON.stringify({
 					"query": {
 						"match_all": {}
 					},
@@ -275,10 +271,12 @@ var metacpan = {
 						{ "date": {"order" : "desc"} }
 					],
 					"size" :  count
-				}, count, function(query, result) {
-					metacpan.results.releases = result;
+				}));
+				$.when(a1, a2).done(function(r1, r2) {
+					metacpan.results.author = r1[0];
+					metacpan.results.releases = r2[0];
 					metacpan.display_author();
-				}, metacpan.show_error);
+				}).fail(metacpan.show_error);
 
 				return;
 			case('profile'):
