@@ -119,39 +119,21 @@ var metacpan = {
 	},
 
 	'post' : function(url, data, query, callback, error) {
-		var xmlhttp = metacpan.prepare(query, callback, error);
-		xmlhttp.open("POST", url, true);
-		xmlhttp.send(JSON.stringify(data));
+		jQuery.post(url, JSON.stringify(data), function(result) {
+				callback(query, result);
+			})
+			.fail(function(result) {
+				error(query, result);
+			})
 	},
 
 	'get' : function(url, query, callback, error) {
-		var xmlhttp = metacpan.prepare(query, callback, error);
-		xmlhttp.open("GET", url, true);
-		xmlhttp.send();
-	},
-
-	'prepare' : function(query, callback, error) {
-		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function() {
-			if (xmlhttp.readyState == 4) {
-				switch (xmlhttp.status) {
-					case 200:
-						console.log('responseText:' + xmlhttp.responseText);
-						var data = JSON.parse(xmlhttp.responseText);
-						callback(query, data);
-						break;
-					case 404:
-						console.log('Status: ' + xmlhttp.status);
-						error(query, {code : 404});
-						break;
-					default:
-						console.log('Status: ' + xmlhttp.status);
-						error(query, data);
-						break;
-				}
-			}
-		}
-		return xmlhttp;
+		jQuery.get(url, function(result) {
+				callback(query, result);
+			})
+			.fail(function(result) {
+				error(query, result);
+			})
 	},
 
 	'search' : function() {
@@ -317,7 +299,6 @@ var metacpan = {
 	},
 
 	'display_author' : function() {
-		console.log('display_author', metacpan.results);
 		if (metacpan.results.author && metacpan.results.releases) {
 			if (metacpan.results.author["profile"]) {
 				metacpan.results.author["profile"] = metacpan.results.author["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
