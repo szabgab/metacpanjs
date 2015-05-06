@@ -254,7 +254,6 @@ var metacpan = {
 				return;
 			case('author'):
 				var query = route[1];
-				metacpan.results = {};
 				metacpan.query = query;
 				var count = 200;
 
@@ -273,13 +272,13 @@ var metacpan = {
 					"size" :  count
 				}));
 				$.when(a1, a2).done(function(r1, r2) {
-					metacpan.results.author = r1[0];
-					metacpan.results.releases = r2[0];
-					if (metacpan.results.author["profile"]) {
-						metacpan.results.author["profile"] = metacpan.results.author["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
-						metacpan.results.author["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
+					var author = r1[0];
+					var releases = r2[0];
+					if (author["profile"]) {
+						author["profile"] = author["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
+						author["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
 					}
-					metacpan.display(metacpan.query, metacpan.results, 'author-template');
+					metacpan.display(metacpan.query, { 'releases' : releases, 'author' : author }, 'author-template');
 				}).fail(metacpan.show_error);
 
 				return;
