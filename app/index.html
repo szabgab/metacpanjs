@@ -20,6 +20,8 @@
 
 <script id="search-template" type="text/x-handlebars-template">
 <h2>Search results</h2>
+  The search feature is very experimental. If you'r search did not provide the right results, you are welcome to <a target="_blank" href="https://github.com/szabgab/metacpanjs">open an issue</a>
+  providing the query and the results you'd expect.
   <table class="table-stripped">
     {{#each result.hits.hits}}
       <tr>
@@ -95,16 +97,16 @@
   <h2>Perl Maven's view of CPAN - categories</h2>
   <table class="table-stripped">
   {{#each result.recommended}}
-     <tr><td><a href="#recommended/{{@key}}">{{@key}}</a></td></tr>
+     <tr><td><a href="#recommended/{{@key}}">{{title}}</a></td></tr>
   {{/each}}
   </table>
-  If you would like to suggest other categories, you can do that via <a target="_blank" href="https://github.com/szabgab/metacpanjs">GitHub</a>
+  If you would like to suggest other categories or update the existing ones, you can do that via <a target="_blank" href="https://github.com/szabgab/metacpanjs">GitHub</a>
 </script>
 
 <script id="recommended-template" type="text/x-handlebars-template">
-  <h2>Perl Maven's recommended CPAN modules for {{query}}</h2>
+  <h2>Perl Maven's recommended CPAN modules for {{result.recommended.title}}</h2>
   <table class="table-stripped">
-  {{#each result.recommended}}
+  {{#each result.recommended.modules}}
      <tr><td><a href="#module/{{this}}">{{this}}</a></td></tr>
   {{/each}}
   </table>

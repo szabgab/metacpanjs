@@ -247,7 +247,6 @@ var metacpan = {
 				}).fail(metacpan.show_error);
 				return;
 
-	
 				if (/::/.exec(route[1])) {
 					metacpan.module(route[1], function(query, result) {
 						metacpan.display(query, result, 'module-template');
