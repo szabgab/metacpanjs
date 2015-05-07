@@ -18,6 +18,21 @@
   <div class="error">Error. {{result.code}}</div>
 </script>
 
+<script id="search-template" type="text/x-handlebars-template">
+<h2>Search results</h2>
+  <table class="table-stripped">
+    {{#each result.hits.hits}}
+      <tr>
+        <td><a href="#release/{{fields.distribution}}">{{fields.name}}</a></td>
+        <td>{{fields.abstract}}</td>
+        <td>{{fields.date}}</td>
+        <!-- <td>{{#iff fields.status '!=' 'latest'}}<b>{{fields.status}}</b>{{/iff}}</td> -->
+      </tr>
+    {{/each}}
+  </table>
+
+</script>
+
 <script id="release-template" type="text/x-handlebars-template">
   <div class="entry">
     <h2><a href="#author/{{result.author}}">{{result.author}}</a> {{result.name}} {{result.date}}</h2>

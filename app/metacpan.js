@@ -210,8 +210,44 @@ var metacpan = {
 					window.location.hash = '#';
 					return;
 				}
+
+				var term = route[1];
+				var terms = term.split(/\s+/);
+				//console.log(terms);
 				// if users searches for Module/Name.pm   we should load it directly
 				// if user search for Module::Name we try to load that exact module (we should search among the module names)
+				// look at https://github.com/CPAN-API/metacpan-web/blob/master/lib/MetaCPAN/Web/Model/API/Module.pm
+				// to see how MetaCPAN searches
+				var a1 = jQuery.post('http://api.metacpan.org/v0/release/_search', JSON.stringify({
+					"query": {
+						"match_all": {}
+					},
+					"fields" : [ "distribution", "name", "status", "date", "abstract" ],
+					//abstract
+					//distribution
+					//metadata.keywords
+					//author
+					"filter" : {
+						"and" : [
+							{ "or" : [
+								{ "term": { "distribution" : term } },  // exact distribution name
+								{ "term": { "provides" : term } },      // exact module name
+							]},
+							{ "term": { "status" : "latest" } },
+						]
+					},
+					"sort" : [
+						{ "date": {"order" : "desc"} }
+					],
+					"size" :  count
+				}));
+				$.when(a1).done(function(r1) {
+					metacpan.display(route[1], r1, 'search-template');
+					//console.log(r1);
+				}).fail(metacpan.show_error);
+				return;
+
+	
 				if (/::/.exec(route[1])) {
 					metacpan.module(route[1], function(query, result) {
 						metacpan.display(query, result, 'module-template');
