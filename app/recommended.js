@@ -21,7 +21,7 @@ metacpan.recommended = {
 	},
 	'dancer'          : {
 		'title'       : 'Dancer, light weight web development framework. (for new projects use Dancer2)',
-		'modules'     :[ 'Dancer', 'Dancer::Plugin::DBIC', 'Dancer::Plugin::Auth::Extensible', 'Dancer::Plugin::Passphrase', 'Dancer::Plugin::Email', 'Dancer::Plugin::Lexicon', 'Dancer::Plugin::Auth::Extensible::Provider::Usergroup', 'Dancer::Plugin::Ajax', 'Dancer::Plugin::Database', 'Dancer::Plugin::EscapeHTML', 'Dancer::Session::Cookie' ],
+		'modules'     :[ 'Dancer', 'Dancer::Plugin::DBIC', 'Dancer::Plugin::Auth::Extensible', 'Dancer::Plugin::Passphrase', 'Dancer::Plugin::Email', 'Dancer::Plugin::Lexicon', 'Dancer::Plugin::Auth::Extensible::Provider::Usergroup', 'Dancer::Plugin::Ajax', 'Dancer::Plugin::Database', 'Dancer::Plugin::EscapeHTML', 'Dancer::Session::Cookie', 'Dancer::Plugin::SimpleCRUD' ],
 	},
 	'dancer2'         : {
 		'title'       : 'Dancer2',
