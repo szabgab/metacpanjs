@@ -63,6 +63,24 @@ var metacpan = {
 	},
 
 
+	'no_repository' : function(query, callback) {
+		//var page_size = metacpan.size();
+		//var page = metacpan.page;
+		//var from = ( page - 1 ) * page_size;
+		metacpan.post("http://api.metacpan.org/v0/release/_search", {
+			"query": {
+				"match_all": {}
+			},
+			"fields" : [ "metadata.resources.repository", "metadata.distribution", "date", "author", "distribution", "name", "metadata.name", "abstract" ],
+			"sort" : [
+				{ "date": {"order" : "desc"} }
+			],
+			"size" : 1000,
+			//"size" : metacpan.size(),
+			//"from" : from
+		}, query, callback, metacpan.show_error)
+	},
+
 	'no_license' : function(query, callback) {
 		//var page_size = metacpan.size();
 		//var page = metacpan.page;
@@ -298,6 +316,14 @@ var metacpan = {
 							metacpan.display(count, releases, 'no-license-template');
 						});
 						return;
+					case('no-repository'):
+						metacpan.no_repository('', function(count, result) {
+							var distros = result["hits"]["hits"].filter(function(h) { return ! h["fields"]["metadata.resources.repository"] } );
+							var releases = metacpan.process_template(count, distros, 'releases-template');
+							metacpan.display(count, releases, 'no-repository-template');
+						});
+						return;
+
 				}
 				return;
 			case('release'):
