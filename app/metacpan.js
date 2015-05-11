@@ -371,7 +371,30 @@ var metacpan = {
 				return;
 			case('module'):
 				metacpan.module(route[1], function(query, result) {
-					metacpan.display(query, result, 'module-template');
+					if (result["module"][0]["associated_pod"]) {
+						jQuery.get("http://api.metacpan.org/v0/pod/" + result["module"][0]["associated_pod"], function(res) {
+							result["pod"] = res;
+							metacpan.display(query, result, 'module-template');
+						})
+						.fail(function(result) {
+							metacpan.display(query, result, 'module-template');
+						})
+					} else {
+						metacpan.display(query, result, 'module-template');
+					}
+					// TODO can there really be more than one modules in a module?
+					//var ajax = new Array;
+					//for (var i = 0; i < result["module"].length; i++ ) {
+					//	if (result["module"][i]["associated_pod"]) {
+					//		console.log(result["module"][i]["associated_pod"]);
+					//		var a = jQuery.get("http://api.metacpan.org/v0/pod/" + result["module"][i]["associated_pod"]);
+					//		ajax.push(a);
+					//		break;
+					//	}
+					//}
+					//$.when(ajax[0]).done(function(r1) {
+					//	console.log(r1);
+					//});
 				});
 				return;
 			default:
