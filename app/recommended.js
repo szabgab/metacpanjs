@@ -32,7 +32,7 @@ metacpan.recommended = {
 		'modules'         : [ 'DBI', 'DBIx::Class', 'DBD::mysql', 'DBD::SQLite', 'MongoDB', 'DBD::Oracle', 'DBD::Sybase', 'DBD::Pg', 'DBD::ODBC', 'DBD::CSV', 'DBD::DB2' ],
 	},
 	'date-time'       : {
-		'title'       : 'Handling Date and Time',
+		'title'       : 'Date and Time',
 		'modules'     : [ 'DateTime', 'DateTime::Tiny', 'DateTime::Format::Strptime', 'DateTime::TimeZone', 'DateTime::Duration', 'DateTime::Format::ISO8601', 'DateTime::Format::MySQL', 'DateTime::Format::DateParse' ],
 	},
 	'email'           : {
