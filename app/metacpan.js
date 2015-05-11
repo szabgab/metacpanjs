@@ -293,7 +293,8 @@ var metacpan = {
 					case('no-license'):
 						metacpan.no_license('', function(count, result) {
 							var distros = result["hits"]["hits"].filter(function(h) { return h["fields"]["license"] == "unknown" } );
-							metacpan.display(count, distros, 'releases-template');
+							var releases = metacpan.process_template(count, distros, 'releases-template');
+							metacpan.display(count, releases, 'no-license-template');
 						});
 						return;
 				}

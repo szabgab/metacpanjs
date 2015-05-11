@@ -170,8 +170,12 @@
 
 </script>
 
-<script id="releases-template" type="text/x-handlebars-template">
+<script id="no-license-template" type="text/x-handlebars-template">
    <h2>Recent releases without a license</h2>
+   {{{result}}}
+</script>
+
+<script id="releases-template" type="text/x-handlebars-template">
    <table class="table-stripped">
    {{#each result}}
      <tr><td><a href="#release/{{fields.distribution}}">{{fields.distribution}}</a></td></tr>
