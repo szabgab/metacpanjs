@@ -45,7 +45,7 @@ metacpan.recommended = {
 	},
 	'exception'       : {
 		'title'       : 'Exception handling',
-		'modules'     : [ 'Try::Tiny' ],
+		'modules'     : [ 'TryCatch', 'Try::Tiny' ],
 	},
 	'json'            : {
 		'title'       : 'JSON',
