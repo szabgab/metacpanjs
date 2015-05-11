@@ -69,12 +69,14 @@
         <th>Module name</th>
         <th>version</th>
         <th>pod</th>
+        <th>MetaCPAN</th>
       </tr>
     {{#each result.module}}
        <tr>
          <td>{{name}}</td>
          <td>{{#if version}}{{version}}{{/if}}</td>
          <td>{{#if associated_pod}}{{associated_pod}}{{/if}}</td>
+         <td><a href="https://metacpan.org/pod/{{name}}" target="_blank">MetaCPAN</a></td>
        </tr>
     {{/each}}
     </table>
