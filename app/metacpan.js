@@ -90,6 +90,7 @@ var metacpan = {
 				"match_all": {}
 			},
 			"fields" : [ "metadata.license", "metadata.distribution", "date", "author", "license", "distribution", "name", "metadata.name", "abstract" ],
+			"filter" : { "term": { "license" : "unknown" } },
 			"sort" : [
 				{ "date": {"order" : "desc"} }
 			],
@@ -311,8 +312,7 @@ var metacpan = {
 				switch(route[1]) {
 					case('no-license'):
 						metacpan.no_license('', function(count, result) {
-							var distros = result["hits"]["hits"].filter(function(h) { return h["fields"]["license"] == "unknown" } );
-							var releases = metacpan.process_template(count, distros, 'releases-template');
+							var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
 							metacpan.display(count, releases, 'no-license-template');
 						});
 						return;
