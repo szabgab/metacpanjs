@@ -273,14 +273,27 @@ var metacpan = {
 			case('profiles'):
 				metacpan.display(0, {'profiles' : metacpan.profiles }, 'profiles-template');
 				return;
+
 			case('other'):
-				metacpan.display(0, {}, 'other-template');
+				window.location.hash = '#lab';
 				return;
 			case('no-license'):
-				metacpan.no_license('', function(count, result) {
-					var distros = result["hits"]["hits"].filter(function(h) { return h["fields"]["license"] == "unknown" } );
-					metacpan.display(count, distros, 'releases-template');
-				});
+				window.location.hash = '#lab/no-license';
+				return;
+			case('lab'):
+				var query = route[1];
+				if (query == null) {
+					metacpan.display(0, {}, 'lab-template');
+					return;
+				}
+				switch(route[1]) {
+					case('no-license'):
+						metacpan.no_license('', function(count, result) {
+							var distros = result["hits"]["hits"].filter(function(h) { return h["fields"]["license"] == "unknown" } );
+							metacpan.display(count, distros, 'releases-template');
+						});
+						return;
+				}
 				return;
 			case('release'):
 				metacpan.release(route[1], function(query, result) {
