@@ -326,11 +326,12 @@ var metacpan = {
 				}));
 				$.when(a1, a2).done(function(r1, r2) {
 					var author = r1[0];
-					var releases = r2[0];
+					var result = r2[0];
 					if (author["profile"]) {
 						author["profile"] = author["profile"].filter( function(p) { return metacpan.profiles[ p["name"] ] });
 						author["profile"].forEach( function(p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
 					}
+					var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
 					metacpan.display(metacpan.query, { 'releases' : releases, 'author' : author }, 'author-template');
 				}).fail(metacpan.show_error);
 

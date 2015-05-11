@@ -142,16 +142,7 @@
     {{/each}}
   {{/if}}
   <h2>Releases</h2>
-  <table class="table-stripped">
-    {{#each result.releases.hits.hits}}
-      <tr>
-        <td><a href="#release/{{fields.distribution}}">{{fields.name}}</a></td>
-        <td>{{fields.abstract}}</td>
-        <td>{{fields.date}}</td>
-        <!-- <td>{{#iff fields.status '!=' 'latest'}}<b>{{fields.status}}</b>{{/iff}}</td> -->
-      </tr>
-    {{/each}}
-  </table>
+  {{{result.releases}}}
 </script>
 
 <script id="recent-template" type="text/x-handlebars-template">
