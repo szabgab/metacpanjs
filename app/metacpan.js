@@ -147,14 +147,17 @@ var metacpan = {
 	},
 
 	'display' : function(query, result, template) {
+		var html = metacpan.process_template(query, result, template);
+		$('#result').html(html);
+	},
+	'process_template' : function(query, result, template) {
 		if (result["hits"]) {
 			metacpan.total = result["hits"]["total"];
 		}
 
 		var source   = $('#' + template).html();
 		var template = Handlebars.compile(source);
-		var html    = template({'query' : query, 'result' : result});
-		$('#result').html(html);
+		return template({'query' : query, 'result' : result});
 	},
 
 	'display_profile' : function(name, result) {
