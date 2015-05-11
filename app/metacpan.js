@@ -72,6 +72,12 @@ var metacpan = {
 				"match_all": {}
 			},
 			"fields" : [ "metadata.resources.repository", "metadata.distribution", "date", "author", "distribution", "name", "metadata.name", "abstract" ],
+			"filter" : { "and" : [
+                  { "missing" : { "field" : "resources.repository.type" } },
+                  { "missing" : { "field" : "resources.repository.url" } },
+                  { "missing" : { "field" : "resources.repository.web" } },
+            ]
+            },
 			"sort" : [
 				{ "date": {"order" : "desc"} }
 			],
@@ -318,8 +324,7 @@ var metacpan = {
 						return;
 					case('no-repository'):
 						metacpan.no_repository('', function(count, result) {
-							var distros = result["hits"]["hits"].filter(function(h) { return ! h["fields"]["metadata.resources.repository"] } );
-							var releases = metacpan.process_template(count, distros, 'releases-template');
+							var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
 							metacpan.display(count, releases, 'no-repository-template');
 						});
 						return;
