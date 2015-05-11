@@ -71,7 +71,7 @@ var metacpan = {
 			"query": {
 				"match_all": {}
 			},
-			"fields" : [ "metadata.license", "metadata.distribution", "date", "author", "license", "distribution", "name", "metadata.name" ],
+			"fields" : [ "metadata.license", "metadata.distribution", "date", "author", "license", "distribution", "name", "metadata.name", "abstract" ],
 			"sort" : [
 				{ "date": {"order" : "desc"} }
 			],
@@ -265,7 +265,8 @@ var metacpan = {
 				return;
 			case('recent'):
 				metacpan.recent(20, function(count, result) {
-					metacpan.display(count, result, 'recent-template');
+					var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
+					metacpan.display(count, releases, 'recent-template');
 				});
 				return;
 			case('leaderboard'):

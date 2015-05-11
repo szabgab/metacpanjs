@@ -116,21 +116,6 @@
 
 
 
-<script id="recent-template" type="text/x-handlebars-template">
-  <table class="table-stripped">
-    {{#each result.hits.hits}}
-      <tr>
-        <td><a href="#release/{{fields.distribution}}">{{fields.name}}</a></td>
-        <td>{{fields.abstract}}</td>
-        <td>{{fields.date}}</td>
-        <!-- <td>{{#iff fields.status '!=' 'latest'}}<b>{{fields.status}}</b>{{/iff}}</td> -->
-      </tr>
-    {{/each}}
-  </table>
-
-</script>
-
-
 <script id="author-template" type="text/x-handlebars-template">
   <h2>{{result.author.name}} ({{result.author.pauseid}})</h2>
   <img src="{{result.author.gravatar_url}}" alt="{{result.author.name}}" /><br>
@@ -167,7 +152,11 @@
       </tr>
     {{/each}}
   </table>
+</script>
 
+<script id="recent-template" type="text/x-handlebars-template">
+   <h2>Recent releases</h2>
+   {{{result}}}
 </script>
 
 <script id="no-license-template" type="text/x-handlebars-template">
@@ -176,11 +165,16 @@
 </script>
 
 <script id="releases-template" type="text/x-handlebars-template">
-   <table class="table-stripped">
-   {{#each result}}
-     <tr><td><a href="#release/{{fields.distribution}}">{{fields.distribution}}</a></td></tr>
-   {{/each}}
-   </table>
+  <table class="table-stripped">
+    {{#each result}}
+      <tr>
+        <td><a href="#release/{{fields.distribution}}">{{fields.name}}</a></td>
+        <td>{{fields.abstract}}</td>
+        <td>{{fields.date}}</td>
+        <!-- <td>{{#iff fields.status '!=' 'latest'}}<b>{{fields.status}}</b>{{/iff}}</td> -->
+      </tr>
+    {{/each}}
+  </table>
 </script>
 
 <script id="lab-template" type="text/x-handlebars-template">
