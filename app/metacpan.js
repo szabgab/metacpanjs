@@ -333,7 +333,7 @@ var metacpan = {
 					// Link to version control
 					// url only linking to http://github.com/szabgab/perl6-in-perl5/  (Inline-Rakudo)
 					if (result["url"] && ! result["web"] && ! result["type"]) {
-						if (new Regex('https?://github.com/[^/]+/[^/]+/?$').exec(result["url"])) {
+						if (new RegExp('https?://github.com/[^/]+/[^/]+/?$').exec(result["url"])) {
 							result["web"] = result["url"];
 							result["type"] = 'git';
 							result["url"] += '.git';
@@ -531,11 +531,22 @@ $(document).ready(function() {
 			$("#msg").removeClass();
 			$("#msg").addClass("tools-message tools-message-red");
 		} else {
-			pages["default"][page] = new Date;
-			localStorage.setItem('saved_pages', JSON.stringify(pages));
-			$("#msg").html('We have just saved this page');
-			$("#msg").removeClass();
-			$("#msg").addClass("tools-message tools-message-green");
+			var m = new RegExp('^#(module|release)/(.*)').exec(page);
+			if (m) {
+				var title = m[0];
+				pages["default"][page] = {
+					title: title,
+					date:  new Date,
+				};
+				localStorage.setItem('saved_pages', JSON.stringify(pages));
+				$("#msg").html('We have just saved this page');
+				$("#msg").removeClass();
+				$("#msg").addClass("tools-message tools-message-green");
+			} else {
+				$("#msg").html('You can only save module and release pages.');
+				$("#msg").removeClass();
+				$("#msg").addClass("tools-message tools-message-red");
+			}
 		}
 		$("#msg").message();
 		return;
