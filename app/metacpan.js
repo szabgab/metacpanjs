@@ -325,6 +325,8 @@ var metacpan = {
 			case('release'):
 				metacpan.release(route[1], function(query, result) {
 					console.log(result);
+
+					// Link to version control
 					// url only linking to http://github.com/szabgab/perl6-in-perl5/  (Inline-Rakudo)
 					if (result["url"] && ! result["web"] && ! result["type"]) {
 						if (new Regex('https?://github.com/[^/]+/[^/]+/?$').exec(result["url"])) {
@@ -336,6 +338,7 @@ var metacpan = {
 					// type: git web https://github.com/PerlDancer/Dancer2   url: https://github.com/PerlDancer/Dancer2.git
 					// url only http://svn.perlide.org/padre/trunk/Padre/ ????
 
+					// CPANTS - Kwalitee
 					// Access-Control-Allow-Origin is not set, if it gets set we can use this
 					//jQuery.get('http://cpants.cpanauthors.org/dist/' + query + '.json', function(kwalitee) {
 					//	console.log(kwalitee);
@@ -346,6 +349,7 @@ var metacpan = {
 						//console.log(author);
 						$("#author").html(author["name"]);
 					});
+
 					metacpan.display(query, result, 'release-template');
 				});
 				return;
