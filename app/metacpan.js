@@ -406,6 +406,7 @@ var metacpan = {
 				//		metacpan.display(query, result, 'module-template');
 				//	}
 				//});
+				window.scrollTo(0, 0);
 				return;
 			default:
 				console.log('unhandled route: ' + route);
