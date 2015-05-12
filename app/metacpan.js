@@ -375,32 +375,24 @@ var metacpan = {
 				metacpan.display(name, { 'recommended' : metacpan.recommended[name] }, 'recommended-template');
 				return;
 			case('module'):
-				metacpan.module(route[1], function(query, result) {
-					if (result["module"][0]["associated_pod"]) {
-						jQuery.get("http://api.metacpan.org/v0/pod/" + result["module"][0]["associated_pod"], function(res) {
-							result["pod"] = res;
-							metacpan.display(query, result, 'module-template');
-						})
-						.fail(function(result) {
-							metacpan.display(query, result, 'module-template');
-						})
-					} else {
-						metacpan.display(query, result, 'module-template');
+				jQuery.get("http://api.metacpan.org/v0/pod/" + route[1], function(result) {
+					if (! result) {
 					}
-					// TODO can there really be more than one modules in a module?
-					//var ajax = new Array;
-					//for (var i = 0; i < result["module"].length; i++ ) {
-					//	if (result["module"][i]["associated_pod"]) {
-					//		console.log(result["module"][i]["associated_pod"]);
-					//		var a = jQuery.get("http://api.metacpan.org/v0/pod/" + result["module"][i]["associated_pod"]);
-					//		ajax.push(a);
-					//		break;
-					//	}
-					//}
-					//$.when(ajax[0]).done(function(r1) {
-					//	console.log(r1);
-					//});
+					metacpan.display(query, { pod: result, module: route[1] }, 'pod-template');
 				});
+				//metacpan.module(route[1], function(query, result) {
+				//	if (result["module"][0]["associated_pod"]) {
+				//		jQuery.get("http://api.metacpan.org/v0/pod/" + result["module"][0]["associated_pod"], function(res) {
+				//			result["pod"] = res;
+				//			metacpan.display(query, result, 'module-template');
+				//		})
+				//		.fail(function(result) {
+				//			metacpan.display(query, result, 'module-template');
+				//		})
+				//	} else {
+				//		metacpan.display(query, result, 'module-template');
+				//	}
+				//});
 				return;
 			default:
 				console.log('unhandled route: ' + route);

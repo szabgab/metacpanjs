@@ -60,6 +60,11 @@
   </table>
 </script>
 
+<script id="pod-template" type="text/x-handlebars-template">
+<h2>{{result.module}}</h2>
+{{{result.pod}}}
+</script>
+
 <script id="module-template" type="text/x-handlebars-template">
     <h2><a href="#release/{{result.distribution}}">{{result.distribution}}</a> {{query}} {{result.version}} by <a href="#author/{{result.author}}">{{result.author}}</a></h2>
     {{result.abstract}}
