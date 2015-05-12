@@ -238,7 +238,7 @@ var metacpan = {
 				// empty search redirct to home page
 				if (route[1] == '') {
 					window.location.hash = '#';
-					return;
+					break;
 				}
 
 				var term = route[1];
@@ -275,24 +275,24 @@ var metacpan = {
 					metacpan.display(route[1], r1, 'search-template');
 					//console.log(r1);
 				}).fail(metacpan.show_error);
-				return;
+				break;
 			case(''):
 				metacpan.display('', { 'recommended' : metacpan.recommended }, 'home-template');
-				return;
+				break;
 			case('recent'):
 				metacpan.recent(20, function(count, result) {
 					var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
 					metacpan.display(count, releases, 'recent-template');
 				});
-				return;
+				break;
 			case('leaderboard'):
 				metacpan.leaderboard('', function (count, result) {
 					metacpan.display(count, result, 'leaderboard-template');
 				})
-				return;
+				break;
 			case('profiles'):
 				metacpan.display(0, {'profiles' : metacpan.profiles }, 'profiles-template');
-				return;
+				break;
 
 			case('other'):
 				window.location.hash = '#lab';
@@ -304,24 +304,28 @@ var metacpan = {
 				var query = route[1];
 				if (query == null) {
 					metacpan.display(0, {}, 'lab-template');
-					return;
+					break;
 				}
 				switch(route[1]) {
+					case('list'):
+						var pages = metacpan.get_pages();
+						metacpan.display('', pages, 'list-pages-template');
+						break;
 					case('no-license'):
 						metacpan.no_license('', function(count, result) {
 							var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
 							metacpan.display(count, releases, 'no-license-template');
 						});
-						return;
+						break;
 					case('no-repository'):
 						metacpan.no_repository('', function(count, result) {
 							var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
 							metacpan.display(count, releases, 'no-repository-template');
 						});
-						return;
+						break;
 
 				}
-				return;
+				break;
 			case('release'):
 				metacpan.release(route[1], function(query, result) {
 					console.log(result);
@@ -352,7 +356,7 @@ var metacpan = {
 
 					metacpan.display(query, result, 'release-template');
 				});
-				return;
+				break;
 			case('author'):
 				var query = route[1];
 				metacpan.query = query;
@@ -383,14 +387,14 @@ var metacpan = {
 					metacpan.display(metacpan.query, { 'releases' : releases, 'author' : author }, 'author-template');
 				}).fail(metacpan.show_error);
 
-				return;
+				break;
 			case('profile'):
 				metacpan.profile(route[1], metacpan.display_profile);
-				return;
+				break;
 			case('recommended'):
 				var name = route[1];
 				metacpan.display(name, { 'recommended' : metacpan.recommended[name] }, 'recommended-template');
-				return;
+				break;
 			case('module'):
 				jQuery.get("http://api.metacpan.org/v0/pod/" + route[1], function(result) {
 					if (! result) {
@@ -411,11 +415,23 @@ var metacpan = {
 				//	}
 				//});
 				window.scrollTo(0, 0);
-				return;
+				break;
 			default:
 				console.log('unhandled route: ' + route);
-		}
+		};
+		$("#save").attr('href', location.hash);
 	},
+
+	'get_pages' : function() {
+		var str = localStorage.getItem('saved_pages');
+		if (str == null) {
+			var o = new Object;
+			o["default"] = new Object;
+			return o;
+		}
+		return JSON.parse(str);
+	},
+
 };
 
 
@@ -507,6 +523,24 @@ $(document).ready(function() {
 	$(window).bind('hashchange', function() {
 		metacpan.click(location.hash)
 	})
+	$('#save').bind('click', function(e) {
+		var page = location.hash;
+		var pages = metacpan.get_pages();
+		if (pages["default"][page]) {
+			$("#msg").html('This page was already saved');
+			$("#msg").removeClass();
+			$("#msg").addClass("tools-message tools-message-red");
+		} else {
+			pages["default"][page] = new Date;
+			localStorage.setItem('saved_pages', JSON.stringify(pages));
+			$("#msg").html('We have just saved this page');
+			$("#msg").removeClass();
+			$("#msg").addClass("tools-message tools-message-green");
+		}
+		$("#msg").message();
+		return;
+	});
+
 	metacpan.click(location.hash);
 });
 

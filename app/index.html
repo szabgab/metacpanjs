@@ -260,12 +260,24 @@
   {{pager}}
 </script>
 
+<script id="list-pages-template" type="text/x-handlebars-template">
+  {{#each result}}
+    <h2>{{@key}}</h2>
+    <ul>
+    {{#each this}}
+      <li><a href="{{@key}}">{{@key}}</a></li>
+    {{/each}}
+    </ul>
+  {{/each}}
+</script>
 
 </head>
 <body>
 
 <nav class="navbar navbar-pills navbar-right">
     <ul>
+        <li><a href="#lab/list">List</a></li>
+        <li><a id="save" href="">Save</a></li>
         <li><a target="_blank" href="https://github.com/szabgab/metacpanjs">fork me</a></li>
     </ul>
 </nav>
@@ -276,8 +288,11 @@
         <li><a href="#leaderboard">leaderboard</a></li>
         <li><a href="#profiles">profiles</a></li>
         <li><a href="#lab">lab</a></li>
+
     </ul>
 </nav>
+
+<div id="msg" ></div>
 
 <div class="units-row">
     <div class="unit-10"></div>
