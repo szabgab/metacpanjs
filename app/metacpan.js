@@ -336,7 +336,7 @@ var metacpan = {
 					// type: git web https://github.com/PerlDancer/Dancer2   url: https://github.com/PerlDancer/Dancer2.git
 					// url only http://svn.perlide.org/padre/trunk/Padre/ ????
 
-					// Access-Control-Allow-Origin not set
+					// Access-Control-Allow-Origin is not set, if it gets set we can use this
 					//jQuery.get('http://cpants.cpanauthors.org/dist/' + query + '.json', function(kwalitee) {
 					//	console.log(kwalitee);
 					//});

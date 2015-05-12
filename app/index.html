@@ -84,6 +84,14 @@
       <tr><td><a href="#module/{{this}}">{{this}}</a></td></tr>
   {{/each}}
   </table>
+
+   <h2>Dependencies</h2>
+{{result.dependencies}}
+   <ul>
+     {{#each result.dependency}}
+       <li><a href="#module/{{module}}" title="{{phase}} {{relationship}}">{{module}}</a></li>
+     {{/each}}
+   </ul>
 </script>
 
 <script id="pod-template" type="text/x-handlebars-template">
