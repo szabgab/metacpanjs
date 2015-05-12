@@ -37,11 +37,18 @@
 
 <script id="release-template" type="text/x-handlebars-template">
   <div class="entry">
-    <h2><a href="#author/{{result.author}}">{{result.author}}</a> {{result.name}} {{result.date}}</h2>
+    <div id="breadcrumbs"><span id="author"><a href="#author/{{result.author}}">{{result.author}}</a></span> / {{result.name}}</div>
+    <div id="date">{{result.date}}</div>
     <a href="https://metacpan.org/release/{{result.distribution}}" target="_blank">MetaCPAN</a>
   </div>
   <div class="repository">
     <a target="_blank" href="{{result.resources.repository.web}}">{{result.resources.repository.type}}</a>
+  </div>
+
+  <div id="tools">
+    <a href="#source/{{result.author}}/{{result.name}}/">Browse</a> (<a target="_blank" href="https://api.metacpan.org/source/{{result.author}}/{{result.name}}/">Raw</a>)<br>
+    <a href="#/changes/distribution/{{result.distribution}}">Changes</a><br>
+    
   </div>
 
   {{#unless result.authorized}}

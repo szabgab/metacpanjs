@@ -324,6 +324,11 @@ var metacpan = {
 				return;
 			case('release'):
 				metacpan.release(route[1], function(query, result) {
+					//console.log(result);
+					jQuery.get("http://api.metacpan.org/v0/author/" + result["author"], function(author) {
+						//console.log(author);
+						$("#author").html(author["name"]);
+					});
 					metacpan.display(query, result, 'release-template');
 				});
 				return;
