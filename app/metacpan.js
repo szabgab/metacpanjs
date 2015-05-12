@@ -210,7 +210,9 @@ var metacpan = {
 			route = '';
 		}
 		route = route.replace(/^#/, '');
-		jQuery.get('/log/' + route);
+		if (/^https?:\/\//.exec(window.location)) {
+			jQuery.get('/log/' + route);
+		}
 		var query_string = route.replace(/^[^?]*\?/, '');
 		query_string.split(/\&/).forEach(function(pair) {
 			var kv = pair.split(/=/);
