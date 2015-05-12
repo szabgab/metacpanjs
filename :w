@@ -336,10 +336,9 @@ var metacpan = {
 					// type: git web https://github.com/PerlDancer/Dancer2   url: https://github.com/PerlDancer/Dancer2.git
 					// url only http://svn.perlide.org/padre/trunk/Padre/ ????
 
-					// Access-Control-Allow-Origin not set
-					//jQuery.get('http://cpants.cpanauthors.org/dist/' + query + '.json', function(kwalitee) {
-					//	console.log(kwalitee);
-					//});
+					jQuery.get('http://cpants.cpanauthors.org/dist/' + query + '.json', function(kwalitee) {
+						console.log(kwalitee);
+					});
 
 
 					jQuery.get("http://api.metacpan.org/v0/author/" + result["author"], function(author) {
