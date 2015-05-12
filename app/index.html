@@ -39,16 +39,35 @@
   <div class="entry">
     <div id="breadcrumbs"><span id="author"><a href="#author/{{result.author}}">{{result.author}}</a></span> / {{result.name}}</div>
     <div id="date">{{result.date}}</div>
-    <a href="https://metacpan.org/release/{{result.distribution}}" target="_blank">MetaCPAN</a>
-  </div>
-  <div class="repository">
-    <a target="_blank" href="{{result.resources.repository.web}}">{{result.resources.repository.type}}</a>
   </div>
 
   <div id="tools">
     <a href="#source/{{result.author}}/{{result.name}}/">Browse</a> (<a target="_blank" href="https://api.metacpan.org/source/{{result.author}}/{{result.name}}/">Raw</a>)<br>
     <a href="#/changes/distribution/{{result.distribution}}">Changes</a><br>
-    
+
+    <a href="https://metacpan.org/release/{{result.distribution}}" target="_blank">MetaCPAN</a><br>
+    {{#if result.resources.repository.web}}
+         <a target="_blank" href="{{result.resources.repository.web}}">Clone Repository</a>
+    {{else}}
+       {{#if result.resources.repository.url}}
+           <a target="_blank" href="{{result.resources.repository.url}}">Clone Repository</a>
+       {{/if}}
+    {{/if}}
+    Issues<br>
+    <a target="_blank" href="http://matrix.cpantesters.org/?dist={{result.distribution}}+{{result.version}}">Testers</a>
+    ( 
+      {{#if result.tests.pass}}
+         <a target="_blank" href="http://www.cpantesters.org/distro/D/{{result.distribution}}.html?oncpan=1&distmat=1&version={{result.version}}&grade=2">{{result.tests.pass}}</a>
+      {{/if}}
+      {{#if result.tests.fail}}
+         <a target="_blank" href="http://www.cpantesters.org/distro/D/{{result.distribution}}.html?oncpan=1&distmat=1&version={{result.version}}&grade=3">{{result.tests.fail}}</a>
+      {{/if}}
+      {{#if result.tests.na}}
+         <a target="_blank" href="http://www.cpantesters.org/distro/D/{{result.distribution}}.html?oncpan=1&distmat=1&version={{result.version}}&grade=4">{{result.tests.na}}</a>
+      {{/if}}
+    )
+    <br>
+    <a target="_blank" href="http://cpants.charsbar.org/dist/overview/{{result.distribution}}">Kwalitee</a><br>
   </div>
 
   {{#unless result.authorized}}

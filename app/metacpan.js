@@ -324,7 +324,19 @@ var metacpan = {
 				return;
 			case('release'):
 				metacpan.release(route[1], function(query, result) {
-					//console.log(result);
+					console.log(result);
+					// url only linking to http://github.com/szabgab/perl6-in-perl5/  (Inline-Rakudo)
+					if (result["url"] && ! result["web"] && ! result["type"]) {
+						if (new Regex('https?://github.com/[^/]+/[^/]+/?$').exec(result["url"])) {
+							result["web"] = result["url"];
+							result["type"] = 'git';
+							result["url"] += '.git';
+						}
+					}
+					// type: git web https://github.com/PerlDancer/Dancer2   url: https://github.com/PerlDancer/Dancer2.git
+					// url only http://svn.perlide.org/padre/trunk/Padre/ ????
+
+
 					jQuery.get("http://api.metacpan.org/v0/author/" + result["author"], function(author) {
 						//console.log(author);
 						$("#author").html(author["name"]);
