@@ -276,17 +276,6 @@ var metacpan = {
 					//console.log(r1);
 				}).fail(metacpan.show_error);
 				return;
-
-				if (/::/.exec(route[1])) {
-					metacpan.module(route[1], function(query, result) {
-						metacpan.display(query, result, 'module-template');
-					});
-				} else {
-					metacpan.release(route[1], function(query, result) {
-						metacpan.display(query, result, 'release-template');
-					});
-				}
-				return;
 			case(''):
 				metacpan.display('', { 'recommended' : metacpan.recommended }, 'home-template');
 				return;
