@@ -186,6 +186,29 @@ var metacpan = {
 
 		metacpan.display(name, result, 'profile-template');
 	},
+	'parse_changes' : function(raw) {
+		var changes = '';
+
+		var lines = raw.split("\n");
+		for (var i=0; i < lines.length; i++) {
+			// 1.001014     Tue Dec 28 08:31:00:00 PST 2015
+			//    * Write a test to ensure this changes file gets updated
+			//    * Update changes file for 1.001013
+			//    * Fix #399, conflict with strawberry-portable
+			//    * restore ability to use regex with test_err and test_out
+			//      (Zefram) [rt.cpan.org #89655] [github #389] [github #387]
+			// 0.98_03 Thu Jun 21 13:04:19 PDT 2012
+			var m = new RegExp(/^(\d+\.[\d_]+)\s+(.*?)\s*$/).exec(lines[i]);
+			if (m) {
+				changes += '<div class="version">' + lines[i] + '</div>';
+			} else {
+				var line = '&nbsp&nbsp&nbsp&nbsp'  + lines[i];
+				line = line.replace(/\[(rt.cpan.org\s+#?(\d+))\]/, '[<a href="https://rt.cpan.org/Ticket/Display.html?id=$2">$1</a>]' );
+				changes += '<div>' + line + '</div>';
+			}
+		}
+		metacpan.changes = changes;
+	},
 
 	'click' : function(route) {
 		var params = new Object;
@@ -225,6 +248,9 @@ var metacpan = {
 				}
 				var release_name = route[2];
 				jQuery.get('http://api.metacpan.org/v0/changes/' + release_name, function(result) {
+					metacpan.parse_changes(result["content"]);
+					//console.log(metacpan.changes);
+					result["html"] = metacpan.changes;
 					metacpan.display(release_name, result, 'changes-template');
 				}).fail(metacpan.show_error);
 				break;

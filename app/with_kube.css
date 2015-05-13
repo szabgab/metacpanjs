@@ -9,3 +9,7 @@ a {
 #unauthorized {
   display: none;
 }
+
+.version {
+   color: blue;
+}
