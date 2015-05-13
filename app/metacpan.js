@@ -144,15 +144,6 @@ var metacpan = {
 			})
 	},
 
-	'get' : function(url, query, callback, error) {
-		return jQuery.get(url, function(result) {
-				callback(query, result);
-			})
-			.fail(function(result) {
-				error(query, result);
-			})
-	},
-
 	'search' : function() {
 		var query = $('#query').val();
 		window.location.hash = '#search/' + query;
@@ -389,24 +380,24 @@ var metacpan = {
 				metacpan.display(name, { 'recommended' : metacpan.recommended[name] }, 'recommended-template');
 				break;
 			case('module'):
-				jQuery.get("http://api.metacpan.org/v0/pod/" + route[1], function(result) {
-					if (! result) {
-					}
-					metacpan.display(query, { pod: result, module: route[1] }, 'pod-template');
+				var module_name = route[1];
+				jQuery.get("http://api.metacpan.org/v0/pod/" + module_name, function(result) {
+					metacpan.display(module_name, { pod: result, module: module_name }, 'pod-template');
 				});
-				//metacpan.get("http://api.metacpan.org/v0/module/" + route[1], route[1], function(query, result) {
+
+				//jQuery.get("http://api.metacpan.org/v0/module/" + module_name, function(result) {
 				//	if (result["module"][0]["associated_pod"]) {
 				//		jQuery.get("http://api.metacpan.org/v0/pod/" + result["module"][0]["associated_pod"], function(res) {
 				//			result["pod"] = res;
-				//			metacpan.display(query, result, 'module-template');
+				//			metacpan.display(module_name, result, 'module-template');
 				//		})
 				//		.fail(function(result) {
-				//			metacpan.display(query, result, 'module-template');
+				//			metacpan.display(module_name, result, 'module-template');
 				//		})
 				//	} else {
-				//		metacpan.display(query, result, 'module-template');
+				//		metacpan.display(module_name, result, 'module-template');
 				//	}
-				//}, metacpan.show_error);
+				//}).fail(metacpan.show_error);
 				window.scrollTo(0, 0);
 				break;
 			default:
