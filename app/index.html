@@ -43,7 +43,7 @@
 
   <div id="tools">
     <a href="#source/{{result.author}}/{{result.name}}/">Browse</a> (<a target="_blank" href="https://api.metacpan.org/source/{{result.author}}/{{result.name}}/">Raw</a>)<br>
-    <a href="#/changes/distribution/{{result.distribution}}">Changes</a><br>
+    <a href="#changes/distribution/{{result.distribution}}">Changes</a><br>
 
     <a href="https://metacpan.org/release/{{result.distribution}}" target="_blank">MetaCPAN</a><br>
     {{#if result.resources.repository.web}}
@@ -92,6 +92,13 @@
        <li><a href="#pod/{{module}}" title="{{phase}} {{relationship}}">{{module}}</a></li>
      {{/each}}
    </ul>
+</script>
+
+<script id="changes-template" type="text/x-handlebars-template">
+<h2>{{query}}</h2>
+<pre>
+{{result.content}}
+</pre>
 </script>
 
 <script id="pod-template" type="text/x-handlebars-template">

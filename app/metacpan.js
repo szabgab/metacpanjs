@@ -217,6 +217,18 @@ var metacpan = {
 		}
 	
 		switch(route[0]) {
+			case('changes'):
+				// invalid requests; TODO report error?
+				if (route[1] != 'distribution' || ! route[2]) {
+					window.location.hash = '#';
+					break;
+				}
+				var release_name = route[2];
+				jQuery.get('http://api.metacpan.org/v0/changes/' + release_name, function(result) {
+					metacpan.display(release_name, result, 'changes-template');
+				}).fail(metacpan.show_error);
+				break;
+
 			case('search'):
 				// empty search redirct to home page
 				if (route[1] == '') {
