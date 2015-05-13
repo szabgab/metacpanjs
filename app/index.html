@@ -81,7 +81,7 @@
   <h2>Provides</h2>
   <table class="table-stripped">
   {{#each result.provides}}
-      <tr><td><a href="#module/{{this}}">{{this}}</a></td></tr>
+      <tr><td><a href="#pod/{{this}}">{{this}}</a></td></tr>
   {{/each}}
   </table>
 
@@ -89,7 +89,7 @@
 {{result.dependencies}}
    <ul>
      {{#each result.dependency}}
-       <li><a href="#module/{{module}}" title="{{phase}} {{relationship}}">{{module}}</a></li>
+       <li><a href="#pod/{{module}}" title="{{phase}} {{relationship}}">{{module}}</a></li>
      {{/each}}
    </ul>
 </script>
@@ -136,7 +136,7 @@
   <h2>Perl Maven's recommended CPAN modules for {{result.recommended.title}}</h2>
   <table class="table-stripped">
   {{#each result.recommended.modules}}
-     <tr><td><a href="#module/{{this}}">{{this}}</a></td></tr>
+     <tr><td><a href="#pod/{{this}}">{{this}}</a></td></tr>
   {{/each}}
   </table>
 </script>

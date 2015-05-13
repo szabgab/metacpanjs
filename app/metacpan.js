@@ -380,6 +380,9 @@ var metacpan = {
 				metacpan.display(name, { 'recommended' : metacpan.recommended[name] }, 'recommended-template');
 				break;
 			case('module'):
+				window.location.hash = '#pod/' + route[1];
+				break;
+			case('pod'):
 				var module_name = route[1];
 				jQuery.get("http://api.metacpan.org/v0/pod/" + module_name, function(result) {
 					metacpan.display(module_name, { pod: result, module: module_name }, 'pod-template');
@@ -512,7 +515,7 @@ $(document).ready(function() {
 			$("#msg").removeClass();
 			$("#msg").addClass("tools-message tools-message-red");
 		} else {
-			var m = new RegExp('^#(module|release)/(.*)').exec(page);
+			var m = new RegExp('^#(pod|release)/(.*)').exec(page);
 			if (m) {
 				var title = m[0];
 				pages["default"][page] = {
@@ -524,7 +527,7 @@ $(document).ready(function() {
 				$("#msg").removeClass();
 				$("#msg").addClass("tools-message tools-message-green");
 			} else {
-				$("#msg").html('You can only save module and release pages.');
+				$("#msg").html('You can only save pod and release pages.');
 				$("#msg").removeClass();
 				$("#msg").addClass("tools-message tools-message-red");
 			}
