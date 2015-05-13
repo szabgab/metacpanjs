@@ -383,21 +383,18 @@ var metacpan = {
 				var module_name = route[1];
 				jQuery.get("http://api.metacpan.org/v0/pod/" + module_name, function(result) {
 					metacpan.display(module_name, { pod: result, module: module_name }, 'pod-template');
-				});
 
-				//jQuery.get("http://api.metacpan.org/v0/module/" + module_name, function(result) {
-				//	if (result["module"][0]["associated_pod"]) {
-				//		jQuery.get("http://api.metacpan.org/v0/pod/" + result["module"][0]["associated_pod"], function(res) {
-				//			result["pod"] = res;
-				//			metacpan.display(module_name, result, 'module-template');
-				//		})
-				//		.fail(function(result) {
-				//			metacpan.display(module_name, result, 'module-template');
-				//		})
-				//	} else {
-				//		metacpan.display(module_name, result, 'module-template');
-				//	}
-				//}).fail(metacpan.show_error);
+					jQuery.get("http://api.metacpan.org/v0/module/" + module_name, function(result) {
+						console.log(result);
+						var breadcrumbs = '<a href="#release/' + result["distribution"] + '">' + result["distribution"] + '</a> ' + module_name + ' ';
+						breadcrumbs += result["version"] + ' by <a href="#author/' + result["author"] + '">' + result["author"] + '</a>';
+						$("#breadcrumbs").html(breadcrumbs);
+						$("#abstract").html(result["abstract"]);
+						if (!result["authorized"]) {
+							$('#unauthorized').show();
+						}
+					}); //.fail(metacpan.show_error);
+				});
 				window.scrollTo(0, 0);
 				break;
 			default:

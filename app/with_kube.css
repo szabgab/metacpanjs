@@ -1,3 +1,11 @@
 a {
   text-decoration: none;
 }
+
+.warn {
+  color: red;
+}
+
+#unauthorized {
+  display: none;
+}

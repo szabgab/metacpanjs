@@ -95,13 +95,14 @@
 </script>
 
 <script id="pod-template" type="text/x-handlebars-template">
-<h2>{{result.module}}</h2>
+<div id="breadcrumbs">{{result.module}}</div>
+<div id="abstract"></div>
+<a target="_blank" href="http://metacpan.org/pod/{{result.module}}">MetaCPAN</a>
+<div id="unauthorized" class="warn">Unauthorized release</div>
 {{{result.pod}}}
 </script>
 
 <script id="module-template" type="text/x-handlebars-template">
-    <h2><a href="#release/{{result.distribution}}">{{result.distribution}}</a> {{query}} {{result.version}} by <a href="#author/{{result.author}}">{{result.author}}</a></h2>
-    {{result.abstract}}
     <hr>
     <table class="table-stripped">
       <tr>
@@ -119,15 +120,6 @@
        </tr>
     {{/each}}
     </table>
-    <hr>
-    {{#unless result.authorized}}
-     <div class="warn">Unauthorized release</div>
-    {{/unless}}
-    {{result.release}}<br>
-    {{result.path}}<br>
-    <div>
-     {{{result.pod}}}
-    </div>
 </script>
 
 <script id="home-template" type="text/x-handlebars-template">
