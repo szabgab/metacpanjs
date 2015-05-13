@@ -55,11 +55,6 @@ var metacpan = {
 	},
 
 
-	'module' : function(query, callback) {
-		metacpan.get("http://api.metacpan.org/v0/module/" + query, query, callback, metacpan.show_error);
-	},
-
-
 	'no_repository' : function(query, callback) {
 		//var page_size = metacpan.size();
 		//var page = metacpan.page;
@@ -398,7 +393,7 @@ var metacpan = {
 					}
 					metacpan.display(query, { pod: result, module: route[1] }, 'pod-template');
 				});
-				//metacpan.module(route[1], function(query, result) {
+				//metacpan.get("http://api.metacpan.org/v0/module/" + route[1], route[1], function(query, result) {
 				//	if (result["module"][0]["associated_pod"]) {
 				//		jQuery.get("http://api.metacpan.org/v0/pod/" + result["module"][0]["associated_pod"], function(res) {
 				//			result["pod"] = res;
@@ -410,7 +405,7 @@ var metacpan = {
 				//	} else {
 				//		metacpan.display(query, result, 'module-template');
 				//	}
-				//});
+				//}, metacpan.show_error);
 				window.scrollTo(0, 0);
 				break;
 			default:
