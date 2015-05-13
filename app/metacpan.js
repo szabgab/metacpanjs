@@ -54,9 +54,6 @@ var metacpan = {
 		}, count, callback, metacpan.show_error);
 	},
 
-	'release' : function(query, callback) {
-		metacpan.get("http://api.metacpan.org/v0/release/" + query, query, callback, metacpan.show_error);
-	},
 
 	'module' : function(query, callback) {
 		metacpan.get("http://api.metacpan.org/v0/module/" + query, query, callback, metacpan.show_error);
@@ -327,7 +324,7 @@ var metacpan = {
 				}
 				break;
 			case('release'):
-				metacpan.release(route[1], function(query, result) {
+				metacpan.get("http://api.metacpan.org/v0/release/" + route[1], route[1], function(query, result) {
 					console.log(result);
 
 					// Link to version control
@@ -355,7 +352,7 @@ var metacpan = {
 					});
 
 					metacpan.display(query, result, 'release-template');
-				});
+				}, metacpan.show_error);
 				break;
 			case('author'):
 				var query = route[1];
