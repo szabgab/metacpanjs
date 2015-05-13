@@ -319,7 +319,8 @@ var metacpan = {
 				}
 				break;
 			case('release'):
-				metacpan.get("http://api.metacpan.org/v0/release/" + route[1], route[1], function(query, result) {
+				var release_name = route[1];
+				jQuery.get("http://api.metacpan.org/v0/release/" + release_name, function(result) {
 					console.log(result);
 
 					// Link to version control
@@ -336,7 +337,7 @@ var metacpan = {
 
 					// CPANTS - Kwalitee
 					// Access-Control-Allow-Origin is not set, if it gets set we can use this
-					//jQuery.get('http://cpants.cpanauthors.org/dist/' + query + '.json', function(kwalitee) {
+					//jQuery.get('http://cpants.cpanauthors.org/dist/' + release_name + '.json', function(kwalitee) {
 					//	console.log(kwalitee);
 					//});
 
@@ -346,8 +347,8 @@ var metacpan = {
 						$("#author").html(author["name"]);
 					});
 
-					metacpan.display(query, result, 'release-template');
-				}, metacpan.show_error);
+					metacpan.display(release_name, result, 'release-template');
+				}).fail(metacpan.show_error);
 				break;
 			case('author'):
 				var query = route[1];
