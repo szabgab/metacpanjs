@@ -1,3 +1,5 @@
+"use strict";
+/*global localStorage: false, jQuery: false, window: false */
 var metacpan = {
 
     'profiles' : {
@@ -30,8 +32,8 @@ var metacpan = {
     },
 
     'size' : function () {
-        var page_size = parseInt(localStorage.getItem('page_size'));
-        if (page_size == null || page_size == 'null') {
+        var page_size = parseInt(localStorage.getItem('page_size'), 10);
+        if (page_size === null || page_size === 'null') {
             page_size = 10;
         }
         return page_size;
@@ -64,11 +66,12 @@ var metacpan = {
                 "match_all": {}
             },
             "fields" : [ "metadata.resources.repository", "metadata.distribution", "date", "author", "distribution", "name", "metadata.name", "abstract" ],
-            "filter" : { "and" : [
-                  { "missing" : { "field" : "resources.repository.type" } },
-                  { "missing" : { "field" : "resources.repository.url" } },
-                  { "missing" : { "field" : "resources.repository.web" } },
-            ]
+            "filter" : {
+                "and" : [
+                    { "missing" : { "field" : "resources.repository.type" } },
+                    { "missing" : { "field" : "resources.repository.url" } },
+                    { "missing" : { "field" : "resources.repository.web" } },
+                ]
             },
             "sort" : [
                 { "date": {"order" : "desc"} }
@@ -76,7 +79,7 @@ var metacpan = {
             "size" : 1000,
             //"size" : metacpan.size(),
             //"from" : from
-        }, query, callback, metacpan.show_error)
+        }, query, callback, metacpan.show_error);
     },
 
     'no_license' : function (query, callback) {
@@ -95,13 +98,13 @@ var metacpan = {
             "size" : 1000,
             //"size" : metacpan.size(),
             //"from" : from
-        }, query, callback, metacpan.show_error)
+        }, query, callback, metacpan.show_error);
     },
 
     'leaderboard' : function (query, callback) {
-        var page_size = metacpan.size();
-        var page = metacpan.page;
-        var from = ( page - 1 ) * page_size;
+        var page_size = metacpan.size(),
+            page = metacpan.page,
+            from = (page - 1) * page_size;
         metacpan.post("http://api.metacpan.org/v0/release/_search", {
             "query": {
                 "match_all": {}
@@ -116,12 +119,12 @@ var metacpan = {
                 }
             },
             "size": 0
-        }, query, callback, metacpan.show_error)
+        }, query, callback, metacpan.show_error);
     },
     'profile' : function (query, callback) {
-        var page_size = metacpan.size();
-        var page = metacpan.page;
-        var from = ( page - 1 ) * page_size;
+        var page_size = metacpan.size(),
+            page = metacpan.page,
+            from = (page - 1) * page_size;
         metacpan.post("http://api.metacpan.org/v0/author/_search", {
             "query": {
                 "match_all": {}
@@ -137,17 +140,16 @@ var metacpan = {
 
     'post' : function (url, data, query, callback, error) {
         return jQuery.post(url, JSON.stringify(data), function (result) {
-                callback(query, result);
-            })
-            .fail(function (result) {
-                error(query, result);
-            })
+            callback(query, result);
+        }).fail(function (result) {
+            error(query, result);
+        });
     },
 
     'search' : function () {
         var query = $('#query').val();
         window.location.hash = '#search/' + query;
-        metacpan.click(location.hash)
+        metacpan.click(window.location.hash)
     },
 
     'show_error' : function (query, result) {
@@ -236,7 +238,7 @@ var metacpan = {
             localStorage.setItem('page_size', params["size"]);
         }
         if (params["page"]) {
-            metacpan.page = parseInt(params["page"]);
+            metacpan.page = parseInt(params["page"], 10);
         }
     
         switch(route[0]) {
