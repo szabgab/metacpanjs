@@ -25,7 +25,7 @@ metacpan.recommended = {
 	},
 	'dancer2'         : {
 		'title'       : 'Dancer2',
-		'modules'     : [ 'Dancer2::Plugin::Path::Class', 'Dancer2::Plugin::DBIC', 'Dancer2::Plugin::Ajax', 'Dancer2::Plugin::Passphrase', 'Dancer2::Plugin::Auth::Extensible'],
+		'modules'     : [ 'Dancer2::Plugin::Path::Class', 'Dancer2::Plugin::DBIC', 'Dancer2::Plugin::Ajax', 'Dancer2::Plugin::Passphrase', 'Dancer2::Plugin::Auth::Extensible', 'Dancer2::Plugin::Feed', 'Dancer2::Plugin::Emailesque', 'Dancer2::Template::Xslate', 'Dancer2::Plugin::UnicodeNormalize', 'Dancer2::Plugin::RootURIFor'],
 	},
 	'database'        : {
 		'title'       : 'Database access',
