@@ -1,5 +1,6 @@
 "use strict";
-/*global localStorage: false, jQuery: false, window: false */
+/*global localStorage: false, jQuery: false, window: false, console: false, $: false, Handlebars: false */
+/*jshint -W069 */
 var metacpan = {
 
     'profiles' : {
@@ -149,7 +150,7 @@ var metacpan = {
     'search' : function () {
         var query = $('#query').val();
         window.location.hash = '#search/' + query;
-        metacpan.click(window.location.hash)
+        metacpan.click(window.location.hash);
     },
 
     'show_error' : function (query, result) {
@@ -231,7 +232,7 @@ var metacpan = {
         route = route.split("/");
     
         $(".active").removeClass('active');
-        var locator = route[0] == '' ? 'a[href=#]' : "a[href=#" + route[0] +"]" ;
+        var locator = route[0] === '' ? 'a[href=#]' : "a[href=#" + route[0] +"]" ;
         $(locator).parent('li').addClass('active');
     
         if (params["size"]) {
@@ -259,7 +260,7 @@ var metacpan = {
 
             case('search'):
                 // empty search redirct to home page
-                if (route[1] == '') {
+                if (route[1] === '') {
                     window.location.hash = '#';
                     break;
                 }
@@ -311,7 +312,7 @@ var metacpan = {
             case('leaderboard'):
                 metacpan.leaderboard('', function (count, result) {
                     metacpan.display(count, result, 'leaderboard-template');
-                })
+                });
                 break;
             case('profiles'):
                 metacpan.display(0, {'profiles' : metacpan.profiles }, 'profiles-template');
@@ -325,7 +326,7 @@ var metacpan = {
                 return;
             case('lab'):
                 var query = route[1];
-                if (query == null) {
+                if (query === null) {
                     metacpan.display(0, {}, 'lab-template');
                     break;
                 }
@@ -404,8 +405,8 @@ var metacpan = {
                     var author = r1[0];
                     var result = r2[0];
                     if (author["profile"]) {
-                        author["profile"] = author["profile"].filter( function (p) { return metacpan.profiles[ p["name"] ] });
-                        author["profile"].forEach( function (p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"] } );
+                        author["profile"] = author["profile"].filter( function (p) { return metacpan.profiles[ p["name"] ]; });
+                        author["profile"].forEach( function (p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"]; } );
                     }
                     var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
                     metacpan.display(metacpan.query, { 'releases' : releases, 'author' : author }, 'author-template');
@@ -442,13 +443,13 @@ var metacpan = {
                 break;
             default:
                 console.log('unhandled route: ' + route);
-        };
-        $("#save").attr('href', location.hash);
+        }
+        $("#save").attr('href', window.location.hash);
     },
 
     'get_pages' : function () {
         var str = localStorage.getItem('saved_pages');
-        if (str == null) {
+        if (str === null) {
             var o = new Object;
             o["default"] = new Object;
             return o;
@@ -462,7 +463,7 @@ var metacpan = {
 Handlebars.registerHelper('pager', function () {
     var page_count = Math.ceil(metacpan.total / metacpan.size());
     var page = metacpan.page;
-    var path = location.hash;
+    var path = window.location.hash;
     if (path) {
         path = path.replace(/\?.*/, '');
     }
@@ -487,7 +488,7 @@ Handlebars.registerHelper('pager', function () {
 
 Handlebars.registerHelper('sizer', function () {
     var page_size = metacpan.size();
-    var path = location.hash;
+    var path = window.location.hash;
     if (path) {
         path = path.replace(/\?.*/, '');
     }
@@ -536,7 +537,7 @@ Handlebars.registerHelper('iff', function (a, operator, b, opts) {
     }
 });
 
-$(document).ready(function () {
+$().ready(function () {
     $('#search').click(metacpan.search);
     $('#query').bind('keypress', function (e) {
         var code = e.keyCode || e.which;
@@ -545,10 +546,10 @@ $(document).ready(function () {
         }
     });
     $(window).bind('hashchange', function () {
-        metacpan.click(location.hash)
-    })
+        metacpan.click(window.location.hash);
+    });
     $('#save').bind('click', function (e) {
-        var page = location.hash;
+        var page = window.location.hash;
         var pages = metacpan.get_pages();
         if (pages["default"][page]) {
             $("#msg").html('This page was already saved');
@@ -576,6 +577,6 @@ $(document).ready(function () {
         return;
     });
 
-    metacpan.click(location.hash);
+    metacpan.click(window.location.hash);
 });
 
