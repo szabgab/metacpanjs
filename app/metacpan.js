@@ -326,7 +326,7 @@ var metacpan = {
                 return;
             case('lab'):
                 var query = route[1];
-                if (query === null) {
+                if (query === undefined) {
                     metacpan.display(0, {}, 'lab-template');
                     break;
                 }
