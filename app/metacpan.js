@@ -45,6 +45,22 @@ var metacpan = {
     'total' : 0,
 
     'cases' : {
+        //'homepage-eumm' : {
+        //    'title'  : 'With "homepage" in META files created by EUMM',
+        //    'filter' : {
+        //        "and" : [
+        //            { "exists" : { "field" : "resources.homepage" } },
+        //            //{ "prefix" : { "abstract" : "Semantic" } },
+        //            //{ "prefix" : { "metadata.generated_by" : "Dist" } },
+        //        ],
+        //    },
+        //},
+                    //{ "regexp" : { "metadata.generated_by" : "Module::Install" } },
+// ^Module::Install version ..., CPAN::Meta::Converter version ..."
+// ^CPAN::Meta::Converter version ..."
+// ^ExtUtils::MakeMaker version ..., CPAN::Meta::Converter version ..., CPAN::Meta::Converter version ...."
+// Dist::Zilla
+
         'with-homepage' : {
             'title'  : 'With "homepage" in META files',
             'filter' : { "exists" : { "field" : "resources.homepage" } },
@@ -70,7 +86,7 @@ var metacpan = {
             "query": {
                 "match_all": {}
             },
-            "fields" : [ "distribution", "name", "status", "date", "abstract" ],
+     //       "fields" : [ "distribution", "name", "status", "date", "abstract" ],
             "sort" : [
                 { "date": {"order" : "desc"} }
             ],
@@ -306,6 +322,7 @@ var metacpan = {
                 break;
             case('recent'):
                 metacpan.recent(20, function (count, result) {
+                    //console.log(result);
                     var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
                     metacpan.display(count, releases, 'recent-template');
                 });
@@ -367,6 +384,7 @@ var metacpan = {
                     default:
                         if (metacpan.cases[query]) {
                             metacpan.releases(metacpan.cases[query]['title'], metacpan.cases[query]['filter'], function (count, result) {
+                                console.log(result);
                                 var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
                                 metacpan.display(count, releases, 'some-template');
                             });
@@ -377,7 +395,7 @@ var metacpan = {
             case('release'):
                 var release_name = route[1];
                 jQuery.get("http://api.metacpan.org/v0/release/" + release_name, function (result) {
-                    console.log(result);
+                    //console.log(result);
 
                     // Link to version control
                     // url only linking to http://github.com/szabgab/perl6-in-perl5/  (Inline-Rakudo)
