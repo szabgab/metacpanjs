@@ -45,6 +45,50 @@ var metacpan = {
     'total' : 0,
 
     'cases' : {
+        'bugtracker-github' : {
+            'title'  : 'GitHub as bugtracker',
+            'filter' : {
+                'or' : [
+                    { 'prefix' : { 'resources.bugtracker.web' : 'https://github' } },
+                    { 'prefix' : { 'resources.bugtracker.web' : 'http://github' } },
+                ],
+            },
+        },
+        'bugtracker-rt' : {
+            'title'  : 'RT.CPAN as bugtracker',
+            'filter' : {
+                'or' : [
+                    { 'prefix' : { 'resources.bugtracker.web' : 'https://rt.cpan.org' } },
+                    { 'prefix' : { 'resources.bugtracker.web' : 'http://rt.cpan.org' } },
+                ],
+            },
+        },
+        'bugtracker-sourceforge' : {
+            'title'  : 'Sourceforge as bugtracker',
+            'filter' : {
+                'or' : [
+                    { 'prefix' : { 'resources.bugtracker.web' : 'https://sourceforge.net' } },
+                    { 'prefix' : { 'resources.bugtracker.web' : 'http://sourceforge.net' } },
+                ],
+            },
+        },
+         'bugtracker-other' : {
+            'title'  : 'Bugtracker is not rt.cpan, not GitHub, and not Sourceforge',
+            'filter' : {
+                'and' : [
+                    { 'term': { 'status' : 'latest' } },
+                    { 'exists' : { 'field' : 'resources.bugtracker.web' } },
+                    { 'not' : { 'prefix' : { 'resources.bugtracker.web' : 'https://rt.cpan.org' } } },
+                    { 'not' : { 'prefix' : { 'resources.bugtracker.web' : 'http://rt.cpan.org' } } },
+                    { 'not' : { 'prefix' : { 'resources.bugtracker.web' : 'https://github' } } },
+                    { 'not' : { 'prefix' : { 'resources.bugtracker.web' : 'http://github' } } },
+                    { 'not' : { 'prefix' : { 'resources.bugtracker.web' : 'https://sourceforge.net' } } },
+                    { 'not' : { 'prefix' : { 'resources.bugtracker.web' : 'http://sourceforge.net' } } },
+                ],
+            },
+        },
+
+
         //'homepage-eumm' : {
         //    'title'  : 'With "homepage" in META files created by EUMM',
         //    'filter' : {
