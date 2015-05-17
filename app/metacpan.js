@@ -46,11 +46,11 @@ var metacpan = {
 
     'cases' : {
         'with-homepage' : {
-            'title'  : 'With homepage in META file(s).',
+            'title'  : 'With "homepage" in META files',
             'filter' : { "exists" : { "field" : "resources.homepage" } },
         },
         'no-repository' : {
-            'title' : 'Recent releases without a repository',
+            'title' : 'Recent releases without a repository in the META files',
             'filter' : {
                 "and" : [
                     { "missing" : { "field" : "resources.repository.type" } },
@@ -342,7 +342,7 @@ var metacpan = {
             case('lab'):
                 var query = route[1];
                 if (query === undefined) {
-                    metacpan.display(0, {}, 'lab-template');
+                    metacpan.display(0, metacpan.cases, 'lab-template');
                     break;
                 }
                 switch(route[1]) {
