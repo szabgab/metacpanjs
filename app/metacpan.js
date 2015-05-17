@@ -44,10 +44,20 @@ var metacpan = {
 
     'total' : 0,
 
-	'cases' : {
+    'cases' : {
         'with-homepage' : {
             'title'  : 'With homepage in META file(s).',
             'filter' : { "exists" : { "field" : "resources.homepage" } },
+        },
+        'no-repository' : {
+            'title' : 'Recent releases without a repository',
+            'filter' : {
+                "and" : [
+                    { "missing" : { "field" : "resources.repository.type" } },
+                    { "missing" : { "field" : "resources.repository.url" } },
+                    { "missing" : { "field" : "resources.repository.web" } },
+                ]
+            },
         },
     },
 
@@ -81,32 +91,6 @@ var metacpan = {
             //"size" : metacpan.size(),
             //"from" : from
         }, title, callback, metacpan.show_error);
-    },
-
-
-    'no_repository' : function (query, callback) {
-        //var page_size = metacpan.size();
-        //var page = metacpan.page;
-        //var from = ( page - 1 ) * page_size;
-        metacpan.post("http://api.metacpan.org/v0/release/_search", {
-            "query": {
-                "match_all": {}
-            },
-            "fields" : [ "metadata.resources.repository", "metadata.distribution", "date", "author", "distribution", "name", "metadata.name", "abstract" ],
-            "filter" : {
-                "and" : [
-                    { "missing" : { "field" : "resources.repository.type" } },
-                    { "missing" : { "field" : "resources.repository.url" } },
-                    { "missing" : { "field" : "resources.repository.web" } },
-                ]
-            },
-            "sort" : [
-                { "date": {"order" : "desc"} }
-            ],
-            "size" : 1000,
-            //"size" : metacpan.size(),
-            //"from" : from
-        }, query, callback, metacpan.show_error);
     },
 
     'no_license' : function (query, callback) {
@@ -373,9 +357,9 @@ var metacpan = {
                         });
                         break;
                     case('no-repository'):
-                        metacpan.no_repository('', function (count, result) {
+                        metacpan.releases(metacpan.cases['no-repository']['title'], metacpan.cases['no-repository']['filter'], function (count, result) {
                             var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
-                            metacpan.display(count, releases, 'no-repository-template');
+                            metacpan.display(count, releases, 'some-template');
                         });
                         break;
                     case('with-homepage'):
