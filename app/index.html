@@ -18,6 +18,24 @@
   <div class="error">Error. {{result.code}}</div>
 </script>
 
+<script id="files-template" type="text/x-handlebars-template">
+   <h2>{{query}}</h2>
+  <table class="table-stripped">
+     <tr>
+       <th>Author</th>
+       <th>Distribution</th>
+       <th>Path</th>
+     </tr>
+   {{#each result}}
+     <tr>
+       <td><a href="#author/{{fields.author}}">{{fields.author}}</a></td>
+       <td><a href="#release/{{fields.distribution}}">{{fields.distribution}}</a></td>
+       <td><a target="_blank" href="https://api.metacpan.org/source/{{fields.author}}/{{fields.release}}/{{fields.path}}">{{fields.path}}</a></td>
+     </tr>
+   {{/each}}
+  </table>
+</script>
+
 <script id="search-template" type="text/x-handlebars-template">
 <h2>Search results</h2>
   The search feature is very experimental. If your search did not provide the right results, you are welcome to <a target="_blank" href="https://github.com/szabgab/metacpanjs">open an issue</a>
@@ -210,6 +228,7 @@
   <table class="table-stripped">
     <tr><td><a href="#lab/no-license">no license</a></td></tr>
     <tr><td><a href="#lab/no-repository">no repository</a></td></tr>
+    <tr><td><a href="#lab/files">files</a></td></tr>
   </table>
 </script>
 

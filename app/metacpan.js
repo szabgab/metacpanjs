@@ -347,6 +347,28 @@ var metacpan = {
                             metacpan.display(count, releases, 'no-repository-template');
                         });
                         break;
+                    case('files'):
+                        var filename = "Bootstrap.pm";
+                        metacpan.post("http://api.metacpan.org/v0/file/_search", {
+                            "query": {
+                                "match_all": {}
+                            },
+                            "fields" : [ "author", "date", "distribution", "name", "path", "release" ],
+                            "filter" : {
+                                "and" : [
+                                    { "term" : { "name" : filename } },
+                                    { "term" : { "status" : "latest" } },
+                                ],
+                            },
+                            //"sort" : [
+                            //    { "date": {"order" : "desc"} }
+                            //],
+                            "size" : 10,
+                        }, '', function (count, result) {
+                           metacpan.display(filename, result["hits"]["hits"], 'files-template');
+                        }, metacpan.show_error);
+                        break;
+
 
                 }
                 break;
