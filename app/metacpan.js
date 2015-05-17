@@ -57,7 +57,7 @@ var metacpan = {
         }, count, callback, metacpan.show_error);
     },
 
-    'releases' : function (query, filter, callback) {
+    'releases' : function (title, filter, callback) {
         //var page_size = metacpan.size();
         //var page = metacpan.page;
         //var from = ( page - 1 ) * page_size;
@@ -73,7 +73,7 @@ var metacpan = {
             "size" : 1000,
             //"size" : metacpan.size(),
             //"from" : from
-        }, query, callback, metacpan.show_error);
+        }, title, callback, metacpan.show_error);
     },
 
 
@@ -372,7 +372,7 @@ var metacpan = {
                         });
                         break;
                     case('with-homepage'):
-                        metacpan.releases('', { "exists" : { "field" : "resources.homepage" } }, function (count, result) {
+                        metacpan.releases('With homepage in META file(s).', { "exists" : { "field" : "resources.homepage" } }, function (count, result) {
                             var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
                             metacpan.display(count, releases, 'some-template');
                         });
