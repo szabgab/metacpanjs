@@ -20,20 +20,23 @@
 
 <script id="files-template" type="text/x-handlebars-template">
    <h2>{{query}}</h2>
-  <table class="table-stripped">
-     <tr>
-       <th>Author</th>
-       <th>Distribution</th>
-       <th>Path</th>
-     </tr>
-   {{#each result}}
-     <tr>
-       <td><a href="#author/{{fields.author}}">{{fields.author}}</a></td>
-       <td><a href="#release/{{fields.distribution}}">{{fields.distribution}}</a></td>
-       <td><a target="_blank" href="https://api.metacpan.org/source/{{fields.author}}/{{fields.release}}/{{fields.path}}">{{fields.path}}</a></td>
-     </tr>
-   {{/each}}
-  </table>
+   <input placeholder="Filename (e.g. Bootstrap.pm, jquery.js, or even js)" type="text" id="filename" class="input-big width-30"> <button class="btn" id="filename-show">Search for file</button>
+   {{#if result}}
+     <table class="table-stripped">
+        <tr>
+          <th>Author</th>
+          <th>Distribution</th>
+          <th>Path</th>
+        </tr>
+      {{#each result}}
+        <tr>
+          <td><a href="#author/{{fields.author}}">{{fields.author}}</a></td>
+          <td><a href="#release/{{fields.distribution}}">{{fields.distribution}}</a></td>
+          <td><a target="_blank" href="https://api.metacpan.org/source/{{fields.author}}/{{fields.release}}/{{fields.path}}">{{fields.path}}</a></td>
+        </tr>
+      {{/each}}
+     </table>
+   {{/if}}
 </script>
 
 <script id="search-template" type="text/x-handlebars-template">

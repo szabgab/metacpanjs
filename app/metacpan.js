@@ -152,6 +152,11 @@ var metacpan = {
         window.location.hash = '#search/' + query;
         metacpan.click(window.location.hash);
     },
+    'filename_show' : function () {
+        var query = $('#filename').val();
+        window.location.hash = '#lab/files/' + query;
+        metacpan.click(window.location.hash);
+    },
 
     'show_error' : function (query, result) {
         metacpan.display(query, result, 'error-template');
@@ -348,7 +353,13 @@ var metacpan = {
                         });
                         break;
                     case('files'):
-                        var filename = "Bootstrap.pm";
+                        var filename = route[2];
+                        if (filename === undefined) {
+                            metacpan.display('', [], 'files-template');
+                            $('#filename-show').click(metacpan.filename_show);
+                            break;
+                        }
+
                         metacpan.post("http://api.metacpan.org/v0/file/_search", {
                             "query": {
                                 "match_all": {}
@@ -363,9 +374,10 @@ var metacpan = {
                             //"sort" : [
                             //    { "date": {"order" : "desc"} }
                             //],
-                            "size" : 10,
+                            "size" : 100,
                         }, '', function (count, result) {
                            metacpan.display(filename, result["hits"]["hits"], 'files-template');
+                            $('#filename-show').click(metacpan.filename_show);
                         }, metacpan.show_error);
                         break;
 
