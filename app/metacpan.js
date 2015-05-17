@@ -44,6 +44,13 @@ var metacpan = {
 
     'total' : 0,
 
+	'cases' : {
+        'with-homepage' : {
+            'title'  : 'With homepage in META file(s).',
+            'filter' : { "exists" : { "field" : "resources.homepage" } },
+        },
+    },
+
     'recent' : function (count, callback) {
         metacpan.post('http://api.metacpan.org/v0/release/_search', {
             "query": {
@@ -372,7 +379,7 @@ var metacpan = {
                         });
                         break;
                     case('with-homepage'):
-                        metacpan.releases('With homepage in META file(s).', { "exists" : { "field" : "resources.homepage" } }, function (count, result) {
+                        metacpan.releases(metacpan.cases['with-homepage']['title'], metacpan.cases['with-homepage']['filter'], function (count, result) {
                             var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
                             metacpan.display(count, releases, 'some-template');
                         });
