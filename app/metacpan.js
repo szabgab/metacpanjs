@@ -331,30 +331,12 @@ var metacpan = {
                     metacpan.display(0, metacpan.cases, 'lab-template');
                     break;
                 }
-                switch(route[1]) {
+                switch(query) {
                     case('list'):
                         var pages = metacpan.get_pages();
                         metacpan.display('', pages, 'list-pages-template');
                         break;
-                    case('no-license'):
-                        metacpan.releases(metacpan.cases['no-license']['title'], metacpan.cases['no-license']['filter'], function (count, result) {
-                            var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
-                            metacpan.display(count, releases, 'some-template');
-                        });
-                        break;
-                    case('no-repository'):
-                        metacpan.releases(metacpan.cases['no-repository']['title'], metacpan.cases['no-repository']['filter'], function (count, result) {
-                            var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
-                            metacpan.display(count, releases, 'some-template');
-                        });
-                        break;
-                    case('with-homepage'):
-                        metacpan.releases(metacpan.cases['with-homepage']['title'], metacpan.cases['with-homepage']['filter'], function (count, result) {
-                            var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
-                            metacpan.display(count, releases, 'some-template');
-                        });
-                        break;
-                    case('files'):
+                   case('files'):
                         var filename = route[2];
                         if (filename === undefined) {
                             metacpan.display('', [], 'files-template');
@@ -382,8 +364,14 @@ var metacpan = {
                             $('#filename-show').click(metacpan.filename_show);
                         }, metacpan.show_error);
                         break;
-
-
+                    default:
+                        if (metacpan.cases[query]) {
+                            metacpan.releases(metacpan.cases[query]['title'], metacpan.cases[query]['filter'], function (count, result) {
+                                var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
+                                metacpan.display(count, releases, 'some-template');
+                            });
+                        }
+                        break;
                 }
                 break;
             case('release'):
