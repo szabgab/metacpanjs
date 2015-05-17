@@ -20,7 +20,9 @@
 
 <script id="files-template" type="text/x-handlebars-template">
    <h2>{{query}}</h2>
+   <form>
    <input placeholder="Filename (e.g. Bootstrap.pm, jquery.js, or even js)" type="text" id="filename" class="input-big width-30"> <button class="btn" id="filename-show">Search for file</button>
+   </form>
    {{#if result}}
      <table class="table-stripped">
         <tr>
@@ -316,7 +318,9 @@
 <div class="units-row">
     <div class="unit-10"></div>
     <div class="unit-90">
+    <form>
     <input type="text" id="query" class="input-big width-50"> <button class="btn" id="search">Search</button>
+    </form>
     </div>
 </div>
 

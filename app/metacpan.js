@@ -573,12 +573,6 @@ Handlebars.registerHelper('iff', function (a, operator, b, opts) {
 
 $().ready(function () {
     $('#search').click(metacpan.search);
-    $('#query').bind('keypress', function (e) {
-        var code = e.keyCode || e.which;
-        if (code == 13) {
-            metacpan.search();
-        }
-    });
     $(window).bind('hashchange', function () {
         metacpan.click(window.location.hash);
     });
