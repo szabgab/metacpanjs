@@ -404,6 +404,8 @@ var metacpan = {
 							$('#filename-show').click(metacpan.filename_show);
 							break;
 						}
+						filename = filename.trim();
+						var files = { "term" : { "name" : filename } };
 
 						metacpan.post("http://api.metacpan.org/v0/file/_search", {
 							"query": {
@@ -412,8 +414,8 @@ var metacpan = {
 							"fields" : [ "author", "date", "distribution", "name", "path", "release" ],
 							"filter" : {
 								"and" : [
-									{ "term" : { "name" : filename } },
 									{ "term" : { "status" : "latest" } },
+									files
 								],
 							},
 							//"sort" : [
