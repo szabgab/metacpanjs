@@ -405,7 +405,6 @@ var metacpan = {
 							break;
 						}
 						filename = filename.trim();
-						var files = { "term" : { "name" : filename } };
 
 						metacpan.post("http://api.metacpan.org/v0/file/_search", {
 							"query": {
@@ -415,7 +414,7 @@ var metacpan = {
 							"filter" : {
 								"and" : [
 									{ "term" : { "status" : "latest" } },
-									files
+									{ "term" : { "name" : filename } },
 								],
 							},
 							//"sort" : [
