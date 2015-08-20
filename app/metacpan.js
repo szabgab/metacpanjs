@@ -125,17 +125,21 @@ var metacpan = {
 		},
 	},
 
-	'recent' : function (count, callback) {
-		metacpan.post('http://api.metacpan.org/v0/release/_search', {
-			"query": {
-				"match_all": {}
-			},
-			"fields" : [ "distribution", "name", "status", "date", "abstract" ],
-			"sort" : [
-				{ "date": {"order" : "desc"} }
-			],
-			"size" :  count
-		}, count, callback, metacpan.show_error);
+	'recent' : function (count) {
+		return {
+			url: 'http://api.metacpan.org/v0/release/_search', 
+			method: 'post',
+			data: {
+				"query": {
+					"match_all": {}
+				},
+				"fields" : [ "distribution", "name", "status", "date", "abstract" ],
+				"sort" : [
+					{ "date": {"order" : "desc"} }
+				],
+				"size" :  count
+			}
+		};
 	},
 
 	'releases' : function (title, filter, callback) {
@@ -193,6 +197,12 @@ var metacpan = {
 			"size" : metacpan.size(),
 			"from" : from
 		}, query, callback, metacpan.show_error);
+	},
+
+	'ajax' : function(request, a, b) {
+		if (request["method"] === "post") {
+			metacpan.post(request["url"], request["data"], a, b, metacpan.show_error);
+		}
 	},
 
 	'post' : function (url, data, query, callback, error) {
@@ -365,7 +375,7 @@ var metacpan = {
 				metacpan.display('', { 'recommended' : metacpan.recommended }, 'home-template');
 				break;
 			case('recent'):
-				metacpan.recent(20, function (count, result) {
+				metacpan.ajax(metacpan.recent(20), count, function (count, result) {
 					//console.log(result);
 					var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
 					metacpan.display(count, releases, 'recent-template');
