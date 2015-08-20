@@ -1,6 +1,26 @@
 "use strict";
 /*global localStorage: false, jQuery: false, window: false, console: false, $: false, Handlebars: false */
 /*jshint -W069 */
+
+var api = {
+	'recent' : function (count) {
+		return {
+			url: 'http://api.metacpan.org/v0/release/_search', 
+			method: 'post',
+			data: {
+				"query": {
+					"match_all": {}
+				},
+				"fields" : [ "distribution", "name", "status", "date", "abstract" ],
+				"sort" : [
+					{ "date": {"order" : "desc"} }
+				],
+				"size" :  count
+			}
+		};
+	},
+};
+
 var jq_cpan = {
 
 	'profiles' : {
@@ -125,22 +145,6 @@ var jq_cpan = {
 		},
 	},
 
-	'recent' : function (count) {
-		return {
-			url: 'http://api.metacpan.org/v0/release/_search', 
-			method: 'post',
-			data: {
-				"query": {
-					"match_all": {}
-				},
-				"fields" : [ "distribution", "name", "status", "date", "abstract" ],
-				"sort" : [
-					{ "date": {"order" : "desc"} }
-				],
-				"size" :  count
-			}
-		};
-	},
 
 	'releases' : function (title, filter, callback) {
 		//var page_size = jq_cpan.size();
@@ -375,7 +379,7 @@ var jq_cpan = {
 				jq_cpan.display('', { 'recommended' : jq_cpan.recommended }, 'home-template');
 				break;
 			case('recent'):
-				jq_cpan.ajax(jq_cpan.recent(20), count, function (count, result) {
+				jq_cpan.ajax(api.recent(20), count, function (count, result) {
 					//console.log(result);
 					var releases = jq_cpan.process_template(count, result["hits"]["hits"], 'releases-template');
 					jq_cpan.display(count, releases, 'recent-template');
