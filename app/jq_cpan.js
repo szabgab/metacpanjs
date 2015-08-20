@@ -19,6 +19,32 @@ var api = {
 			}
 		};
 	},
+
+	'leaderboard' : function (query) {
+		var page_size = jq_cpan.size(),
+			page = jq_cpan.page,
+			from = (page - 1) * page_size;
+		return {
+			method: 'post',
+			url: "http://api.metacpan.org/v0/release/_search",
+			data: {
+				"query": {
+					"match_all": {}
+				},
+				"facets": {
+					"author": {
+						"terms": {
+							"field": "author",
+							"from" : from,
+							"size": page_size
+						}
+					}
+				},
+				"size": 0
+			}
+		};
+	},
+
 };
 
 var jq_cpan = {
@@ -166,26 +192,6 @@ var jq_cpan = {
 	},
 
 
-	'leaderboard' : function (query, callback) {
-		var page_size = jq_cpan.size(),
-			page = jq_cpan.page,
-			from = (page - 1) * page_size;
-		jq_cpan.post("http://api.metacpan.org/v0/release/_search", {
-			"query": {
-				"match_all": {}
-			},
-			"facets": {
-				"author": {
-					"terms": {
-						"field": "author",
-						"from" : from,
-						"size": page_size
-					}
-				}
-			},
-			"size": 0
-		}, query, callback, jq_cpan.show_error);
-	},
 	'profile' : function (query, callback) {
 		var page_size = jq_cpan.size(),
 			page = jq_cpan.page,
@@ -386,7 +392,7 @@ var jq_cpan = {
 				});
 				break;
 			case('leaderboard'):
-				jq_cpan.leaderboard('', function (count, result) {
+				jq_cpan.ajax(api.leaderboard(''), query, function (count, result) {
 					jq_cpan.display(count, result, 'leaderboard-template');
 				});
 				break;
