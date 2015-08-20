@@ -130,7 +130,7 @@ var metacpan = {
 			"query": {
 				"match_all": {}
 			},
-			//"fields" : [ "distribution", "name", "status", "date", "abstract" ],
+			"fields" : [ "distribution", "name", "status", "date", "abstract" ],
 			"sort" : [
 				{ "date": {"order" : "desc"} }
 			],
@@ -291,18 +291,18 @@ var metacpan = {
 		route = route.replace(/\?.*/, '');
 
 		route = route.split("/");
-	
+
 		$(".active").removeClass('active');
 		var locator = route[0] === '' ? 'a[href=#]' : "a[href=#" + route[0] +"]" ;
 		$(locator).parent('li').addClass('active');
-	
+
 		if (params["size"]) {
 			localStorage.setItem('page_size', params["size"]);
 		}
 		if (params["page"]) {
 			metacpan.page = parseInt(params["page"], 10);
 		}
-	
+
 		switch(route[0]) {
 			case('changes'):
 				// invalid requests; TODO report error?
@@ -660,4 +660,3 @@ $().ready(function () {
 
 	metacpan.click(window.location.hash);
 });
-
