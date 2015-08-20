@@ -1,5 +1,5 @@
-/*global metacpan: false */
-metacpan.recommended = {
+/*global jq_cpan: false */
+jq_cpan.recommended = {
     'async'           : {
         'title'       : 'Asynchronous code',
         'modules'     : [ 'POE', 'AnyEvent', 'AnyEvent::HTTP', 'IO::Async' ],

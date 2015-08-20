@@ -1,7 +1,7 @@
 "use strict";
 /*global localStorage: false, jQuery: false, window: false, console: false, $: false, Handlebars: false */
 /*jshint -W069 */
-var metacpan = {
+var jq_cpan = {
 
 	'profiles' : {
 		'coderwall'         : 'http://www.coderwall.com/',
@@ -143,10 +143,10 @@ var metacpan = {
 	},
 
 	'releases' : function (title, filter, callback) {
-		//var page_size = metacpan.size();
-		//var page = metacpan.page;
+		//var page_size = jq_cpan.size();
+		//var page = jq_cpan.page;
 		//var from = ( page - 1 ) * page_size;
-		metacpan.post("http://api.metacpan.org/v0/release/_search", {
+		jq_cpan.post("http://api.metacpan.org/v0/release/_search", {
 			"query": {
 				"match_all": {}
 			},
@@ -156,17 +156,17 @@ var metacpan = {
 				{ "date": {"order" : "desc"} }
 			],
 			"size" : 1000,
-			//"size" : metacpan.size(),
+			//"size" : jq_cpan.size(),
 			//"from" : from
-		}, title, callback, metacpan.show_error);
+		}, title, callback, jq_cpan.show_error);
 	},
 
 
 	'leaderboard' : function (query, callback) {
-		var page_size = metacpan.size(),
-			page = metacpan.page,
+		var page_size = jq_cpan.size(),
+			page = jq_cpan.page,
 			from = (page - 1) * page_size;
-		metacpan.post("http://api.metacpan.org/v0/release/_search", {
+		jq_cpan.post("http://api.metacpan.org/v0/release/_search", {
 			"query": {
 				"match_all": {}
 			},
@@ -180,13 +180,13 @@ var metacpan = {
 				}
 			},
 			"size": 0
-		}, query, callback, metacpan.show_error);
+		}, query, callback, jq_cpan.show_error);
 	},
 	'profile' : function (query, callback) {
-		var page_size = metacpan.size(),
-			page = metacpan.page,
+		var page_size = jq_cpan.size(),
+			page = jq_cpan.page,
 			from = (page - 1) * page_size;
-		metacpan.post("http://api.metacpan.org/v0/author/_search", {
+		jq_cpan.post("http://api.metacpan.org/v0/author/_search", {
 			"query": {
 				"match_all": {}
 			},
@@ -194,14 +194,14 @@ var metacpan = {
 				"term": { "author.profile.name" : query }
 			},
 			"fields" : ["name", "pauseid", "profile"],
-			"size" : metacpan.size(),
+			"size" : jq_cpan.size(),
 			"from" : from
-		}, query, callback, metacpan.show_error);
+		}, query, callback, jq_cpan.show_error);
 	},
 
 	'ajax' : function(request, a, b) {
 		if (request["method"] === "post") {
-			metacpan.post(request["url"], request["data"], a, b, metacpan.show_error);
+			jq_cpan.post(request["url"], request["data"], a, b, jq_cpan.show_error);
 		}
 	},
 
@@ -216,25 +216,25 @@ var metacpan = {
 	'search' : function () {
 		var query = $('#query').val();
 		window.location.hash = '#search/' + query;
-		metacpan.click(window.location.hash);
+		jq_cpan.click(window.location.hash);
 	},
 	'filename_show' : function () {
 		var query = $('#filename').val();
 		window.location.hash = '#lab/files/' + query;
-		metacpan.click(window.location.hash);
+		jq_cpan.click(window.location.hash);
 	},
 
 	'show_error' : function (query, result) {
-		metacpan.display(query, result, 'error-template');
+		jq_cpan.display(query, result, 'error-template');
 	},
 
 	'display' : function (query, result, template) {
-		var html = metacpan.process_template(query, result, template);
+		var html = jq_cpan.process_template(query, result, template);
 		$('#result').html(html);
 	},
 	'process_template' : function (query, result, template) {
 		if (result["hits"]) {
-			metacpan.total = result["hits"]["total"];
+			jq_cpan.total = result["hits"]["total"];
 		}
 
 		var source   = $('#' + template).html();
@@ -250,7 +250,7 @@ var metacpan = {
 			for (var j=0; j < profile.length; j++) {
 				if (profile[j]["name"] == name) {
 					id  = profile[j]["id"];
-					url = metacpan.profiles[name] + profile[j]["id"];
+					url = jq_cpan.profiles[name] + profile[j]["id"];
 					break;
 				}
 			}
@@ -258,7 +258,7 @@ var metacpan = {
 			result["hits"]["hits"][i]["id"] = id;
 		}
 
-		metacpan.display(name, result, 'profile-template');
+		jq_cpan.display(name, result, 'profile-template');
 	},
 	'parse_changes' : function (raw) {
 		var changes = '';
@@ -281,7 +281,7 @@ var metacpan = {
 				changes += '<div>' + line + '</div>';
 			}
 		}
-		metacpan.changes = changes;
+		jq_cpan.changes = changes;
 	},
 
 	'click' : function (route) {
@@ -310,7 +310,7 @@ var metacpan = {
 			localStorage.setItem('page_size', params["size"]);
 		}
 		if (params["page"]) {
-			metacpan.page = parseInt(params["page"], 10);
+			jq_cpan.page = parseInt(params["page"], 10);
 		}
 
 		switch(route[0]) {
@@ -322,11 +322,11 @@ var metacpan = {
 				}
 				var release_name = route[2];
 				jQuery.get('http://api.metacpan.org/v0/changes/' + release_name, function (result) {
-					metacpan.parse_changes(result["content"]);
-					//console.log(metacpan.changes);
-					result["html"] = metacpan.changes;
-					metacpan.display(release_name, result, 'changes-template');
-				}).fail(metacpan.show_error);
+					jq_cpan.parse_changes(result["content"]);
+					//console.log(jq_cpan.changes);
+					result["html"] = jq_cpan.changes;
+					jq_cpan.display(release_name, result, 'changes-template');
+				}).fail(jq_cpan.show_error);
 				break;
 
 			case('search'):
@@ -367,27 +367,27 @@ var metacpan = {
 					"size" :  count
 				}));
 				$.when(a1).done(function (r1) {
-					metacpan.display(route[1], r1, 'search-template');
+					jq_cpan.display(route[1], r1, 'search-template');
 					//console.log(r1);
-				}).fail(metacpan.show_error);
+				}).fail(jq_cpan.show_error);
 				break;
 			case(''):
-				metacpan.display('', { 'recommended' : metacpan.recommended }, 'home-template');
+				jq_cpan.display('', { 'recommended' : jq_cpan.recommended }, 'home-template');
 				break;
 			case('recent'):
-				metacpan.ajax(metacpan.recent(20), count, function (count, result) {
+				jq_cpan.ajax(jq_cpan.recent(20), count, function (count, result) {
 					//console.log(result);
-					var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
-					metacpan.display(count, releases, 'recent-template');
+					var releases = jq_cpan.process_template(count, result["hits"]["hits"], 'releases-template');
+					jq_cpan.display(count, releases, 'recent-template');
 				});
 				break;
 			case('leaderboard'):
-				metacpan.leaderboard('', function (count, result) {
-					metacpan.display(count, result, 'leaderboard-template');
+				jq_cpan.leaderboard('', function (count, result) {
+					jq_cpan.display(count, result, 'leaderboard-template');
 				});
 				break;
 			case('profiles'):
-				metacpan.display(0, {'profiles' : metacpan.profiles }, 'profiles-template');
+				jq_cpan.display(0, {'profiles' : jq_cpan.profiles }, 'profiles-template');
 				break;
 
 			case('other'):
@@ -399,24 +399,24 @@ var metacpan = {
 			case('lab'):
 				var query = route[1];
 				if (query === undefined) {
-					metacpan.display(0, metacpan.cases, 'lab-template');
+					jq_cpan.display(0, jq_cpan.cases, 'lab-template');
 					break;
 				}
 				switch(query) {
 					case('list'):
-						var pages = metacpan.get_pages();
-						metacpan.display('', pages, 'list-pages-template');
+						var pages = jq_cpan.get_pages();
+						jq_cpan.display('', pages, 'list-pages-template');
 						break;
 					case('files'):
 						var filename = route[2];
 						if (filename === undefined) {
-							metacpan.display('', [], 'files-template');
-							$('#filename-show').click(metacpan.filename_show);
+							jq_cpan.display('', [], 'files-template');
+							$('#filename-show').click(jq_cpan.filename_show);
 							break;
 						}
 						filename = filename.trim();
 
-						metacpan.post("http://api.metacpan.org/v0/file/_search", {
+						jq_cpan.post("http://api.metacpan.org/v0/file/_search", {
 							"query": {
 								"match_all": {}
 							},
@@ -432,16 +432,16 @@ var metacpan = {
 							//],
 							"size" : 100,
 						}, '', function (count, result) {
-							metacpan.display(filename, result["hits"]["hits"], 'files-template');
-							$('#filename-show').click(metacpan.filename_show);
-						}, metacpan.show_error);
+							jq_cpan.display(filename, result["hits"]["hits"], 'files-template');
+							$('#filename-show').click(jq_cpan.filename_show);
+						}, jq_cpan.show_error);
 						break;
 					default:
-						if (metacpan.cases[query]) {
-							metacpan.releases(metacpan.cases[query]['title'], metacpan.cases[query]['filter'], function (count, result) {
+						if (jq_cpan.cases[query]) {
+							jq_cpan.releases(jq_cpan.cases[query]['title'], jq_cpan.cases[query]['filter'], function (count, result) {
 								console.log(result);
-								var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
-								metacpan.display(count, releases, 'some-template');
+								var releases = jq_cpan.process_template(count, result["hits"]["hits"], 'releases-template');
+								jq_cpan.display(count, releases, 'some-template');
 							});
 						}
 						break;
@@ -476,12 +476,12 @@ var metacpan = {
 						$("#author").html(author["name"]);
 					});
 
-					metacpan.display(release_name, result, 'release-template');
-				}).fail(metacpan.show_error);
+					jq_cpan.display(release_name, result, 'release-template');
+				}).fail(jq_cpan.show_error);
 				break;
 			case('author'):
 				var query = route[1];
-				metacpan.query = query;
+				jq_cpan.query = query;
 				var count = 200;
 
 				var a1 = jQuery.get("http://api.metacpan.org/v0/author/" + query);
@@ -502,20 +502,20 @@ var metacpan = {
 					var author = r1[0];
 					var result = r2[0];
 					if (author["profile"]) {
-						author["profile"] = author["profile"].filter( function (p) { return metacpan.profiles[ p["name"] ]; });
-						author["profile"].forEach( function (p) { p["url"] =  metacpan.profiles[ p["name"] ] + p["id"]; } );
+						author["profile"] = author["profile"].filter( function (p) { return jq_cpan.profiles[ p["name"] ]; });
+						author["profile"].forEach( function (p) { p["url"] =  jq_cpan.profiles[ p["name"] ] + p["id"]; } );
 					}
-					var releases = metacpan.process_template(count, result["hits"]["hits"], 'releases-template');
-					metacpan.display(metacpan.query, { 'releases' : releases, 'author' : author }, 'author-template');
-				}).fail(metacpan.show_error);
+					var releases = jq_cpan.process_template(count, result["hits"]["hits"], 'releases-template');
+					jq_cpan.display(jq_cpan.query, { 'releases' : releases, 'author' : author }, 'author-template');
+				}).fail(jq_cpan.show_error);
 
 				break;
 			case('profile'):
-				metacpan.profile(route[1], metacpan.display_profile);
+				jq_cpan.profile(route[1], jq_cpan.display_profile);
 				break;
 			case('recommended'):
 				var name = route[1];
-				metacpan.display(name, { 'recommended' : metacpan.recommended[name] }, 'recommended-template');
+				jq_cpan.display(name, { 'recommended' : jq_cpan.recommended[name] }, 'recommended-template');
 				break;
 			case('module'):
 				window.location.hash = '#pod/' + route[1];
@@ -523,7 +523,7 @@ var metacpan = {
 			case('pod'):
 				var module_name = route[1];
 				jQuery.get("http://api.metacpan.org/v0/pod/" + module_name, function (result) {
-					metacpan.display(module_name, { pod: result, module: module_name }, 'pod-template');
+					jq_cpan.display(module_name, { pod: result, module: module_name }, 'pod-template');
 
 					jQuery.get("http://api.metacpan.org/v0/module/" + module_name, function (result) {
 						console.log(result);
@@ -534,7 +534,7 @@ var metacpan = {
 						if (!result["authorized"]) {
 							$('#unauthorized').show();
 						}
-					}); //.fail(metacpan.show_error);
+					}); //.fail(jq_cpan.show_error);
 				});
 				window.scrollTo(0, 0);
 				break;
@@ -558,8 +558,8 @@ var metacpan = {
 
 
 Handlebars.registerHelper('pager', function () {
-	var page_count = Math.ceil(metacpan.total / metacpan.size());
-	var page = metacpan.page;
+	var page_count = Math.ceil(jq_cpan.total / jq_cpan.size());
+	var page = jq_cpan.page;
 	var path = window.location.hash;
 	if (path) {
 		path = path.replace(/\?.*/, '');
@@ -584,7 +584,7 @@ Handlebars.registerHelper('pager', function () {
 });
 
 Handlebars.registerHelper('sizer', function () {
-	var page_size = metacpan.size();
+	var page_size = jq_cpan.size();
 	var path = window.location.hash;
 	if (path) {
 		path = path.replace(/\?.*/, '');
@@ -635,13 +635,13 @@ Handlebars.registerHelper('iff', function (a, operator, b, opts) {
 });
 
 $().ready(function () {
-	$('#search').click(metacpan.search);
+	$('#search').click(jq_cpan.search);
 	$(window).bind('hashchange', function () {
-		metacpan.click(window.location.hash);
+		jq_cpan.click(window.location.hash);
 	});
 	$('#save').bind('click', function (e) {
 		var page = window.location.hash;
-		var pages = metacpan.get_pages();
+		var pages = jq_cpan.get_pages();
 		if (pages["default"][page]) {
 			$("#msg").html('This page was already saved');
 			$("#msg").removeClass();
@@ -668,5 +668,5 @@ $().ready(function () {
 		return;
 	});
 
-	metacpan.click(window.location.hash);
+	jq_cpan.click(window.location.hash);
 });
