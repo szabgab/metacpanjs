@@ -33,6 +33,35 @@ var api = {
 			url: "http://api.metacpan.org/v0/release/" + release,
 		};
 	},
+	'search' : function(term, count) {
+		return {
+			method: 'post',
+			url: 'http://api.metacpan.org/v0/release/_search', 
+			data: {
+				"query": {
+					"match_all": {}
+				},
+				"fields" : [ "distribution", "name", "status", "date", "abstract" ],
+				//abstract
+				//distribution
+				//metadata.keywords
+				//author
+				"filter" : {
+					"and" : [
+						{ "or" : [
+							{ "term": { "distribution" : term } },  // exact distribution name
+							{ "term": { "provides" : term } },      // exact module name
+						]},
+						{ "term": { "status" : "latest" } },
+					]
+				},
+				"sort" : [
+					{ "date": {"order" : "desc"} }
+				],
+				"size" :  count
+			}
+		};
+	},
 	'files' : function (filename) {
 		return {
 			method: 'post',
@@ -439,33 +468,10 @@ var jq_cpan = {
 				// if user search for Module::Name we try to load that exact module (we should search among the module names)
 				// look at https://github.com/CPAN-API/metacpan-web/blob/master/lib/MetaCPAN/Web/Model/API/Module.pm
 				// to see how MetaCPAN searches
-				var a1 = jQuery.post('http://api.metacpan.org/v0/release/_search', JSON.stringify({
-					"query": {
-						"match_all": {}
-					},
-					"fields" : [ "distribution", "name", "status", "date", "abstract" ],
-					//abstract
-					//distribution
-					//metadata.keywords
-					//author
-					"filter" : {
-						"and" : [
-							{ "or" : [
-								{ "term": { "distribution" : term } },  // exact distribution name
-								{ "term": { "provides" : term } },      // exact module name
-							]},
-							{ "term": { "status" : "latest" } },
-						]
-					},
-					"sort" : [
-						{ "date": {"order" : "desc"} }
-					],
-					"size" :  count
-				}));
-				$.when(a1).done(function (r1) {
+				jq_cpan.ajax(api.search(term, count), 1, function (count, r1) {
 					jq_cpan.display(route[1], r1, 'search-template');
 					//console.log(r1);
-				}).fail(jq_cpan.show_error);
+				});
 				break;
 			case(''):
 				jq_cpan.display('', { 'recommended' : jq_cpan.recommended }, 'home-template');
