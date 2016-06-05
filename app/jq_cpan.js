@@ -3,6 +3,18 @@
 /*jshint -W069 */
 
 var api = {
+	'module' : function(module_name) {
+		return {
+			method: 'get',
+			url: 'http://api.metacpan.org/v0/module/' + module_name
+		}
+	},
+	'pod' : function(module_name) {
+		return {
+			method: 'get',
+			url: 'http://api.metacpan.org/v0/pod/' + module_name, 
+		}
+	},
 	'changes' : function(release_name) {
 		return {
 			method: 'get',
@@ -581,10 +593,10 @@ var jq_cpan = {
 				break;
 			case('pod'):
 				var module_name = route[1];
-				jQuery.get("http://api.metacpan.org/v0/pod/" + module_name, function (result) {
+				jq_cpan.ajax(api.pod(module_name), 1, function (count, result) {
 					jq_cpan.display(module_name, { pod: result, module: module_name }, 'pod-template');
 
-					jQuery.get("http://api.metacpan.org/v0/module/" + module_name, function (result) {
+					jq_cpan.ajax(api.module(module_name), 1, function (count, result) {
 						console.log(result);
 						var breadcrumbs = '<a href="#release/' + result["distribution"] + '">' + result["distribution"] + '</a> ' + module_name + ' ';
 						breadcrumbs += result["version"] + ' by <a href="#author/' + result["author"] + '">' + result["author"] + '</a>';
