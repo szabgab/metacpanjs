@@ -3,16 +3,22 @@
 /*jshint -W069 */
 
 var api = {
+	'changes' : function(release_name) {
+		return {
+			method: 'get',
+			url: 'http://api.metacpan.org/v0/changes/' + release_name
+		}
+	},
 	'author' : function(pauseid) {
 		return {
-			url: "http://api.metacpan.org/v0/author/" + pauseid,
 			method: 'get',
+			url: "http://api.metacpan.org/v0/author/" + pauseid,
 		}
 	},
 	'release' : function (release) {
 		return {
-			url: "http://api.metacpan.org/v0/release/" + release,
 			method: 'get',
+			url: "http://api.metacpan.org/v0/release/" + release,
 		};
 	},
 	'release_post' : function (pauseid, count) {
@@ -36,8 +42,8 @@ var api = {
 	},
 	'recent' : function (count) {
 		return {
-			url: 'http://api.metacpan.org/v0/release/_search', 
 			method: 'post',
+			url: 'http://api.metacpan.org/v0/release/_search', 
 			data: {
 				"query": {
 					"match_all": {}
@@ -379,12 +385,12 @@ var jq_cpan = {
 					break;
 				}
 				var release_name = route[2];
-				jQuery.get('http://api.metacpan.org/v0/changes/' + release_name, function (result) {
+				jq_cpan.ajax(api.changes(release_name), count, function (count, result) {
 					jq_cpan.parse_changes(result["content"]);
 					//console.log(jq_cpan.changes);
 					result["html"] = jq_cpan.changes;
 					jq_cpan.display(release_name, result, 'changes-template');
-				}).fail(jq_cpan.show_error);
+				});
 				break;
 
 			case('search'):
