@@ -57,10 +57,8 @@ var api = {
 		};
 	},
 
-	'leaderboard' : function (query) {
-		var page_size = jq_cpan.size(),
-			page = jq_cpan.page,
-			from = (page - 1) * page_size;
+	'leaderboard' : function (page_size, page) {
+		var from = (page - 1) * page_size;
 		return {
 			method: 'post',
 			url: "http://api.metacpan.org/v0/release/_search",
@@ -446,7 +444,7 @@ var jq_cpan = {
 				});
 				break;
 			case('leaderboard'):
-				jq_cpan.ajax(api.leaderboard(''), query, function (count, result) {
+				jq_cpan.ajax(api.leaderboard(jq_cpan.size(), jq_cpan.page), query, function (count, result) {
 					jq_cpan.display(count, result, 'leaderboard-template');
 				});
 				break;
