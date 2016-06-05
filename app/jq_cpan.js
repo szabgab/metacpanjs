@@ -541,7 +541,7 @@ var jq_cpan = {
 					//});
 
 
-					jQuery.get("http://api.metacpan.org/v0/author/" + result["author"], function (author) {
+					jq_cpan.ajax(api.author(result["author"]), 1, function (count, author) {
 						//console.log(author);
 						$("#author").html(author["name"]);
 					});
