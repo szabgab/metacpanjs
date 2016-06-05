@@ -3,11 +3,36 @@
 /*jshint -W069 */
 
 var api = {
+	'author' : function(pauseid) {
+		return {
+			url: "http://api.metacpan.org/v0/author/" + pauseid,
+			method: 'get',
+		}
+	},
 	'release' : function (release) {
 		return {
 			url: "http://api.metacpan.org/v0/release/" + release,
 			method: 'get',
 		};
+	},
+	'release_post' : function (pauseid, count) {
+		return {
+			method: 'post',
+			url : 'http://api.metacpan.org/v0/release/_search',
+			data: {
+					"query": {
+						"match_all": {}
+					},
+					"fields" : [ "distribution", "name", "status", "date", "abstract" ],
+					"filter" : {
+						"term": { "author" : pauseid }
+					},
+					"sort" : [
+						{ "date": {"order" : "desc"} }
+					],
+					"size" :  count
+				}
+		}
 	},
 	'recent' : function (count) {
 		return {
@@ -518,20 +543,9 @@ var jq_cpan = {
 				jq_cpan.query = query;
 				var count = 200;
 
-				var a1 = jQuery.get("http://api.metacpan.org/v0/author/" + query);
-				var a2 = jQuery.post('http://api.metacpan.org/v0/release/_search', JSON.stringify({
-					"query": {
-						"match_all": {}
-					},
-					"fields" : [ "distribution", "name", "status", "date", "abstract" ],
-					"filter" : {
-						"term": { "author" : query }
-					},
-					"sort" : [
-						{ "date": {"order" : "desc"} }
-					],
-					"size" :  count
-				}));
+				var a1 = jQuery.get(api.author(query).url);
+				var api2 = api.release_post(query, count);
+				var a2 = jQuery.post(api2.url, JSON.stringify(api2.data));
 				$.when(a1, a2).done(function (r1, r2) {
 					var author = r1[0];
 					var result = r2[0];
