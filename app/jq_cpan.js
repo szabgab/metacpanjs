@@ -3,6 +3,12 @@
 /*jshint -W069 */
 
 var api = {
+	'release' : function (release) {
+		return {
+			url: "http://api.metacpan.org/v0/release/" + release,
+			method: 'get',
+		};
+	},
 	'recent' : function (count) {
 		return {
 			url: 'http://api.metacpan.org/v0/release/_search', 
@@ -210,9 +216,26 @@ var jq_cpan = {
 	},
 
 	'ajax' : function(request, a, b) {
+		//console.log('ajax', request);
 		if (request["method"] === "post") {
 			jq_cpan.post(request["url"], request["data"], a, b, jq_cpan.show_error);
+			return;
 		}
+		if (request["method"] === "get") {
+			//console.log('URL:', request['url']);
+			jq_cpan.get(request["url"], a, b, jq_cpan.show_error);
+			return;
+		}
+		console.error('Invalid method in request', request);
+		return;
+	},
+
+	'get' : function (url, query, callback, error) {
+		return jQuery.get(url, function (result) {
+			callback(query, result);
+		}).fail(function (result) {
+			error(query, result);
+		});
 	},
 
 	'post' : function (url, data, query, callback, error) {
@@ -459,8 +482,9 @@ var jq_cpan = {
 				break;
 			case('release'):
 				var release_name = route[1];
-				jQuery.get("http://api.metacpan.org/v0/release/" + release_name, function (result) {
-					//console.log(result);
+				//console.log('release');
+				jq_cpan.ajax(api.release(release_name), 1, function (count, result) {
+					//console.log('release result:', result);
 
 					// Link to version control
 					// url only linking to http://github.com/szabgab/perl6-in-perl5/  (Inline-Rakudo)
@@ -487,7 +511,7 @@ var jq_cpan = {
 					});
 
 					jq_cpan.display(release_name, result, 'release-template');
-				}).fail(jq_cpan.show_error);
+				});
 				break;
 			case('author'):
 				var query = route[1];
