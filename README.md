@@ -2,7 +2,7 @@ Experimental front-end to MetaCPAN using JavaScript only.
 
 To launch a small web server to handle the static pages run
 
-    plackup
+    $ plackup
 
 in the root directory of the project.
 
