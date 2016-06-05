@@ -27,6 +27,24 @@ var api = {
 			url: "http://api.metacpan.org/v0/author/" + pauseid,
 		}
 	},
+	'author_post' : function(page_size, page, size, query) {
+		var from = (page - 1) * page_size;
+		return {
+			method: 'post',
+			url: 'http://api.metacpan.org/v0/author/_search',
+			data: {
+				"query": {
+					"match_all": {}
+				},
+				"filter" : {
+					"term": { "author.profile.name" : query }
+				},
+				"fields" : ["name", "pauseid", "profile"],
+				"size" : size,
+				"from" : from
+			}, 
+		};
+	},
 	'release' : function (release) {
 		return {
 			method: 'get',
@@ -62,7 +80,7 @@ var api = {
 			}
 		};
 	},
-	'files' : function (filename) {
+	'files_post' : function (filename) {
 		return {
 			method: 'post',
 			url: 'http://api.metacpan.org/v0/file/_search',
@@ -290,23 +308,6 @@ var jq_cpan = {
 	},
 
 
-	'profile' : function (query, callback) {
-		var page_size = jq_cpan.size(),
-			page = jq_cpan.page,
-			from = (page - 1) * page_size;
-		jq_cpan.post("http://api.metacpan.org/v0/author/_search", {
-			"query": {
-				"match_all": {}
-			},
-			"filter" : {
-				"term": { "author.profile.name" : query }
-			},
-			"fields" : ["name", "pauseid", "profile"],
-			"size" : jq_cpan.size(),
-			"from" : from
-		}, query, callback, jq_cpan.show_error);
-	},
-
 	'ajax' : function(request, a, b) {
 		//console.log('ajax', request);
 		if (request["method"] === "post") {
@@ -518,7 +519,7 @@ var jq_cpan = {
 						}
 						filename = filename.trim();
 
-						jq_cpan.ajax(api.files(filename), query, function (count, result) {
+						jq_cpan.ajax(api.files_post(filename), query, function (count, result) {
 							jq_cpan.display(filename, result["hits"]["hits"], 'files-template');
 							$('#filename-show').click(jq_cpan.filename_show);
 						}, jq_cpan.show_error);
@@ -588,7 +589,7 @@ var jq_cpan = {
 
 				break;
 			case('profile'):
-				jq_cpan.profile(route[1], jq_cpan.display_profile);
+				jq_cpan.ajax(api.author_post(jq_cpan.size(), jq_cpan.page, jq_cpan.size(), route[1]), route[1], jq_cpan.display_profile);
 				break;
 			case('recommended'):
 				var name = route[1];
