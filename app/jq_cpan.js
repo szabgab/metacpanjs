@@ -21,6 +21,28 @@ var api = {
 			url: "http://api.metacpan.org/v0/release/" + release,
 		};
 	},
+	'files' : function (filename) {
+		return {
+			method: 'post',
+			url: 'http://api.metacpan.org/v0/file/_search',
+			data: {
+				"query": {
+					"match_all": {}
+				},
+				"fields" : [ "author", "date", "distribution", "name", "path", "release" ],
+				"filter" : {
+					"and" : [
+						{ "term" : { "status" : "latest" } },
+						{ "term" : { "name" : filename } },
+					],
+				},
+				//"sort" : [
+				//	{ "date": {"order" : "desc"} }
+				//],
+				"size" : 100,
+			}
+		};
+	},
 	'release_post' : function (pauseid, count) {
 		return {
 			method: 'post',
@@ -478,22 +500,7 @@ var jq_cpan = {
 						}
 						filename = filename.trim();
 
-						jq_cpan.post("http://api.metacpan.org/v0/file/_search", {
-							"query": {
-								"match_all": {}
-							},
-							"fields" : [ "author", "date", "distribution", "name", "path", "release" ],
-							"filter" : {
-								"and" : [
-									{ "term" : { "status" : "latest" } },
-									{ "term" : { "name" : filename } },
-								],
-							},
-							//"sort" : [
-							//	{ "date": {"order" : "desc"} }
-							//],
-							"size" : 100,
-						}, '', function (count, result) {
+						jq_cpan.ajax(api.files(filename), query, function (count, result) {
 							jq_cpan.display(filename, result["hits"]["hits"], 'files-template');
 							$('#filename-show').click(jq_cpan.filename_show);
 						}, jq_cpan.show_error);
