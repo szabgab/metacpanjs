@@ -2,36 +2,38 @@
 /*global localStorage: false, jQuery: false, window: false, console: false, $: false, Handlebars: false */
 /*jshint -W069 */
 
+var api_url = 'https://fastapi.metacpan.org/v1/';
+
 var api = {
 	'module' : function(module_name) {
 		return {
 			method: 'get',
-			url: 'http://api.metacpan.org/v0/module/' + module_name
+			url: api_url + 'module/' + module_name
 		}
 	},
 	'pod' : function(module_name) {
 		return {
 			method: 'get',
-			url: 'http://api.metacpan.org/v0/pod/' + module_name, 
+			url: api_url + 'pod/' + module_name, 
 		}
 	},
 	'changes' : function(release_name) {
 		return {
 			method: 'get',
-			url: 'http://api.metacpan.org/v0/changes/' + release_name
+			url: api_url + 'changes/' + release_name
 		}
 	},
 	'author' : function(pauseid) {
 		return {
 			method: 'get',
-			url: "http://api.metacpan.org/v0/author/" + pauseid,
+			url: api_url + "author/" + pauseid,
 		}
 	},
 	'author_post' : function(page_size, page, size, query) {
 		var from = (page - 1) * page_size;
 		return {
 			method: 'post',
-			url: 'http://api.metacpan.org/v0/author/_search',
+			url: api_url + 'author/_search',
 			data: {
 				"query": {
 					"match_all": {}
@@ -48,13 +50,13 @@ var api = {
 	'release' : function (release) {
 		return {
 			method: 'get',
-			url: "http://api.metacpan.org/v0/release/" + release,
+			url: api_url + "release/" + release,
 		};
 	},
 	'search' : function(term, count) {
 		return {
 			method: 'post',
-			url: 'http://api.metacpan.org/v0/release/_search', 
+			url: api_url + 'release/_search', 
 			data: {
 				"query": {
 					"match_all": {}
@@ -83,7 +85,7 @@ var api = {
 	'files_post' : function (filename) {
 		return {
 			method: 'post',
-			url: 'http://api.metacpan.org/v0/file/_search',
+			url: api_url + 'file/_search',
 			data: {
 				"query": {
 					"match_all": {}
@@ -105,7 +107,7 @@ var api = {
 	'release_post' : function (pauseid, count) {
 		return {
 			method: 'post',
-			url : 'http://api.metacpan.org/v0/release/_search',
+			url : api_url + 'release/_search',
 			data: {
 					"query": {
 						"match_all": {}
@@ -124,7 +126,7 @@ var api = {
 	'recent' : function (count) {
 		return {
 			method: 'post',
-			url: 'http://api.metacpan.org/v0/release/_search', 
+			url: api_url + 'release/_search', 
 			data: {
 				"query": {
 					"match_all": {}
@@ -142,7 +144,7 @@ var api = {
 		var from = (page - 1) * page_size;
 		return {
 			method: 'post',
-			url: "http://api.metacpan.org/v0/release/_search",
+			url: api_url + "release/_search",
 			data: {
 				"query": {
 					"match_all": {}
@@ -292,7 +294,7 @@ var jq_cpan = {
 		//var page_size = jq_cpan.size();
 		//var page = jq_cpan.page;
 		//var from = ( page - 1 ) * page_size;
-		jq_cpan.post("http://api.metacpan.org/v0/release/_search", {
+		jq_cpan.post(api_url + "release/_search", {
 			"query": {
 				"match_all": {}
 			},
